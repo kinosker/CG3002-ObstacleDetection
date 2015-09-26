@@ -15,13 +15,13 @@
 
 #define valueToCM 5
 
-void MaxSonar_Start();
+void myMaxSonar_Start();
 
 // Return distance in cm
-int MaxSonar_Read(char analogChannel);
+int myMaxSonar_Read(char analogChannel);
 
 // Return distance in bits 8:2
-int MaxSonar_ReadRaw(char analogChannel);
+int myMaxSonar_ReadRaw(char analogChannel);
 
 
 #endif /* MAXSONAR_H_ */

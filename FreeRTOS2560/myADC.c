@@ -22,7 +22,7 @@ ISR(ADC_vect)
 	xSemaphoreGiveFromISR(semaReadADC, pdFALSE);
 }
 
-void ADC_Init()
+void myADC_Init()
 {
 	
 	ADCSRA = ( 1<<ADEN ) | ( 1<<ADIE ) | ADC_PRESCALER; // enable ADC, enable interrupt, set prescaler
@@ -36,14 +36,14 @@ void ADC_Init()
 }
 
 
-unsigned char analogRead(char channel)
+unsigned char myADC_analogRead(char channel)
 {
-	startADC(channel);
-	return readADC(channel);
+	myADC_startADC(channel);
+	return myADC_readADC(channel);
 }
 
 // channel = AN0 to AN15, use the macro...
-void startADC(char channel)
+void myADC_startADC(char channel)
 {
 	
 	 //char buffer [10];
@@ -68,7 +68,7 @@ void startADC(char channel)
 	ADCSRA |= ( 1 << ADSC );	// READY TO SEND!!
 }
 
-unsigned char readADC(char channel)
+unsigned char myADC_readADC(char channel)
 {
 	xSemaphoreTake(semaReadADC, portMAX_DELAY); // wait for reading...
 	xSemaphoreGive(semaGuardStartADC); // reading done, nxt task can start ADC

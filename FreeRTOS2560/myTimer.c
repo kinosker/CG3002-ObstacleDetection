@@ -17,7 +17,7 @@ TaskHandle_t * timerTask;					   // hold the task for suspension and resume..
 
 // timer task should be the highest priority....
 // set taskHandle...
-void MyTimer_Init(TaskHandle_t *task)
+void myTimer_Init(TaskHandle_t *task)
 {
 	timerTask = task;
 	vTaskSuspend(*timerTask); // suspend first not using delay micro
@@ -26,7 +26,7 @@ void MyTimer_Init(TaskHandle_t *task)
 }
 
 // Return timer 0 value
-unsigned char readTimer()
+unsigned char myTimer_Read()
 {
 	return TCNT0;
 }
@@ -34,10 +34,10 @@ unsigned char readTimer()
 // Dont use for > 1ms...
 // Max error of around + 3 microseconds...
 // careful when usin in more than 1 task.. need handle (future implementation?)
-void delayMicro(int delay)
+void myTimer_DelayMicro(int delay)
 {
 	// NOTE : Tick here refer to timer0 tick not FreeRtos tick (1ms)
-	unsigned char currentTick = readTimer();
+	unsigned char currentTick = myTimer_Read();
 
 
 	delay /= MICROSECONDS_PER_TICK; // convert delay into ticks..
@@ -48,9 +48,9 @@ void delayMicro(int delay)
 }
 
 // duplicate of delayMicro....
-void delayMicro2(int delay)
+void myTimer_DelayMicro2(int delay)
 {
-	unsigned char currentTick = readTimer();
+	unsigned char currentTick = myTimer_Read();
 
 	delay /= MICROSECONDS_PER_TICK; // convert delay into ticks..
 	expectedTick2 = currentTick + delay; 
@@ -59,9 +59,9 @@ void delayMicro2(int delay)
 }
 
 // Semaphore on sale if u match lucky number ...
-void delayMicroCheck()
+void myTimer_DelayChecker()
 {
-	unsigned char currentTick = readTimer();
+	unsigned char currentTick = myTimer_Read();
 	
 	if(currentTick == 0) // overflow happened
 	{

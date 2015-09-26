@@ -37,14 +37,14 @@
 
 #define ADC_PRESCALER 7 // Select div factor of 128, 16Mhz/128 = 125Khz... (ADPS0:2 = 1 => 0b111)
 	
-void ADC_Init();
+void myADC_Init();
 
-unsigned char analogRead(char channel);
+unsigned char myADC_analogRead(char channel);
 
 // channel = AN0 to AN15, use the macro...
-void startADC(char channel);
+void myADC_startADC(char channel);
 
-unsigned char readADC(char channel);
+unsigned char myADC_readADC(char channel);
 
 
 

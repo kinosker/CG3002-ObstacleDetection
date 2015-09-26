@@ -26,33 +26,33 @@
 #define HANDSHAKE_ACK 0x55
 #define HANDSHAKE_FIN 0xFF
 
- void USART0_Init(void);
+ void myUSART_USART0_Init(void);
  
- void USART1_Init(void);
+ void myUSART_USART1_Init(void);
 
- void transmitUSART0_c(unsigned char data);
+ void myUSART_transmitUSART0_c(unsigned char data);
 
- void transmitUSART1_c(unsigned char data);
+ void myUSART_transmitUSART1_c(unsigned char data);
 
- void transmitUSART1(const unsigned char* data);
+ void myUSART_transmitUSART1(const unsigned char* data);
 
- void transmitUSART0(const unsigned char* data);
+ void myUSART_transmitUSART0(const unsigned char* data);
 
- unsigned char receiveUSART1();
+ unsigned char myUSART_receiveUSART1();
 
- unsigned char receiveUSART0();
+ unsigned char myUSART_receiveUSART0();
  
  
  // -1 if fail, 0 success
- char startHandShake();
+ char myUSART_startHandShake();
  
- char waitForHandshake();
+ char myUSART_waitForHandshake();
 
- char receiveHandShakeAck(unsigned char message);
+ char myUSART_receiveHandShakeAck(unsigned char message);
  
- char receiveHandShakeStart(unsigned char message);
+ char myUSART_receiveHandShakeStart(unsigned char message);
  
- char receiveHandShakeFin(unsigned char message);
+ char myUSART_receiveHandShakeFin(unsigned char message);
  
 
 #endif /* MYUSART_H_ */

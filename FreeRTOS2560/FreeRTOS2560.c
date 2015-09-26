@@ -56,15 +56,15 @@ void task2(void *p)
 
 void RPI_receiveTask(void *p)
 {
-	waitForHandshake();	
-	transmitUSART0("\n\nRPI Handshake Done\n\n");
+	myUSART_waitForHandshake();	
+	myUSART_transmitUSART0("\n\nRPI Handshake Done\n\n");
 
 }
 
 void RPI_sendTask(void *p)
 {
-	startHandShake();
-	transmitUSART0("\n\nMy Handshake Done\n\n");
+	myUSART_startHandShake();
+	myUSART_transmitUSART0("\n\nMy Handshake Done\n\n");
 }
 
 
@@ -86,30 +86,30 @@ void maxSonarTask(void *p)
 	
 	while(1)
 	{
-		MaxSonar_Start();
+		myMaxSonar_Start();
 		
-		frontSonar = MaxSonar_Read(AN15);
+		frontSonar = myMaxSonar_Read(AN15);
 		
 		itoa(frontSonar, asciiReading, 10);
-		transmitUSART0(front);
-		transmitUSART0(asciiReading);
-		transmitUSART0(next);
+		myUSART_transmitUSART0(front);
+		myUSART_transmitUSART0(asciiReading);
+		myUSART_transmitUSART0(next);
 
-		leftSonar = MaxSonar_Read(AN14);		
+		leftSonar = myMaxSonar_Read(AN14);		
 		
 		itoa(leftSonar, asciiReading, 10);
-		transmitUSART0(left);
-		transmitUSART0(asciiReading);
-		transmitUSART0(next);
+		myUSART_transmitUSART0(left);
+		myUSART_transmitUSART0(asciiReading);
+		myUSART_transmitUSART0(next);
 		
 		
-		rightSonar = MaxSonar_Read(AN13);
+		rightSonar = myMaxSonar_Read(AN13);
 		rightSonar -= 10; // Hardware Problem : offset
 		
 		itoa(rightSonar, asciiReading, 10);
-		transmitUSART0(right);
-		transmitUSART0(asciiReading);
-		transmitUSART0(end);
+		myUSART_transmitUSART0(right);
+		myUSART_transmitUSART0(asciiReading);
+		myUSART_transmitUSART0(end);
 		
 		vTaskDelayUntil( &xLastWakeTime, 150);  // delay 150 ms for 3 sonar chain...
 		
@@ -121,11 +121,11 @@ void myTimerTask(void *p)
 	TaskHandle_t *t_delay = (TaskHandle_t*)p; // recast back.
 
 	
-	MyTimer_Init(t_delay);	
+	myTimer_Init(t_delay);	
 	
 	while(1)
 	{
-		delayMicroCheck(); // task should be suspended and resumed only when delayMicro is used..
+		myTimer_DelayChecker(); // task should be suspended and resumed only when delayMicro is used..
 	}
 }
 
@@ -216,9 +216,9 @@ void init()
 	{
 		clearTimer();
 		setPowerReduction();
-		USART0_Init();
-		USART1_Init();
-		ADC_Init();
+		myUSART_USART0_Init();
+		myUSART_USART1_Init();
+		myADC_Init();
 		MaxSonar_Init();
 		
 		DDRB |= (1 << DDB6) | (1 << DDB7); // set direction...

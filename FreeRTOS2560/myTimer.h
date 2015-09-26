@@ -22,19 +22,19 @@
 
 
 // Initialize my timer 
-void MyTimer_Init(TaskHandle_t *task);
+void myTimer_Init(TaskHandle_t *task);
 
 // Return timer 0 value
-unsigned char readTimer();
+unsigned char myTimer_Read();
 
 // Dont use for > 1ms...
 // Max error of around + 3 microseconds...
 // careful when usin in more than 1 task.. need handle (future implementation?)
-void delayMicro(int delay);
-void delayMicro2(int delay);
+void myTimer_DelayMicro(int delay);
+void myTimer_DelayMicro2(int delay);
 
 // check if the delayMicro have lapsed..
-void delayMicroCheck();
+void myTimer_DelayChecker();
 
 
 #endif /* MYTIMER_H_ */

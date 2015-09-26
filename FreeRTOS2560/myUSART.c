@@ -81,7 +81,7 @@ ISR( USART0_UDRE_vect )
 }
 
  
- void USART0_Init(void)
+ void myUSART_USART0_Init(void)
  {
 		 
 	// Set baud rate
@@ -101,7 +101,7 @@ ISR( USART0_UDRE_vect )
 	semaUsart0Receive = xSemaphoreCreateBinary();
 }
 
-void USART1_Init(void)
+void myUSART_USART1_Init(void)
 {
 	// Set baud rate
 	UBRR1H = (BAUD_PRESCALE >> 8); // Set upper 8-bit of prescale to register...
@@ -121,7 +121,7 @@ void USART1_Init(void)
 }
 
 
-void transmitUSART0_c(unsigned char data )
+void myUSART_transmitUSART0_c(unsigned char data )
 {
 	while ( ringBufferFull(&uart0_txRingBuffer)); // wait till there is space..
 	
@@ -132,7 +132,7 @@ void transmitUSART0_c(unsigned char data )
 	
 }
 
-void transmitUSART1_c(unsigned char data )
+void myUSART_transmitUSART1_c(unsigned char data )
 {
 	while ( ringBufferFull(&uart1_txRingBuffer)); // wait till there is space..
 	
@@ -143,26 +143,26 @@ void transmitUSART1_c(unsigned char data )
 	
 }
 
-void transmitUSART1(const unsigned char* data)
+void myUSART_transmitUSART1(const unsigned char* data)
 {
 	
 	while (*data)
 	{
-			transmitUSART1_c(*data++);
+			myUSART_transmitUSART1_c(*data++);
 	}
 
 }
 
-void transmitUSART0(const unsigned char* data)
+void myUSART_transmitUSART0(const unsigned char* data)
 {	
 	while (*data)
 	{
-		transmitUSART0_c(*data++);
+		myUSART_transmitUSART0_c(*data++);
 	}
 
 }
 
-unsigned char receiveUSART1()
+unsigned char myUSART_receiveUSART1()
 {
 	unsigned char data;
 	
@@ -178,7 +178,7 @@ unsigned char receiveUSART1()
 	return data;
 }
 
-unsigned char receiveUSART0()
+unsigned char myUSART_receiveUSART0()
 {
 	unsigned char data;
 	
@@ -196,32 +196,32 @@ unsigned char receiveUSART0()
 }
 
 // -1 if fail, 0 success
-char startHandShake()
+char myUSART_startHandShake()
 {
-	transmitUSART1_c(HANDSHAKE_START);
+	myUSART_transmitUSART1_c(HANDSHAKE_START);
 	
-	if (! receiveHandShakeAck(receiveUSART1()))
+	if (! myUSART_receiveHandShakeAck(myUSART_receiveUSART1()))
 	{
 		return -1; //error handling
 	}
 	
-	transmitUSART1_c(HANDSHAKE_FIN);
+	myUSART_transmitUSART1_c(HANDSHAKE_FIN);
 	
 	return 0;
 }
 
 
 // -1 if fail, 0 success
-char waitForHandshake()
+char myUSART_waitForHandshake()
 {
-	if (! receiveHandShakeStart(receiveUSART1()))
+	if (! myUSART_receiveHandShakeStart(myUSART_receiveUSART1()))
 	{
 		return -1; // error handling
 	}
 	
-	transmitUSART1_c(HANDSHAKE_ACK);
+	myUSART_transmitUSART1_c(HANDSHAKE_ACK);
 	
-	if (! receiveHandShakeStart(receiveUSART1()))
+	if (! myUSART_receiveHandShakeStart(myUSART_receiveUSART1()))
 	{
 		return -1; // error handling
 	}
@@ -229,18 +229,18 @@ char waitForHandshake()
 	return 0;		
 }
 
-char receiveHandShakeAck(unsigned char message)
+char myUSART_receiveHandShakeAck(unsigned char message)
 {
 	return (message == HANDSHAKE_ACK);
 }
 
-char receiveHandShakeStart(unsigned char message)
+char myUSART_receiveHandShakeStart(unsigned char message)
 {
 	return (message == HANDSHAKE_START);
 }
 
 
-char receiveHandShakeFin(unsigned char message)
+char myUSART_receiveHandShakeFin(unsigned char message)
 {
 	return (message == HANDSHAKE_FIN);
 }

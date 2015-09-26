@@ -137,6 +137,12 @@
     <Compile Include="list.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="myHcSonar.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="myHcSonar.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="myMaxSonar.c">
       <SubType>compile</SubType>
     </Compile>
