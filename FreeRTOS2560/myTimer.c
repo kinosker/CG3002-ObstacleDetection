@@ -6,14 +6,12 @@
  */ 
 
 #include <myTimer.h>
-#include <FreeRTOS.h>
-#include <semphr.h>
-#include <task.h>
 
 SemaphoreHandle_t semaDelayMicro;
 unsigned char expectedTick = IMPOSSIBLE_RANGE; // max tick is 250... refer to RTOSConfig (timer compare...)
 											   // wont reach this at delayMicroCheck, wont give sema at init()...
 TaskHandle_t * timerTask;					   // hold the task for suspension and resume..
+
 
 // timer task should be the highest priority....
 // set taskHandle...

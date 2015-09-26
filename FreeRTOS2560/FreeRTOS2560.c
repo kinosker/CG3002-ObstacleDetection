@@ -136,8 +136,8 @@ int main(void)
 		TaskHandle_t t1,t2, t_maxSonar, t_rx, t_tx, t_delay;
 		
 		init();
-		MyTimer_Init(&t_delay);
 		
+		MyTimer_Init(&t_delay);	
 		xTaskCreate(myTimerTask, "myTimer", MY_TIMER_STACK, NULL, MY_TIMER_PRIORITY, &t_delay); // danger?!?
 		
 		xTaskCreate(maxSonarTask, "maxSonar", MAXSONAR_STACK, NULL, MAXSONAR_PRIORITY, &t_maxSonar);

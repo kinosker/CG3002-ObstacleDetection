@@ -24,7 +24,8 @@ myMaxSonar.d myMaxSonar.o: .././myMaxSonar.c \
  C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/semphr.h \
  C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/queue.h \
  C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/task.h \
- C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/list.h
+ C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/list.h \
+ C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myTimer.h
 
 C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myMaxSonar.h:
 
@@ -77,3 +78,5 @@ C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/queue.
 C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/task.h:
 
 C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/list.h:
+
+C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myTimer.h:

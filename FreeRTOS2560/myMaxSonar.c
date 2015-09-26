@@ -7,12 +7,14 @@
 
 #include <myMaxSonar.h>
 #include <myADC.h>
+#include <myTimer.h>
 
 void MaxSonar_Start()
 {
 	MaxSonar_TriggerStart();
 	
-	vTaskDelay(1);	
+	delayMicro(25); // delay 25 micro seconds...
+	//vTaskDelay(1);	// delay 1ms using vTaskDelay
 	
 	MaxSonar_TriggerStop();
 }

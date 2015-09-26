@@ -14,6 +14,11 @@
 #define IMPOSSIBLE_RANGE 254
 #define MAX_SEMA_WAIT 2 // wait only 2ms
 
+#include <FreeRTOS.h>
+#include <semphr.h>
+#include <task.h>
+
+
 
 // Initialize my timer 
 void MyTimer_Init(TaskHandle_t *task);
