@@ -5,6 +5,7 @@
  *  Author: tienlong
  */ 
 #include <myHcSonar.h>
+#include <myUSART.h>
 
 volatile int ms_tickStart;
 volatile int ms_tickLapsed;
@@ -18,6 +19,7 @@ ISR(PCINT0_vect) //Digital pin 50
 {
 	if(HC_Echo_Read == 1)
 	{
+		myUSART_transmitUSART0("\nAt the PCINT0 ISR\n");
 		us_tickStart = myTimer_Read();
 		ms_tickStart = xTaskGetTickCountFromISR();
 	}	
@@ -47,7 +49,7 @@ void myHcSonar_Start()
 {
 	HcSonar_TriggerStart();
 	
-	myTimer_DelayMicro2(15); // delay 15 micro seconds for the pulse
+	myTimer_DelayMicro2(20); // delay 20 micro seconds for the pulse
 	//vTaskDelay(1);	// delay 1ms using vTaskDelay
 	
 	HcSonar_TriggerStop();
@@ -58,7 +60,7 @@ int myHcSonar_Read()
 	int usLength, msLength;
 	
 	myHcSonar_Start();	
-	xSemaphoreTake(semaReadReady, portMAX_DELAY);
+	xSemaphoreTake(semaReadReady, 200);
 	
 	usLength = us_tickLapsed / 14;
 	msLength = ms_tickLapsed * 17;

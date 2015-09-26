@@ -113,6 +113,13 @@ void maxSonarTask(void *p)
 		
 		vTaskDelayUntil( &xLastWakeTime, 150);  // delay 150 ms for 3 sonar chain...
 		
+		// test btm sonar
+		int btmSonar = myHcSonar_Read();
+		itoa(btmSonar, asciiReading, 10);
+		myUSART_transmitUSART0("Btm :");
+		myUSART_transmitUSART0(asciiReading);
+		myUSART_transmitUSART0(end);
+		
 	}
 }
 
@@ -220,6 +227,7 @@ void init()
 		myUSART_USART1_Init();
 		myADC_Init();
 		MaxSonar_Init();
+		myHcSonar_Init();
 		
 		DDRB |= (1 << DDB6) | (1 << DDB7); // set direction...
 		
