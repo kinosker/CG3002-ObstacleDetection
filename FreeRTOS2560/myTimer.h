@@ -30,6 +30,7 @@ unsigned char readTimer();
 // Max error of around + 3 microseconds...
 // careful when usin in more than 1 task.. need handle (future implementation?)
 void delayMicro(int delay);
+void delayMicro2(int delay);
 
 // check if the delayMicro have lapsed..
 void delayMicroCheck();

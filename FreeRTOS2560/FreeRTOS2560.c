@@ -117,8 +117,7 @@ void maxSonarTask(void *p)
 void myTimerTask(void *p)
 {
 	TaskHandle_t *t_delay = (TaskHandle_t*)p; // recast back.
-	TaskHandle_t test = *t_delay;
-	int i = 2;
+
 	
 	MyTimer_Init(t_delay);	
 	
