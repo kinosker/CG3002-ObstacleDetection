@@ -70,8 +70,10 @@ void RPI_sendTask(void *p)
 
 void maxSonarTask(void *p)
 {
+	TickType_t xLastWakeTime;
 	int frontSonar, leftSonar, rightSonar;
 	char asciiReading[4];
+	
 	
 	unsigned char front[] = "Front :";
 	unsigned char left[] = "Left :";
@@ -80,13 +82,14 @@ void maxSonarTask(void *p)
 	unsigned char next[] = " cm, ";
 	unsigned char end[] = " cm\n";
 	
+	xLastWakeTime = xTaskGetTickCount(); // get tick count
 	
 	while(1)
 	{
 		MaxSonar_Start();
 		
 		frontSonar = MaxSonar_Read(AN15);
-
+		
 		itoa(frontSonar, asciiReading, 10);
 		transmitUSART0(front);
 		transmitUSART0(asciiReading);
@@ -108,8 +111,7 @@ void maxSonarTask(void *p)
 		transmitUSART0(asciiReading);
 		transmitUSART0(end);
 		
-		
-		vTaskDelay(150); // delay 150 ms for sonar chain...
+		vTaskDelayUntil( &xLastWakeTime, 150);  // delay 150 ms for 3 sonar chain...
 		
 	}
 }

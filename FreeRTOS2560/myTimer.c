@@ -8,8 +8,8 @@
 #include <myTimer.h>
 
 SemaphoreHandle_t semaDelayMicro, semaDelayMicro2;
-volatile unsigned char expectedTick = IMPOSSIBLE_RANGE; // max tick is 250... refer to RTOSConfig (timer compare...)
-volatile unsigned char expectedTick2 = IMPOSSIBLE_RANGE; // wont reach this at delayMicroCheck, wont give sema at init()...									   
+volatile int expectedTick = IMPOSSIBLE_RANGE; // max tick is 250... refer to RTOSConfig (timer compare...)
+volatile int expectedTick2 = IMPOSSIBLE_RANGE; // wont reach this at delayMicroCheck, wont give sema at init()...									   
 											   
 TaskHandle_t * timerTask;					   // hold the task for suspension and resume..
 
@@ -41,7 +41,7 @@ void delayMicro(int delay)
 
 
 	delay /= MICROSECONDS_PER_TICK; // convert delay into ticks..
-	expectedTick = currentTick + delay + 1; // add 1 tick for positive error...	
+	expectedTick = currentTick + delay; 	
 	
 	vTaskResume( *timerTask ); // resume delayMicroCheck..
 	xSemaphoreTake(semaDelayMicro, MAX_SEMA_WAIT);	// delay for the micro here... safety mech: max wait for 2 ms... cannot be more than tht..
@@ -53,7 +53,7 @@ void delayMicro2(int delay)
 	unsigned char currentTick = readTimer();
 
 	delay /= MICROSECONDS_PER_TICK; // convert delay into ticks..
-	expectedTick2 = currentTick + delay + 1; // add 1 tick for positive error...
+	expectedTick2 = currentTick + delay; 
 	vTaskResume( *timerTask ); // resume delayMicroCheck..
 	xSemaphoreTake(semaDelayMicro2, MAX_SEMA_WAIT);	// delay for the micro here... safety mech: max wait for 2 ms... cannot be more than tht..
 }
@@ -63,14 +63,23 @@ void delayMicroCheck()
 {
 	unsigned char currentTick = readTimer();
 	
-	if( currentTick >= expectedTick)
+	if(currentTick == 0) // overflow happened
+	{
+		if(expectedTick != IMPOSSIBLE_RANGE)
+			expectedTick -= MAX_TICKS;
+
+		if(expectedTick2 != IMPOSSIBLE_RANGE)
+			expectedTick2 -= MAX_TICKS;
+	}
+	
+	if( currentTick > expectedTick) // more than => 1 more tick => positive error..
 	{
 		expectedTick = IMPOSSIBLE_RANGE; // set back to impossible range.
 		xSemaphoreGive(semaDelayMicro); // give the semaphore to resume...	
 	}
 	
 	
-	if( currentTick >= expectedTick2)
+	if( currentTick > expectedTick2) // more than => 1 more tick => positive error..
 	{
 		expectedTick2 = IMPOSSIBLE_RANGE; // set back to impossible range.
 		xSemaphoreGive(semaDelayMicro2); // give the semaphore to resume...

@@ -10,8 +10,9 @@
 #define MYTIMER_H_
 
 
+#define MAX_TICKS 250
 #define MICROSECONDS_PER_TICK 4
-#define IMPOSSIBLE_RANGE 254
+#define IMPOSSIBLE_RANGE 5000
 #define MAX_SEMA_WAIT 2 // wait only 2ms
 
 #include <FreeRTOS.h>
