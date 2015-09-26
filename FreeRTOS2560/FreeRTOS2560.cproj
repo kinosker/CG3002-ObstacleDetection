@@ -137,10 +137,10 @@
     <Compile Include="list.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="maxSonar.c">
+    <Compile Include="myMaxSonar.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="maxSonar.h">
+    <Compile Include="myMaxSonar.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="myADC.c">
@@ -149,7 +149,13 @@
     <Compile Include="myADC.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="myTask.h">
+    <Compile Include="myTaskConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="myTimer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="myTimer.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="myUSART.c">

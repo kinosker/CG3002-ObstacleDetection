@@ -12,9 +12,9 @@
 #include <task.h>
 //#include <Arduino.h>
 #include <myUSART.h>
-#include <myTask.h>
+#include <myTaskConfig.h>
 #include <myADC.h>
-#include <maxSonar.h>
+#include <myMaxSonar.h>
 
 #include <stdlib.h>
 
@@ -208,3 +208,29 @@ void init()
 	
 	sei(); // enable interrupts..
 }
+
+
+/* itoa:  convert n to characters in s */
+//void itoa(int n, unsigned char s[])
+//{
+	//int i = 0;
+	//
+	//do {       /* generate digits in reverse order */
+		//s[i++] = n % 10 + '0';   /* get next digit */	
+	//}	while ((n /= 10) > 0);     /* delete it */
+	//
+	//reverse(i,s);
+//}
+//
+//void reverse(int size, unsigned char s[])
+//{
+	//int i, j;
+	//char c;
+	//
+	//for (i = 0, j = size-1; i<j; i++, j--) 
+	//{
+		//c = s[i];
+		//s[i] = s[j];
+		//s[j] = c;
+	//}
+//}

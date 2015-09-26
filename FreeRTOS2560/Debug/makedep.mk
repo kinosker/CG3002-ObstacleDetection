@@ -10,9 +10,11 @@ heap_1.c
 
 list.c
 
-maxSonar.c
+myMaxSonar.c
 
 myADC.c
+
+myTimer.c
 
 myUSART.c
 

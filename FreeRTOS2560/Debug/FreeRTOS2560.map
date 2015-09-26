@@ -32,9 +32,11 @@ uart1_txBuffer      0x20              myUSART.o
 semaUsart0Receive   0x2               myUSART.o
 semaUsart1Receive   0x2               myUSART.o
 uart1_txRingBuffer  0x5               myUSART.o
+semaDelayMicro      0x2               myTimer.o
 uart0_txRingBuffer  0x5               myUSART.o
 uart1_rxRingBuffer  0x5               myUSART.o
 semaReadADC         0x2               myADC.o
+timerTask           0x2               myTimer.o
 
 Discarded input sections
 
@@ -63,14 +65,36 @@ Discarded input sections
  .text          0x00000000        0x0 list.o
  .data          0x00000000        0x0 list.o
  .bss           0x00000000        0x0 list.o
- .text          0x00000000        0x0 maxSonar.o
- .data          0x00000000        0x0 maxSonar.o
- .bss           0x00000000        0x0 maxSonar.o
+ .text          0x00000000        0x0 myMaxSonar.o
+ .data          0x00000000        0x0 myMaxSonar.o
+ .bss           0x00000000        0x0 myMaxSonar.o
  .text.MaxSonar_ReadRaw
-                0x00000000        0x8 maxSonar.o
+                0x00000000        0x8 myMaxSonar.o
  .text          0x00000000        0x0 myADC.o
  .data          0x00000000        0x0 myADC.o
  .bss           0x00000000        0x0 myADC.o
+ .text          0x00000000        0x0 myTimer.o
+ .data          0x00000000        0x0 myTimer.o
+ .bss           0x00000000        0x0 myTimer.o
+ .text.MyTimer_Init
+                0x00000000       0x26 myTimer.o
+ .text.delayMicro
+                0x00000000       0x44 myTimer.o
+ .text.delayMicroCheck
+                0x00000000       0x2a myTimer.o
+ .data.expectedTick
+                0x00000000        0x1 myTimer.o
+ .debug_info    0x00000000      0x2f0 myTimer.o
+ .debug_abbrev  0x00000000      0x132 myTimer.o
+ .debug_loc     0x00000000       0x6d myTimer.o
+ .debug_aranges
+                0x00000000       0x30 myTimer.o
+ .debug_ranges  0x00000000       0x20 myTimer.o
+ .debug_line    0x00000000      0x1ed myTimer.o
+ .debug_str     0x00000000      0x28d myTimer.o
+ .comment       0x00000000       0x31 myTimer.o
+ .debug_frame   0x00000000       0x44 myTimer.o
+ COMMON         0x00000000        0x4 myTimer.o
  .text          0x00000000        0x0 myUSART.o
  .data          0x00000000        0x0 myUSART.o
  .bss           0x00000000        0x0 myUSART.o
@@ -251,8 +275,9 @@ LOAD debugPrint.o
 LOAD FreeRTOS2560.o
 LOAD heap_1.o
 LOAD list.o
-LOAD maxSonar.o
+LOAD myMaxSonar.o
 LOAD myADC.o
+LOAD myTimer.o
 LOAD myUSART.o
 LOAD port.o
 LOAD queue.o
@@ -513,10 +538,10 @@ END GROUP
                 0x00000492       0x4c list.o
                 0x00000492                uxListRemove
  .text.MaxSonar_Start
-                0x000004de       0x10 maxSonar.o
+                0x000004de       0x10 myMaxSonar.o
                 0x000004de                MaxSonar_Start
  .text.MaxSonar_Read
-                0x000004ee       0x14 maxSonar.o
+                0x000004ee       0x14 myMaxSonar.o
                 0x000004ee                MaxSonar_Read
  .text.__vector_29
                 0x00000502       0x68 myADC.o
@@ -720,7 +745,7 @@ END GROUP
  *(.fini0)
                 0x00001ce6                _etext = .
 
-.data           0x00800200       0x7a load address 0x00001ce6
+.data           0x00800200       0x82 load address 0x00001ce6
                 0x00800200                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -729,88 +754,88 @@ END GROUP
  *(.rodata)
  *(.rodata*)
  .rodata.str1.1
-                0x00800202       0x73 FreeRTOS2560.o
+                0x00800202       0x7b FreeRTOS2560.o
  .rodata.str1.1
-                0x00800275        0x5 tasks.o
+                0x0080027d        0x5 tasks.o
  *(.gnu.linkonce.d*)
-                0x0080027a                . = ALIGN (0x2)
-                0x0080027a                _edata = .
-                0x0080027a                PROVIDE (__data_end, .)
+                0x00800282                . = ALIGN (0x2)
+                0x00800282                _edata = .
+                0x00800282                PROVIDE (__data_end, .)
 
-.bss            0x0080027a      0x6df
-                0x0080027a                PROVIDE (__bss_start, .)
+.bss            0x00800282      0x6df
+                0x00800282                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  .bss.pucAlignedHeap.1837
-                0x0080027a        0x2 heap_1.o
+                0x00800282        0x2 heap_1.o
  .bss.xNextFreeByte
-                0x0080027c        0x2 heap_1.o
- .bss.ucHeap    0x0080027e      0x5dc heap_1.o
+                0x00800284        0x2 heap_1.o
+ .bss.ucHeap    0x00800286      0x5dc heap_1.o
  .bss.uxSchedulerSuspended
-                0x0080085a        0x1 tasks.o
+                0x00800862        0x1 tasks.o
  .bss.uxTaskNumber
-                0x0080085b        0x1 tasks.o
- .bss.xNumOfOverflows
-                0x0080085c        0x1 tasks.o
- .bss.xYieldPending
-                0x0080085d        0x1 tasks.o
- .bss.uxPendedTicks
-                0x0080085e        0x1 tasks.o
- .bss.xSchedulerRunning
-                0x0080085f        0x1 tasks.o
- .bss.uxTopReadyPriority
-                0x00800860        0x1 tasks.o
- .bss.xTickCount
-                0x00800861        0x2 tasks.o
- .bss.uxCurrentNumberOfTasks
                 0x00800863        0x1 tasks.o
+ .bss.xNumOfOverflows
+                0x00800864        0x1 tasks.o
+ .bss.xYieldPending
+                0x00800865        0x1 tasks.o
+ .bss.uxPendedTicks
+                0x00800866        0x1 tasks.o
+ .bss.xSchedulerRunning
+                0x00800867        0x1 tasks.o
+ .bss.uxTopReadyPriority
+                0x00800868        0x1 tasks.o
+ .bss.xTickCount
+                0x00800869        0x2 tasks.o
+ .bss.uxCurrentNumberOfTasks
+                0x0080086b        0x1 tasks.o
  .bss.xSuspendedTaskList
-                0x00800864        0x9 tasks.o
+                0x0080086c        0x9 tasks.o
  .bss.uxTasksDeleted
-                0x0080086d        0x1 tasks.o
+                0x00800875        0x1 tasks.o
  .bss.xTasksWaitingTermination
-                0x0080086e        0x9 tasks.o
+                0x00800876        0x9 tasks.o
  .bss.xPendingReadyList
-                0x00800877        0x9 tasks.o
+                0x0080087f        0x9 tasks.o
  .bss.pxOverflowDelayedTaskList
-                0x00800880        0x2 tasks.o
+                0x00800888        0x2 tasks.o
  .bss.pxDelayedTaskList
-                0x00800882        0x2 tasks.o
+                0x0080088a        0x2 tasks.o
  .bss.xDelayedTaskList2
-                0x00800884        0x9 tasks.o
+                0x0080088c        0x9 tasks.o
  .bss.xDelayedTaskList1
-                0x0080088d        0x9 tasks.o
+                0x00800895        0x9 tasks.o
  .bss.pxReadyTasksLists
-                0x00800896       0x24 tasks.o
+                0x0080089e       0x24 tasks.o
  .bss.pxCurrentTCB
-                0x008008ba        0x2 tasks.o
-                0x008008ba                pxCurrentTCB
+                0x008008c2        0x2 tasks.o
+                0x008008c2                pxCurrentTCB
  *(COMMON)
- COMMON         0x008008bc        0x5 myADC.o
-                0x008008bc                adcReading
-                0x008008bd                semaGuardStartADC
-                0x008008bf                semaReadADC
- COMMON         0x008008c1       0x98 myUSART.o
-                0x008008c1                uart1_rxBuffer
-                0x008008e1                uart0_rxRingBuffer
-                0x008008e6                uart0_txBuffer
-                0x00800906                uart0_rxBuffer
-                0x00800926                uart1_txBuffer
-                0x00800946                semaUsart0Receive
-                0x00800948                semaUsart1Receive
-                0x0080094a                uart1_txRingBuffer
-                0x0080094f                uart0_txRingBuffer
-                0x00800954                uart1_rxRingBuffer
-                0x00800959                PROVIDE (__bss_end, .)
+ COMMON         0x008008c4        0x5 myADC.o
+                0x008008c4                adcReading
+                0x008008c5                semaGuardStartADC
+                0x008008c7                semaReadADC
+ COMMON         0x008008c9       0x98 myUSART.o
+                0x008008c9                uart1_rxBuffer
+                0x008008e9                uart0_rxRingBuffer
+                0x008008ee                uart0_txBuffer
+                0x0080090e                uart0_rxBuffer
+                0x0080092e                uart1_txBuffer
+                0x0080094e                semaUsart0Receive
+                0x00800950                semaUsart1Receive
+                0x00800952                uart1_txRingBuffer
+                0x00800957                uart0_txRingBuffer
+                0x0080095c                uart1_rxRingBuffer
+                0x00800961                PROVIDE (__bss_end, .)
                 0x00001ce6                __data_load_start = LOADADDR (.data)
-                0x00001d60                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00001d68                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800959        0x0
-                0x00800959                PROVIDE (__noinit_start, .)
+.noinit         0x00800961        0x0
+                0x00800961                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800959                PROVIDE (__noinit_end, .)
-                0x00800959                _end = .
-                0x00800959                PROVIDE (__heap_start, .)
+                0x00800961                PROVIDE (__noinit_end, .)
+                0x00800961                _end = .
+                0x00800961                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -855,7 +880,7 @@ END GROUP
                                  0x31 (size before relaxing)
  .comment       0x00000000       0x31 heap_1.o
  .comment       0x00000000       0x31 list.o
- .comment       0x00000000       0x31 maxSonar.o
+ .comment       0x00000000       0x31 myMaxSonar.o
  .comment       0x00000000       0x31 myADC.o
  .comment       0x00000000       0x31 myUSART.o
  .comment       0x00000000       0x31 port.o
@@ -887,7 +912,7 @@ END GROUP
  .debug_aranges
                 0x000000a8       0x40 list.o
  .debug_aranges
-                0x000000e8       0x30 maxSonar.o
+                0x000000e8       0x30 myMaxSonar.o
  .debug_aranges
                 0x00000118       0x40 myADC.o
  .debug_aranges
@@ -909,7 +934,7 @@ END GROUP
  .debug_info    0x00000000      0xaef FreeRTOS2560.o
  .debug_info    0x00000aef      0x1ad heap_1.o
  .debug_info    0x00000c9c      0x2c6 list.o
- .debug_info    0x00000f62      0x16b maxSonar.o
+ .debug_info    0x00000f62      0x16b myMaxSonar.o
  .debug_info    0x000010cd      0x39d myADC.o
  .debug_info    0x0000146a      0x9bd myUSART.o
  .debug_info    0x00001e27      0x20d port.o
@@ -922,7 +947,7 @@ END GROUP
  .debug_abbrev  0x00000000      0x2fe FreeRTOS2560.o
  .debug_abbrev  0x000002fe      0x12e heap_1.o
  .debug_abbrev  0x0000042c       0xf8 list.o
- .debug_abbrev  0x00000524       0xc7 maxSonar.o
+ .debug_abbrev  0x00000524       0xc7 myMaxSonar.o
  .debug_abbrev  0x000005eb      0x126 myADC.o
  .debug_abbrev  0x00000711      0x1f9 myUSART.o
  .debug_abbrev  0x0000090a      0x13d port.o
@@ -930,25 +955,25 @@ END GROUP
  .debug_abbrev  0x00000cfd       0xd9 ringBuffer.o
  .debug_abbrev  0x00000dd6      0x304 tasks.o
 
-.debug_line     0x00000000     0x2d89
+.debug_line     0x00000000     0x2d8b
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x557 FreeRTOS2560.o
  .debug_line    0x00000557      0x26e heap_1.o
  .debug_line    0x000007c5      0x282 list.o
- .debug_line    0x00000a47      0x201 maxSonar.o
- .debug_line    0x00000c48      0x232 myADC.o
- .debug_line    0x00000e7a      0x4ac myUSART.o
- .debug_line    0x00001326      0x343 port.o
- .debug_line    0x00001669      0x8f0 queue.o
- .debug_line    0x00001f59      0x14f ringBuffer.o
- .debug_line    0x000020a8      0xce1 tasks.o
+ .debug_line    0x00000a47      0x203 myMaxSonar.o
+ .debug_line    0x00000c4a      0x232 myADC.o
+ .debug_line    0x00000e7c      0x4ac myUSART.o
+ .debug_line    0x00001328      0x343 port.o
+ .debug_line    0x0000166b      0x8f0 queue.o
+ .debug_line    0x00001f5b      0x14f ringBuffer.o
+ .debug_line    0x000020aa      0xce1 tasks.o
 
 .debug_frame    0x00000000      0xc24
  *(.debug_frame)
  .debug_frame   0x00000000       0xec FreeRTOS2560.o
  .debug_frame   0x000000ec       0x60 heap_1.o
  .debug_frame   0x0000014c       0x88 list.o
- .debug_frame   0x000001d4       0x44 maxSonar.o
+ .debug_frame   0x000001d4       0x44 myMaxSonar.o
  .debug_frame   0x00000218       0xbc myADC.o
  .debug_frame   0x000002d4      0x27c myUSART.o
  .debug_frame   0x00000550       0x74 port.o
@@ -956,7 +981,7 @@ END GROUP
  .debug_frame   0x00000800       0x74 ringBuffer.o
  .debug_frame   0x00000874      0x3b0 tasks.o
 
-.debug_str      0x00000000     0x128d
+.debug_str      0x00000000     0x128f
  *(.debug_str)
  .debug_str     0x00000000      0x396 FreeRTOS2560.o
                                 0x3df (size before relaxing)
@@ -964,19 +989,19 @@ END GROUP
                                 0x226 (size before relaxing)
  .debug_str     0x00000445      0x129 list.o
                                 0x2a1 (size before relaxing)
- .debug_str     0x0000056e       0x3a maxSonar.o
-                                0x1d9 (size before relaxing)
- .debug_str     0x000005a8       0xe1 myADC.o
+ .debug_str     0x0000056e       0x3c myMaxSonar.o
+                                0x1db (size before relaxing)
+ .debug_str     0x000005aa       0xe1 myADC.o
                                 0x283 (size before relaxing)
- .debug_str     0x00000689      0x201 myUSART.o
+ .debug_str     0x0000068b      0x201 myUSART.o
                                 0x44a (size before relaxing)
- .debug_str     0x0000088a       0xda port.o
+ .debug_str     0x0000088c       0xda port.o
                                 0x277 (size before relaxing)
- .debug_str     0x00000964      0x3b9 queue.o
+ .debug_str     0x00000966      0x3b9 queue.o
                                 0x6ea (size before relaxing)
- .debug_str     0x00000d1d       0x36 ringBuffer.o
+ .debug_str     0x00000d1f       0x36 ringBuffer.o
                                 0x20c (size before relaxing)
- .debug_str     0x00000d53      0x53a tasks.o
+ .debug_str     0x00000d55      0x53a tasks.o
                                 0xa53 (size before relaxing)
 
 .debug_loc      0x00000000     0x3484
@@ -984,7 +1009,7 @@ END GROUP
  .debug_loc     0x00000000      0x1b6 FreeRTOS2560.o
  .debug_loc     0x000001b6       0xf1 heap_1.o
  .debug_loc     0x000002a7      0x155 list.o
- .debug_loc     0x000003fc       0x42 maxSonar.o
+ .debug_loc     0x000003fc       0x42 myMaxSonar.o
  .debug_loc     0x0000043e      0x188 myADC.o
  .debug_loc     0x000005c6      0x5af myUSART.o
  .debug_loc     0x00000b75      0x29b port.o
@@ -1015,7 +1040,7 @@ END GROUP
  .debug_ranges  0x00000000       0x60 FreeRTOS2560.o
  .debug_ranges  0x00000060       0x28 heap_1.o
  .debug_ranges  0x00000088       0x30 list.o
- .debug_ranges  0x000000b8       0x20 maxSonar.o
+ .debug_ranges  0x000000b8       0x20 myMaxSonar.o
  .debug_ranges  0x000000d8       0x30 myADC.o
  .debug_ranges  0x00000108       0x90 myUSART.o
  .debug_ranges  0x00000198       0x38 port.o

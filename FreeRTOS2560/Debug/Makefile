@@ -41,8 +41,9 @@ C_SRCS +=  \
 ../FreeRTOS2560.c \
 ../heap_1.c \
 ../list.c \
-../maxSonar.c \
+../myMaxSonar.c \
 ../myADC.c \
+../myTimer.c \
 ../myUSART.c \
 ../port.c \
 ../queue.c \
@@ -61,8 +62,9 @@ debugPrint.o \
 FreeRTOS2560.o \
 heap_1.o \
 list.o \
-maxSonar.o \
+myMaxSonar.o \
 myADC.o \
+myTimer.o \
 myUSART.o \
 port.o \
 queue.o \
@@ -74,8 +76,9 @@ debugPrint.o \
 FreeRTOS2560.o \
 heap_1.o \
 list.o \
-maxSonar.o \
+myMaxSonar.o \
 myADC.o \
+myTimer.o \
 myUSART.o \
 port.o \
 queue.o \
@@ -87,8 +90,9 @@ debugPrint.d \
 FreeRTOS2560.d \
 heap_1.d \
 list.d \
-maxSonar.d \
+myMaxSonar.d \
 myADC.d \
+myTimer.d \
 myUSART.d \
 port.d \
 queue.d \
@@ -100,8 +104,9 @@ debugPrint.d \
 FreeRTOS2560.d \
 heap_1.d \
 list.d \
-maxSonar.d \
+myMaxSonar.d \
 myADC.d \
+myTimer.d \
 myUSART.d \
 port.d \
 queue.d \
@@ -123,6 +128,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

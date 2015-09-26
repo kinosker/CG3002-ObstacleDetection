@@ -13,7 +13,7 @@
 #define MaxSonar_TriggerStart()		PORTG |= ( 1 << 1 )	// start trigger pin (Pin 40)		
 #define MaxSonar_TriggerStop()		PORTG &= ( 0 << 1 ) // stop trigger pin (Pin 40)
 
-
+#define valueToCM 5
 
 void MaxSonar_Start();
 

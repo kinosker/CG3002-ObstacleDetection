@@ -5,7 +5,7 @@
  *  Author: tienlong
  */ 
 
-#include <maxSonar.h>
+#include <myMaxSonar.h>
 #include <myADC.h>
 
 void MaxSonar_Start()
@@ -20,7 +20,7 @@ void MaxSonar_Start()
 // Return distance in cm
 int MaxSonar_Read(char analogChannel)
 {
-	return analogRead(analogChannel) * 5;
+	return analogRead(analogChannel) * valueToCM;
 }
 
 // Return distance in bits 8:2
