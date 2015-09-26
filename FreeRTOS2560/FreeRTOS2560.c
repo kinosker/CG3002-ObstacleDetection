@@ -52,17 +52,6 @@ void task2(void *p)
 	}
 }
 
-#define STACK_DEPTH 256
-
-
-//void task3(void *p)
-//{
-	//while(1)
-	//{
-		//transmitUSART1("testing aa\n");
-		//vTaskDelay(2000);
-	//}
-//}
 
 void RPI_receiveTask(void *p)
 {
@@ -123,30 +112,6 @@ void maxSonarTask(void *p)
 		
 	}
 }
-
-
-/*
-void task4(void *p)
-{
-unsigned char received;
-
-while(1)
-{
-received = (receiveUSART0());
-transmitUSART0_c(received);
-
-/ *if(checkReceiveUSART0())
-{
-received = (receiveUSART0());
-transmitUSART0_c(received);
-}
-else
-{
-// can use vTaskSuspend..
-vTaskDelay(100);
-}* /
-}
-}*/
 
 
 void vApplicationIdleHook()
@@ -243,29 +208,3 @@ void init()
 	
 	sei(); // enable interrupts..
 }
-
-
-/* itoa:  convert n to characters in s */
-//void itoa(int n, unsigned char s[])
-//{
-	//int i = 0;
-	//
-	//do {       /* generate digits in reverse order */
-		//s[i++] = n % 10 + '0';   /* get next digit */	
-	//}	while ((n /= 10) > 0);     /* delete it */
-	//
-	//reverse(i,s);
-//}
-//
-//void reverse(int size, unsigned char s[])
-//{
-	//int i, j;
-	//char c;
-	//
-	//for (i = 0, j = size-1; i<j; i++, j--) 
-	//{
-		//c = s[i];
-		//s[i] = s[j];
-		//s[j] = c;
-	//}
-//}
