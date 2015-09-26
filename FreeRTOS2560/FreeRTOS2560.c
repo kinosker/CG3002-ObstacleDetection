@@ -116,6 +116,12 @@ void maxSonarTask(void *p)
 
 void myTimerTask(void *p)
 {
+	TaskHandle_t *t_delay = (TaskHandle_t*)p; // recast back.
+	TaskHandle_t test = *t_delay;
+	int i = 2;
+	
+	MyTimer_Init(t_delay);	
+	
 	while(1)
 	{
 		delayMicroCheck(); // task should be suspended and resumed only when delayMicro is used..
@@ -137,8 +143,7 @@ int main(void)
 		
 		init();
 		
-		MyTimer_Init(&t_delay);	
-		xTaskCreate(myTimerTask, "myTimer", MY_TIMER_STACK, NULL, MY_TIMER_PRIORITY, &t_delay); // danger?!?
+		xTaskCreate(myTimerTask, "myTimer", MY_TIMER_STACK, (&t_delay) , MY_TIMER_PRIORITY, &t_delay); // danger?!?
 		
 		xTaskCreate(maxSonarTask, "maxSonar", MAXSONAR_STACK, NULL, MAXSONAR_PRIORITY, &t_maxSonar);
 		xTaskCreate(task1, "Task 1", BLINK_1_STACK, NULL, BLINK_1_PRIORITY, &t1);

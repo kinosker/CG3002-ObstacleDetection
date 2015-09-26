@@ -24,7 +24,7 @@
 void MyTimer_Init(TaskHandle_t *task);
 
 // Return timer 0 value
-inline unsigned char readTimer();
+unsigned char readTimer();
 
 // Dont use for > 1ms...
 // Max error of around + 3 microseconds...

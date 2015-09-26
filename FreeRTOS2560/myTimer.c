@@ -8,7 +8,7 @@
 #include <myTimer.h>
 
 SemaphoreHandle_t semaDelayMicro;
-unsigned char expectedTick = IMPOSSIBLE_RANGE; // max tick is 250... refer to RTOSConfig (timer compare...)
+volatile unsigned char expectedTick = IMPOSSIBLE_RANGE; // max tick is 250... refer to RTOSConfig (timer compare...)
 											   // wont reach this at delayMicroCheck, wont give sema at init()...
 TaskHandle_t * timerTask;					   // hold the task for suspension and resume..
 
@@ -23,7 +23,7 @@ void MyTimer_Init(TaskHandle_t *task)
 }
 
 // Return timer 0 value
-inline unsigned char readTimer()
+unsigned char readTimer()
 {
 	return TCNT0;
 }
@@ -41,14 +41,14 @@ void delayMicro(int delay)
 	expectedTick = currentTick + delay + 1; // add 1 tick for positive error...	
 	
 	vTaskResume( *timerTask ); // resume delayMicroCheck..
-	xSemaphoreTake(semaDelayMicro, MAX_SEMA_WAIT);	// delay for the micro here... max wait for 2 ms... cannot be more than tht..
+	xSemaphoreTake(semaDelayMicro, MAX_SEMA_WAIT);	// delay for the micro here... safety mech: max wait for 2 ms... cannot be more than tht..
 }
 
 void delayMicroCheck()
 {
-	if(expectedTick >= readTimer())
+	if( expectedTick <= readTimer())
 	{
 		xSemaphoreGive(semaDelayMicro); // give the semaphore to resume...	
-		vTaskSuspend(NULL); // suspend again...
+		vTaskSuspend(*timerTask); // suspend again...
 	}
 }
