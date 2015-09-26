@@ -15,6 +15,7 @@
 #include <myTaskConfig.h>
 #include <myADC.h>
 #include <myMaxSonar.h>
+#include <myTimer.h>
 
 #include <stdlib.h>
 
@@ -113,6 +114,14 @@ void maxSonarTask(void *p)
 	}
 }
 
+void myTimerTask(void *p)
+{
+	while(1)
+	{
+		delayMicroCheck(); // task should be suspended and resumed only when delayMicro is used..
+	}
+}
+
 
 void vApplicationIdleHook()
 {
@@ -124,17 +133,22 @@ int main(void)
 {
 	while(1)
 	{
-		init();
-		TaskHandle_t t1,t2,t3,t4,t5;
+		TaskHandle_t t1,t2, t_maxSonar, t_rx, t_tx, t_delay;
 		
-		xTaskCreate(maxSonarTask, "maxSonar", MAXSONAR_STACK, NULL, MAXSONAR_PRIORITY, &t3);
+		init();
+		MyTimer_Init(&t_delay);
+		
+		xTaskCreate(myTimerTask, "myTimer", MY_TIMER_STACK, NULL, MY_TIMER_PRIORITY, &t_delay); // danger?!?
+		
+		xTaskCreate(maxSonarTask, "maxSonar", MAXSONAR_STACK, NULL, MAXSONAR_PRIORITY, &t_maxSonar);
 		xTaskCreate(task1, "Task 1", BLINK_1_STACK, NULL, BLINK_1_PRIORITY, &t1);
 		xTaskCreate(task2, "Task 2", BLINK_2_STACK, NULL, BLINK_2_PRIORITY, &t2);
 		
-		xTaskCreate(RPI_receiveTask, "RPI_Receive", RPI_RECEIVE_STACK, NULL, RPI_RECEIVE_PRIORITY, &t4);
-		xTaskCreate(RPI_sendTask, "RPI_Send", RPI_SEND_STACK, NULL, RPI_SEND_PRIORITY, &t5);
-		
+		xTaskCreate(RPI_receiveTask, "RPI_Receive", RPI_RECEIVE_STACK, NULL, RPI_RECEIVE_PRIORITY, &t_rx);
+		xTaskCreate(RPI_sendTask, "RPI_Send", RPI_SEND_STACK, NULL, RPI_SEND_PRIORITY, &t_tx);
+	
 
+		
 		vTaskStartScheduler();
 		
 	}
@@ -209,28 +223,3 @@ void init()
 	sei(); // enable interrupts..
 }
 
-
-/* itoa:  convert n to characters in s */
-//void itoa(int n, unsigned char s[])
-//{
-	//int i = 0;
-	//
-	//do {       /* generate digits in reverse order */
-		//s[i++] = n % 10 + '0';   /* get next digit */	
-	//}	while ((n /= 10) > 0);     /* delete it */
-	//
-	//reverse(i,s);
-//}
-//
-//void reverse(int size, unsigned char s[])
-//{
-	//int i, j;
-	//char c;
-	//
-	//for (i = 0, j = size-1; i<j; i++, j--) 
-	//{
-		//c = s[i];
-		//s[i] = s[j];
-		//s[j] = c;
-	//}
-//}

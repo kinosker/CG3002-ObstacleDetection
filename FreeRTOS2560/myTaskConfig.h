@@ -13,13 +13,18 @@
 #define USART_1_PRIORITY					( tskIDLE_PRIORITY + 3 )
 #define BLINK_2_PRIORITY					( tskIDLE_PRIORITY + 1 )
 #define BLINK_1_PRIORITY					( tskIDLE_PRIORITY + 1 )
+
 #define MAXSONAR_PRIORITY					( tskIDLE_PRIORITY + 2 )
 #define RPI_SEND_PRIORITY					( tskIDLE_PRIORITY + 2 )
 #define RPI_RECEIVE_PRIORITY				( tskIDLE_PRIORITY + 3 )
+#define MY_TIMER_PRIORITY					( tskIDLE_PRIORITY + 4 ) // Highest priority... will be suspended most of the time...
+
+
 
 #define MAXSONAR_STACK					(configMINIMAL_STACK_SIZE + 200)
 #define RPI_SEND_STACK					(configMINIMAL_STACK_SIZE + 50)
 #define RPI_RECEIVE_STACK				(configMINIMAL_STACK_SIZE + 50)
+#define MY_TIMER_STACK					(configMINIMAL_STACK_SIZE + 20)
 
 #define USART_0_STACK					(configMINIMAL_STACK_SIZE + 50)
 #define USART_1_STACK					(configMINIMAL_STACK_SIZE + 50)
