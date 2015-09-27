@@ -6,6 +6,7 @@
  */ 
 
 #include <myTimer.h>
+#include <myUSART.h>
 
 SemaphoreHandle_t semaDelayMicro, semaDelayMicro2;
 volatile int expectedTick = IMPOSSIBLE_RANGE; // max tick is 250... refer to RTOSConfig (timer compare...)

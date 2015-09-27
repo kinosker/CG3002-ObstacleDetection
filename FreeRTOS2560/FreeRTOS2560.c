@@ -78,6 +78,7 @@ void maxSonarTask(void *p)
 	unsigned char front[] = "Front :";
 	unsigned char left[] = "Left :";
 	unsigned char right[] = "Right :";
+	unsigned char btm[] = "Btm :";
 	
 	unsigned char next[] = " cm, ";
 	unsigned char end[] = " cm\n";
@@ -87,6 +88,8 @@ void maxSonarTask(void *p)
 	while(1)
 	{
 		myMaxSonar_Start();
+		
+		
 		
 		frontSonar = myMaxSonar_Read(AN15);
 		
@@ -109,17 +112,17 @@ void maxSonarTask(void *p)
 		itoa(rightSonar, asciiReading, 10);
 		myUSART_transmitUSART0(right);
 		myUSART_transmitUSART0(asciiReading);
-		myUSART_transmitUSART0(end);
-		
-		vTaskDelayUntil( &xLastWakeTime, 150);  // delay 150 ms for 3 sonar chain...
-		
+		myUSART_transmitUSART0(next);
+					
 		// test btm sonar
 		int btmSonar = myHcSonar_Read();
 		itoa(btmSonar, asciiReading, 10);
-		myUSART_transmitUSART0("Btm :");
+		myUSART_transmitUSART0(btm);
 		myUSART_transmitUSART0(asciiReading);
 		myUSART_transmitUSART0(end);
 		
+		vTaskDelayUntil( &xLastWakeTime, 200);  // delay 150 ms for 3 sonar chain...
+
 	}
 }
 

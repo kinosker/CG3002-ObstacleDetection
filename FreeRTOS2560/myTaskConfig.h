@@ -21,7 +21,7 @@
 
 
 
-#define MAXSONAR_STACK					(configMINIMAL_STACK_SIZE + 200)
+#define MAXSONAR_STACK					(configMINIMAL_STACK_SIZE + 250)
 #define RPI_SEND_STACK					(configMINIMAL_STACK_SIZE + 50)
 #define RPI_RECEIVE_STACK				(configMINIMAL_STACK_SIZE + 50)
 #define MY_TIMER_STACK					(configMINIMAL_STACK_SIZE + 20)

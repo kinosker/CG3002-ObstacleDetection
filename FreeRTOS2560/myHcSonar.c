@@ -5,7 +5,6 @@
  *  Author: tienlong
  */ 
 #include <myHcSonar.h>
-#include <myUSART.h>
 
 volatile int ms_tickStart;
 volatile int ms_tickLapsed;
@@ -17,16 +16,16 @@ SemaphoreHandle_t semaReadReady;
 
 ISR(PCINT0_vect) //Digital pin 50
 {
-	if(HC_Echo_Read == 1)
+		
+	if(HC_Echo_Read)
 	{
-		myUSART_transmitUSART0("\nAt the PCINT0 ISR\n");
 		us_tickStart = myTimer_Read();
 		ms_tickStart = xTaskGetTickCountFromISR();
 	}	
-	else
+	else if (!(HC_Echo_Read))
 	{
 		if ((us_tickEnd = myTimer_Read()) < us_tickStart) // if smaller then add...
-			us_tickEnd += MAX_TICKS;
+		us_tickEnd += MAX_TICKS;
 			
 		us_tickLapsed = myTimer_Read() - us_tickStart;
 		ms_tickLapsed = xTaskGetTickCountFromISR() - ms_tickStart;
@@ -49,10 +48,10 @@ void myHcSonar_Start()
 {
 	HcSonar_TriggerStart();
 	
-	myTimer_DelayMicro2(20); // delay 20 micro seconds for the pulse
-	//vTaskDelay(1);	// delay 1ms using vTaskDelay
+	myTimer_DelayMicro2(30); // delay 20 micro seconds for the pulse
 	
 	HcSonar_TriggerStop();
+
 }
 
 int myHcSonar_Read()
@@ -60,7 +59,7 @@ int myHcSonar_Read()
 	int usLength, msLength;
 	
 	myHcSonar_Start();	
-	xSemaphoreTake(semaReadReady, 200);
+	xSemaphoreTake(semaReadReady, portMAX_DELAY);
 	
 	usLength = us_tickLapsed / 14;
 	msLength = ms_tickLapsed * 17;
