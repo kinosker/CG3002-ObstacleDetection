@@ -71,7 +71,7 @@ int myHcSonar_Read()
 	xSemaphoreTake(semaReadReady, portMAX_DELAY);
 	
 	usLength = us_tickLapsed / 14;
-	msLength = ms_tickLapsed * 17;
+	msLength = ms_tickLapsed * 5;
 	return usLength + msLength;
 	
 }

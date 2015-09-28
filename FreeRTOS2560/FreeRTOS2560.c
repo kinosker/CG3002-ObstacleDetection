@@ -32,6 +32,12 @@ void init();
 xQueueHandle queueObstacleData;
 xQueueHandle queueObstacleNumber;
 
+#define MOTOR_LEFT_START()			PORTE |= ( 1 << 4 )	// start motor left
+#define MOTOR_LEFT_STOP()			PORTE &= ~( 1 << 4 ) // stop motor left
+
+#define MOTOR_RIGHT_START()			PORTH |= ( 1 << 4 )	// start motor left
+#define MOTOR_RIGHT_STOP()			PORTH &= ~( 1 << 4 ) // stop motor left
+
 
 typedef struct 
 {
@@ -126,10 +132,39 @@ void Sonar_Task(void *p)
 		frontSonar = myMaxSonar_Read(AN15);
 		leftSonar = myMaxSonar_Read(AN14);
 		rightSonar = myMaxSonar_Read(AN13) - 10;
+		vTaskDelay(50);
 		btmSonar = myHcSonar_Read();
 		
+	
 		if (btmSonar > 999)
 			btmSonar = 888;
+	
+	
+		if(frontSonar < 70)
+		{
+			if(leftSonar < 45 && rightSonar < 45)
+			{
+				MOTOR_LEFT_START();
+				MOTOR_RIGHT_START();
+			}
+			else if( (leftSonar-10) > rightSonar)
+			{
+				MOTOR_RIGHT_STOP();
+				MOTOR_LEFT_START();
+			}
+			else if (rightSonar > (leftSonar-10))
+			{
+				MOTOR_LEFT_STOP();
+				MOTOR_RIGHT_START();
+			}
+				 
+	}
+	else
+	{
+		MOTOR_RIGHT_STOP();
+		MOTOR_LEFT_STOP();
+	}
+		
 		
 	//	if(frontSonar < OBSTACLE_DISTANCE)
 		{
@@ -181,7 +216,7 @@ void Sonar_Task(void *p)
 			
 		}
 		
-		vTaskDelayUntil( &xLastWakeTime, 150);  // delay 150 ms for 3 sonar chain...
+		vTaskDelayUntil( &xLastWakeTime, 200);  // delay 150 ms for 3 sonar chain...
 	}
 }
 
@@ -215,7 +250,7 @@ int main(void)
 		
 		init();
 
-		xTaskCreate(task1, "Task 1", BLINK_1_STACK, NULL, BLINK_1_PRIORITY, &t1);
+		//xTaskCreate(task1, "Task 1", BLINK_1_STACK, NULL, BLINK_1_PRIORITY, &t1);
 		//xTaskCreate(task2, "Task 2", BLINK_2_STACK, NULL, BLINK_2_PRIORITY, &t2);
 		
 		xTaskCreate(myTimerTask, "myTimer", MY_TIMER_STACK, (&t_delay) , MY_TIMER_PRIORITY, &t_delay); // danger?!?		
@@ -294,10 +329,12 @@ void init()
 		MaxSonar_Init();
 		myHcSonar_Init();
 		
+		
 		queueObstacleNumber = xQueueCreate(QUEUE_SIZE, sizeof (char)); // create queue
 		queueObstacleData = xQueueCreate( (QUEUE_SIZE*SONAR_NUM), sizeof (obstacleData)); // create queue
 		
-		DDRB |= (1 << DDB6) | (1 << DDB7); // set direction for led
+		DDRE |= (1 << DDE4) ; // E4 => digitial pin 2 (LEFT)
+		DDRH |= (1 << DDH4) ; // H4 => digital pin 7 (RIGHT)
 		
 		
 	}
@@ -313,17 +350,17 @@ void init()
 
 
 // Tasks flash LEDs at Pins 12 and 13 at 1Hz and 2Hz respectively.
-void task1(void *p)
-{
-while(1)
-{
-PORTB |= ( 1 << 6 );
-vTaskDelay(1000); // Delay for 500 ticks. Since each tick is 1ms,
-//this delays for 500ms.
-PORTB &= ( 0 << 6 );
-vTaskDelay(1000);
-}
-}
+//void task1(void *p)
+//{
+//while(1)
+//{
+//PORTB |= ( 1 << 6 );
+//vTaskDelay(1000); // Delay for 500 ticks. Since each tick is 1ms,
+////this delays for 500ms.
+//PORTB &= ( 0 << 6 );
+//vTaskDelay(1000);
+//}
+//}
 
 
 //void task2(void *p)
