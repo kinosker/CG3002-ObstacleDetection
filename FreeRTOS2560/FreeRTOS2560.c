@@ -41,63 +41,6 @@ typedef struct
 } obstacleData;
 
 
-//void Sonar_Task(void *p)
-//{
-//TickType_t xLastWakeTime;
-//int frontSonar, leftSonar, rightSonar;
-//char asciiReading[4];
-//
-//
-//unsigned char front[] = "Front :";
-//unsigned char left[] = "Left :";
-//unsigned char right[] = "Right :";
-//unsigned char btm[] = "Btm :";
-//
-//unsigned char next[] = " cm, ";
-//unsigned char end[] = " cm\n";
-//
-//xLastWakeTime = xTaskGetTickCount(); // get tick count
-//
-//while(1)
-//{
-//myMaxSonar_Start();
-//
-//
-//
-//frontSonar = myMaxSonar_Read(AN15);
-//
-//itoa(frontSonar, asciiReading, 10);
-//myUSART_transmitUSART0(front);
-//myUSART_transmitUSART0(asciiReading);
-//myUSART_transmitUSART0(next);
-//
-//leftSonar = myMaxSonar_Read(AN14);
-//
-//itoa(leftSonar, asciiReading, 10);
-//myUSART_transmitUSART0(left);
-//myUSART_transmitUSART0(asciiReading);
-//myUSART_transmitUSART0(next);
-//
-//
-//rightSonar = myMaxSonar_Read(AN13);
-//rightSonar -= 10; // Hardware Problem : offset
-//
-//itoa(rightSonar, asciiReading, 10);
-//myUSART_transmitUSART0(right);
-//myUSART_transmitUSART0(asciiReading);
-//myUSART_transmitUSART0(next);
-//
-//// test btm sonar
-//int btmSonar = myHcSonar_Read();
-//itoa(btmSonar, asciiReading, 10);
-//myUSART_transmitUSART0(btm);
-//myUSART_transmitUSART0(asciiReading);
-//myUSART_transmitUSART0(end);
-//
-//vTaskDelayUntil( &xLastWakeTime, 150);  // delay 150 ms for 3 sonar chain...
-//
-//}
-//}
 
 
 
@@ -129,10 +72,7 @@ void RPI_sendTask(void *p)
 		
 		while(obstacleDetected--)
 		{
-			//myUSART_transmitUSART0_c((obstacleDetected + '0'));
-			//myUSART_transmitUSART0_c(('\n'));
-			
-			
+
 			xQueueReceive(queueObstacleData, &(dataToSend), portMAX_DELAY);
 			myUSART_transmitUSART0_c(dataToSend.deviceID);
 			myUSART_transmitUSART0(": ");
@@ -189,7 +129,7 @@ void Sonar_Task(void *p)
 		btmSonar = myHcSonar_Read();
 		
 		if (btmSonar > 999)
-			btmSonar = 0;
+			btmSonar = 888;
 		
 	//	if(frontSonar < OBSTACLE_DISTANCE)
 		{
@@ -398,3 +338,61 @@ vTaskDelay(1000);
 //}
 //}
 
+
+//void Sonar_Task(void *p)
+//{
+//TickType_t xLastWakeTime;
+//int frontSonar, leftSonar, rightSonar;
+//char asciiReading[4];
+//
+//
+//unsigned char front[] = "Front :";
+//unsigned char left[] = "Left :";
+//unsigned char right[] = "Right :";
+//unsigned char btm[] = "Btm :";
+//
+//unsigned char next[] = " cm, ";
+//unsigned char end[] = " cm\n";
+//
+//xLastWakeTime = xTaskGetTickCount(); // get tick count
+//
+//while(1)
+//{
+//myMaxSonar_Start();
+//
+//
+//
+//frontSonar = myMaxSonar_Read(AN15);
+//
+//itoa(frontSonar, asciiReading, 10);
+//myUSART_transmitUSART0(front);
+//myUSART_transmitUSART0(asciiReading);
+//myUSART_transmitUSART0(next);
+//
+//leftSonar = myMaxSonar_Read(AN14);
+//
+//itoa(leftSonar, asciiReading, 10);
+//myUSART_transmitUSART0(left);
+//myUSART_transmitUSART0(asciiReading);
+//myUSART_transmitUSART0(next);
+//
+//
+//rightSonar = myMaxSonar_Read(AN13);
+//rightSonar -= 10; // Hardware Problem : offset
+//
+//itoa(rightSonar, asciiReading, 10);
+//myUSART_transmitUSART0(right);
+//myUSART_transmitUSART0(asciiReading);
+//myUSART_transmitUSART0(next);
+//
+//// test btm sonar
+//int btmSonar = myHcSonar_Read();
+//itoa(btmSonar, asciiReading, 10);
+//myUSART_transmitUSART0(btm);
+//myUSART_transmitUSART0(asciiReading);
+//myUSART_transmitUSART0(end);
+//
+//vTaskDelayUntil( &xLastWakeTime, 150);  // delay 150 ms for 3 sonar chain...
+//
+//}
+//}

@@ -22,7 +22,7 @@
 #define RIGHT_SONAR_ID						82
 #define BTM_SONAR_ID						66
 
-#define OBSTACLE_DISTANCE					50
+#define OBSTACLE_DISTANCE					55
 
 
 #define USART_0_PRIORITY					( tskIDLE_PRIORITY + 2 )

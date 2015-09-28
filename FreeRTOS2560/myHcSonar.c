@@ -8,6 +8,8 @@
 
 volatile int ms_tickStart;
 volatile int ms_tickLapsed;
+volatile int ms_tickEnd;
+
 volatile int us_tickEnd;
 volatile int us_tickStart;
 volatile int us_tickLapsed;
@@ -24,11 +26,18 @@ ISR(PCINT0_vect) //Digital pin 50
 	}	
 	else if (!(HC_Echo_Read))
 	{
+
+		if ((ms_tickEnd = xTaskGetTickCountFromISR()) < ms_tickStart)
+			ms_tickEnd += 65535;
+		
 		if ((us_tickEnd = myTimer_Read()) < us_tickStart) // if smaller then add...
-		us_tickEnd += MAX_TICKS;
+			us_tickEnd += MAX_TICKS;
+		
 			
-		us_tickLapsed = myTimer_Read() - us_tickStart;
-		ms_tickLapsed = xTaskGetTickCountFromISR() - ms_tickStart;
+			
+		us_tickLapsed = us_tickEnd - us_tickStart;
+		ms_tickLapsed = ms_tickEnd - ms_tickStart;
+		
 		xSemaphoreGiveFromISR(semaReadReady, pdFALSE);
 	}	
 }
