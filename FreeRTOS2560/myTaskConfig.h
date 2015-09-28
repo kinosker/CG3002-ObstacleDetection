@@ -9,6 +9,9 @@
 #ifndef MYTASK_H_
 #define MYTASK_H_
 
+#define QUEUE_SIZE							5
+#define SONAR_NUM							4
+
 #define FRONT_DEVICE						0
 #define LEFT_DEVICE							1
 #define RIGHT_DEVICE						2
@@ -28,7 +31,7 @@
 #define BLINK_1_PRIORITY					( tskIDLE_PRIORITY + 1 )
 
 #define MAXSONAR_PRIORITY					( tskIDLE_PRIORITY + 2 )
-#define RPI_SEND_PRIORITY					( tskIDLE_PRIORITY + 2 )
+#define RPI_SEND_PRIORITY					( tskIDLE_PRIORITY + 1 )
 #define RPI_RECEIVE_PRIORITY				( tskIDLE_PRIORITY + 3 )
 #define MY_TIMER_PRIORITY					( tskIDLE_PRIORITY + 4 ) // Highest priority... will be suspended most of the time...
 
