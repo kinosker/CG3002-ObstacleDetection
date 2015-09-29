@@ -131,7 +131,7 @@ void Sonar_Task(void *p)
 		myMaxSonar_Start();
 		frontSonar = myMaxSonar_Read(AN15);
 		leftSonar = myMaxSonar_Read(AN14);
-		rightSonar = myMaxSonar_Read(AN13) - 10;
+		rightSonar = myMaxSonar_Read(AN13) - 10; // for offset...
 		vTaskDelay(50);
 		btmSonar = myHcSonar_Read();
 		
@@ -147,12 +147,12 @@ void Sonar_Task(void *p)
 				MOTOR_LEFT_START();
 				MOTOR_RIGHT_START();
 			}
-			else if( (leftSonar-10) > rightSonar)
+			else if( (leftSonar+10) > rightSonar)
 			{
 				MOTOR_RIGHT_STOP();
 				MOTOR_LEFT_START();
 			}
-			else if (rightSonar > (leftSonar-10))
+			else if (rightSonar > (leftSonar+10))
 			{
 				MOTOR_LEFT_STOP();
 				MOTOR_RIGHT_START();
@@ -250,7 +250,7 @@ int main(void)
 		
 		init();
 
-		//xTaskCreate(task1, "Task 1", BLINK_1_STACK, NULL, BLINK_1_PRIORITY, &t1);
+		xTaskCreate(task1, "Task 1", BLINK_1_STACK, NULL, BLINK_1_PRIORITY, &t1);
 		//xTaskCreate(task2, "Task 2", BLINK_2_STACK, NULL, BLINK_2_PRIORITY, &t2);
 		
 		xTaskCreate(myTimerTask, "myTimer", MY_TIMER_STACK, (&t_delay) , MY_TIMER_PRIORITY, &t_delay); // danger?!?		
@@ -349,18 +349,20 @@ void init()
 
 
 
-// Tasks flash LEDs at Pins 12 and 13 at 1Hz and 2Hz respectively.
-//void task1(void *p)
-//{
-//while(1)
-//{
-//PORTB |= ( 1 << 6 );
-//vTaskDelay(1000); // Delay for 500 ticks. Since each tick is 1ms,
-////this delays for 500ms.
-//PORTB &= ( 0 << 6 );
-//vTaskDelay(1000);
-//}
-//}
+//// Tasks flash LEDs at Pins 12 and 13 at 1Hz and 2Hz respectively.
+void task1(void *p)
+{
+		DDRB |= (1 <<DDB6 ); // led
+		
+while(1)
+{
+PORTB |= ( 1 << 6 );
+vTaskDelay(1000); // Delay for 500 ticks. Since each tick is 1ms,
+//this delays for 500ms.
+PORTB &= ( 0 << 6 );
+vTaskDelay(1000);
+}
+}
 
 
 //void task2(void *p)

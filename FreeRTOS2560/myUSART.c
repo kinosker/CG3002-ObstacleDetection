@@ -198,12 +198,18 @@ unsigned char myUSART_receiveUSART0()
 // -1 if fail, 0 success
 char myUSART_startHandShake()
 {
-	myUSART_transmitUSART1_c(HANDSHAKE_START);
 	
+	myUSART_transmitUSART1_c(HANDSHAKE_START);
+
 	if (! myUSART_receiveHandShakeAck(myUSART_receiveUSART1()))
 	{
+			myUSART_transmitUSART0("RUBBISH\n");
+
 		return -1; //error handling
 	}
+
+	myUSART_transmitUSART0("Received\n");
+
 	
 	myUSART_transmitUSART1_c(HANDSHAKE_FIN);
 	

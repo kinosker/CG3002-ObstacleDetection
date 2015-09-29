@@ -22,7 +22,13 @@ void myMaxSonar_Start()
 // Return distance in cm
 int myMaxSonar_Read(char analogChannel)
 {
-	return myADC_analogRead(analogChannel) * valueToCM;
+	int reading = 0;
+	
+	unsigned char adcReading = myADC_analogRead(analogChannel);
+	reading = adcReading * valueToCM;
+	reading = reading + (adcReading/12); // divided by 12 for float compensation
+	
+	return reading;
 }
 
 // Return distance in bits 8:2

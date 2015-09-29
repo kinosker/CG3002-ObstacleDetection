@@ -45,7 +45,7 @@
 #define USART_0_STACK					(configMINIMAL_STACK_SIZE + 50)
 #define USART_1_STACK					(configMINIMAL_STACK_SIZE + 50)
 #define BLINK_2_STACK					(configMINIMAL_STACK_SIZE + 20)
-#define BLINK_1_STACK					(configMINIMAL_STACK_SIZE + 20)
+#define BLINK_1_STACK					(configMINIMAL_STACK_SIZE)
 
 
 
