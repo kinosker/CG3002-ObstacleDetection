@@ -190,12 +190,12 @@ Disassembly of section .text:
      124:	6d cf       	rjmp	.-294    	; 0x0 <__vectors>
 
 00000126 <RPI_receiveTask>:
-}
+		xTaskCreate(task1, "Task 1", BLINK_1_STACK, NULL, BLINK_1_PRIORITY, &t1);
+		//xTaskCreate(task2, "Task 2", BLINK_2_STACK, NULL, BLINK_2_PRIORITY, &t2);
+		
+		xTaskCreate(myTimerTask, "myTimer", MY_TIMER_STACK, (&t_delay) , MY_TIMER_PRIORITY, &t_delay); // danger?!?		
+		xTaskCreate(Sonar_Task, "maxSonar", MAXSONAR_STACK, NULL, MAXSONAR_PRIORITY, &t_maxSonar);
 
-
-
-void setDigitalInputPowerReduction()
-{
      126:	17 d6       	rcall	.+3118   	; 0xd56 <myUSART_waitForHandshake>
      128:	86 e0       	ldi	r24, 0x06	; 6
      12a:	92 e0       	ldi	r25, 0x02	; 2
@@ -434,75 +434,75 @@ void setDigitalInputPowerReduction()
      30c:	9c cf       	rjmp	.-200    	; 0x246 <Sonar_Task+0x2e>
 
 0000030e <setPowerReduction>:
-}
 
-// Shut down unused...
-void setPowerReduction()
-{
-	PRR0 = (1<<PRTWI) | (1<<PRTIM2) | (1<<PRTIM1) | (1<<PRSPI); // Shut down I2C, timer2, timer 1, SPI
+		
+		vTaskStartScheduler();
+		
+	}
+}
      30e:	8c ec       	ldi	r24, 0xCC	; 204
      310:	80 93 64 00 	sts	0x0064, r24
-	// Include USART0 after finish debugging using usb.... (1<<PRUSART0)
-	
-	PRR1 = (1<<PRTIM5) | (1<<PRTIM4) | (1<<PRTIM3) | (1<<PRUSART3) | (1<<PRUSART2); // Shut down timer5, timer4, timer3, USART3, USART2
+
+
+
      314:	8e e3       	ldi	r24, 0x3E	; 62
      316:	80 93 65 00 	sts	0x0065, r24
      31a:	08 95       	ret
 
 0000031c <clearTimer>:
+	// Set when confirm which ADC pin not used..
+	//DIDR0 =s
+	//DIDR1 =
+	//DIDR2 =
 }
 
+     31c:	10 92 80 00 	sts	0x0080, r1
+// Shut down unused...
+     320:	10 92 81 00 	sts	0x0081, r1
+void setPowerReduction()
+     324:	10 92 6f 00 	sts	0x006F, r1
+{
+	PRR0 = (1<<PRTWI) | (1<<PRTIM2) | (1<<PRTIM1) | (1<<PRSPI); // Shut down I2C, timer2, timer 1, SPI
+	// Include USART0 after finish debugging using usb.... (1<<PRUSART0)
+     328:	10 92 b0 00 	sts	0x00B0, r1
+	
+     32c:	10 92 b1 00 	sts	0x00B1, r1
+	PRR1 = (1<<PRTIM5) | (1<<PRTIM4) | (1<<PRTIM3) | (1<<PRUSART3) | (1<<PRUSART2); // Shut down timer5, timer4, timer3, USART3, USART2
+     330:	10 92 70 00 	sts	0x0070, r1
+	
+	setDigitalInputPowerReduction();
+}
+     334:	10 92 90 00 	sts	0x0090, r1
+
+     338:	10 92 91 00 	sts	0x0091, r1
 void clearTimer()
+     33c:	10 92 71 00 	sts	0x0071, r1
 {
 	// Clear Timer1
 	TCCR1A = 0;     // Clear all settings
-     31c:	10 92 80 00 	sts	0x0080, r1
+     340:	10 92 a0 00 	sts	0x00A0, r1
 	TCCR1B = 0;     // Clear all settings
-     320:	10 92 81 00 	sts	0x0081, r1
+     344:	10 92 a1 00 	sts	0x00A1, r1
 	TIMSK1 = 0;     // Disable all interrupts
-     324:	10 92 6f 00 	sts	0x006F, r1
+     348:	10 92 72 00 	sts	0x0072, r1
 
 	// Clear Timer2
 	TCCR2A = 0;     // Clear all settings
-     328:	10 92 b0 00 	sts	0x00B0, r1
-	TCCR2B = 0;     // Clear all settings
-     32c:	10 92 b1 00 	sts	0x00B1, r1
-	TIMSK2 = 0;     // Disable all interrupts
-     330:	10 92 70 00 	sts	0x0070, r1
-	
-	// Clear Timer3
-	TCCR3A = 0;     // Clear all settings
-     334:	10 92 90 00 	sts	0x0090, r1
-	TCCR3B = 0;     // Clear all settings
-     338:	10 92 91 00 	sts	0x0091, r1
-	TIMSK3 = 0;     // Disable all interrupts
-     33c:	10 92 71 00 	sts	0x0071, r1
-
-	// Clear Timer4
-	TCCR4A = 0;     // Clear all settings
-     340:	10 92 a0 00 	sts	0x00A0, r1
-	TCCR4B = 0;     // Clear all settings
-     344:	10 92 a1 00 	sts	0x00A1, r1
-	TIMSK4 = 0;     // Disable all interrupts
-     348:	10 92 72 00 	sts	0x0072, r1
-
-	// Clear Timer5
-	TCCR5A = 0;     // Clear all settings
      34c:	10 92 20 01 	sts	0x0120, r1
-	TCCR5B = 0;     // Clear all settings
+	TCCR2B = 0;     // Clear all settings
      350:	10 92 21 01 	sts	0x0121, r1
-	TIMSK5 = 0;     // Disable all interrupts
+	TIMSK2 = 0;     // Disable all interrupts
      354:	10 92 73 00 	sts	0x0073, r1
      358:	08 95       	ret
 
 0000035a <init>:
-}
-
-void init()
-{
+	
+	// Clear Timer3
+	TCCR3A = 0;     // Clear all settings
+	TCCR3B = 0;     // Clear all settings
      35a:	cf 93       	push	r28
-	// Ensure atomic...
-	ATOMIC_BLOCK( ATOMIC_RESTORESTATE )
+	TIMSK3 = 0;     // Disable all interrupts
+
      35c:	cf b7       	in	r28, 0x3f	; 63
     return 1;
 }
@@ -511,41 +511,41 @@ static __inline__ uint8_t __iCliRetVal(void)
 {
     cli();
      35e:	f8 94       	cli
-	{
-		clearTimer();
+	// Clear Timer4
+	TCCR4A = 0;     // Clear all settings
      360:	dd df       	rcall	.-70     	; 0x31c <clearTimer>
-		setPowerReduction();
+	TCCR4B = 0;     // Clear all settings
      362:	d5 df       	rcall	.-86     	; 0x30e <setPowerReduction>
-		myUSART_USART0_Init();
+	TIMSK4 = 0;     // Disable all interrupts
      364:	5b d4       	rcall	.+2230   	; 0xc1c <myUSART_USART0_Init>
-		myUSART_USART1_Init();
+
      366:	7a d4       	rcall	.+2292   	; 0xc5c <myUSART_USART1_Init>
-		myADC_Init();
+	// Clear Timer5
      368:	41 d2       	rcall	.+1154   	; 0x7ec <myADC_Init>
-		MaxSonar_Init();
+	TCCR5A = 0;     // Clear all settings
      36a:	99 9a       	sbi	0x13, 1	; 19
-		myHcSonar_Init();
+	TCCR5B = 0;     // Clear all settings
      36c:	bb d1       	rcall	.+886    	; 0x6e4 <myHcSonar_Init>
-		
-		
-		queueObstacleNumber = xQueueCreate(QUEUE_SIZE, sizeof (char)); // create queue
+	TIMSK5 = 0;     // Disable all interrupts
+}
+
      36e:	40 e0       	ldi	r20, 0x00	; 0
      370:	61 e0       	ldi	r22, 0x01	; 1
      372:	85 e0       	ldi	r24, 0x05	; 5
      374:	6d d7       	rcall	.+3802   	; 0x1250 <xQueueGenericCreate>
      376:	90 93 a2 08 	sts	0x08A2, r25
      37a:	80 93 a1 08 	sts	0x08A1, r24
-		queueObstacleData = xQueueCreate( (QUEUE_SIZE*SONAR_NUM), sizeof (obstacleData)); // create queue
+void init()
      37e:	40 e0       	ldi	r20, 0x00	; 0
      380:	65 e0       	ldi	r22, 0x05	; 5
      382:	84 e1       	ldi	r24, 0x14	; 20
      384:	65 d7       	rcall	.+3786   	; 0x1250 <xQueueGenericCreate>
      386:	90 93 a4 08 	sts	0x08A4, r25
      38a:	80 93 a3 08 	sts	0x08A3, r24
-		
-		DDRE |= (1 << DDE4) ; // E4 => digitial pin 2 (LEFT)
+{
+	// Ensure atomic...
      38e:	6c 9a       	sbi	0x0d, 4	; 13
-		DDRH |= (1 << DDH4) ; // H4 => digital pin 7 (RIGHT)
+	ATOMIC_BLOCK( ATOMIC_RESTORESTATE )
      390:	e1 e0       	ldi	r30, 0x01	; 1
      392:	f1 e0       	ldi	r31, 0x01	; 1
      394:	80 81       	ld	r24, Z
@@ -558,23 +558,23 @@ static __inline__ void __iRestore(const  uint8_t *__s)
 {
     SREG = *__s;
      39a:	cf bf       	out	0x3f, r28	; 63
-		
-		
-	}
-	
-	sei(); // enable interrupts..
+	{
+		clearTimer();
+		setPowerReduction();
+		myUSART_USART0_Init();
+		myUSART_USART1_Init();
      39c:	78 94       	sei
-}
+		myADC_Init();
      39e:	cf 91       	pop	r28
      3a0:	08 95       	ret
 
 000003a2 <main>:
-	
-	// do nth
-}
-
-int main(void)
 {
+	TaskHandle_t *t_delay = (TaskHandle_t*)p; // recast back.
+
+	
+	myTimer_Init(t_delay);	
+	
      3a2:	cf 93       	push	r28
      3a4:	df 93       	push	r29
      3a6:	cd b7       	in	r28, 0x3d	; 61
@@ -587,12 +587,12 @@ int main(void)
      3b4:	cd bf       	out	0x3d, r28	; 61
 	while(1)
 	{
-		TaskHandle_t t_maxSonar, t_rx, t_tx, t_delay, t1;
-		
-		init();
+		myTimer_DelayChecker(); // task should be suspended and resumed only when delayMicro is used..
+	}
+}
      3b6:	d1 df       	rcall	.-94     	; 0x35a <init>
 
-		xTaskCreate(task1, "Task 1", BLINK_1_STACK, NULL, BLINK_1_PRIORITY, &t1);
+
      3b8:	a1 2c       	mov	r10, r1
      3ba:	b1 2c       	mov	r11, r1
      3bc:	c1 2c       	mov	r12, r1
@@ -610,9 +610,9 @@ int main(void)
      3d4:	84 ed       	ldi	r24, 0xD4	; 212
      3d6:	90 e0       	ldi	r25, 0x00	; 0
      3d8:	0e 94 8e 0b 	call	0x171c	; 0x171c <xTaskGenericCreate>
-		//xTaskCreate(task2, "Task 2", BLINK_2_STACK, NULL, BLINK_2_PRIORITY, &t2);
-		
-		xTaskCreate(myTimerTask, "myTimer", MY_TIMER_STACK, (&t_delay) , MY_TIMER_PRIORITY, &t_delay); // danger?!?		
+void vApplicationIdleHook()
+{
+	
      3dc:	ce 01       	movw	r24, r28
      3de:	03 96       	adiw	r24, 0x03	; 3
      3e0:	7c 01       	movw	r14, r24
@@ -625,7 +625,7 @@ int main(void)
      3ee:	81 ee       	ldi	r24, 0xE1	; 225
      3f0:	90 e0       	ldi	r25, 0x00	; 0
      3f2:	0e 94 8e 0b 	call	0x171c	; 0x171c <xTaskGenericCreate>
-		xTaskCreate(Sonar_Task, "maxSonar", MAXSONAR_STACK, NULL, MAXSONAR_PRIORITY, &t_maxSonar);
+	// do nth
      3f6:	ce 01       	movw	r24, r28
      3f8:	09 96       	adiw	r24, 0x09	; 9
      3fa:	7c 01       	movw	r14, r24
@@ -639,9 +639,9 @@ int main(void)
      40a:	8c e0       	ldi	r24, 0x0C	; 12
      40c:	91 e0       	ldi	r25, 0x01	; 1
      40e:	0e 94 8e 0b 	call	0x171c	; 0x171c <xTaskGenericCreate>
+}
 
-		
-		xTaskCreate(RPI_receiveTask, "RPI_Receive", RPI_RECEIVE_STACK, NULL, RPI_RECEIVE_PRIORITY, &t_rx);
+int main(void)
      412:	ce 01       	movw	r24, r28
      414:	07 96       	adiw	r24, 0x07	; 7
      416:	7c 01       	movw	r14, r24
@@ -655,7 +655,7 @@ int main(void)
      426:	83 e9       	ldi	r24, 0x93	; 147
      428:	90 e0       	ldi	r25, 0x00	; 0
      42a:	0e 94 8e 0b 	call	0x171c	; 0x171c <xTaskGenericCreate>
-		xTaskCreate(RPI_sendTask, "RPI_Send", RPI_SEND_STACK, NULL, RPI_SEND_PRIORITY, &t_tx);
+{
      42e:	ce 01       	movw	r24, r28
      430:	05 96       	adiw	r24, 0x05	; 5
      432:	7c 01       	movw	r14, r24
@@ -669,10 +669,10 @@ int main(void)
      442:	88 e9       	ldi	r24, 0x98	; 152
      444:	90 e0       	ldi	r25, 0x00	; 0
      446:	0e 94 8e 0b 	call	0x171c	; 0x171c <xTaskGenericCreate>
-	
-
+	while(1)
+	{
+		TaskHandle_t t_maxSonar, t_rx, t_tx, t_delay, t1;
 		
-		vTaskStartScheduler();
      44a:	0e 94 ee 0c 	call	0x19dc	; 0x19dc <vTaskStartScheduler>
      44e:	b3 cf       	rjmp	.-154    	; 0x3b6 <main+0x14>
 
@@ -2154,8 +2154,8 @@ void myTimer_DelayChecker()
      d1a:	5f ef       	ldi	r21, 0xFF	; 255
      d1c:	60 e0       	ldi	r22, 0x00	; 0
      d1e:	70 e0       	ldi	r23, 0x00	; 0
-     d20:	80 91 44 09 	lds	r24, 0x0944
-     d24:	90 91 45 09 	lds	r25, 0x0945
+     d20:	80 91 46 09 	lds	r24, 0x0946
+     d24:	90 91 47 09 	lds	r25, 0x0947
      d28:	b2 d3       	rcall	.+1892   	; 0x148e <xQueueGenericReceive>
      d2a:	82 e5       	ldi	r24, 0x52	; 82
      d2c:	99 e0       	ldi	r25, 0x09	; 9
@@ -2171,8 +2171,8 @@ void myTimer_DelayChecker()
      d40:	50 e0       	ldi	r21, 0x00	; 0
      d42:	60 e0       	ldi	r22, 0x00	; 0
      d44:	70 e0       	ldi	r23, 0x00	; 0
-     d46:	80 91 44 09 	lds	r24, 0x0944
-     d4a:	90 91 45 09 	lds	r25, 0x0945
+     d46:	80 91 46 09 	lds	r24, 0x0946
+     d4a:	90 91 47 09 	lds	r25, 0x0947
      d4e:	aa d2       	rcall	.+1364   	; 0x12a4 <xQueueGenericSend>
      d50:	8c 2f       	mov	r24, r28
      d52:	cf 91       	pop	r28

@@ -166,13 +166,13 @@ unsigned char myUSART_receiveUSART1()
 {
 	unsigned char data;
 	
-	xSemaphoreTake(semaUsart0Receive, portMAX_DELAY);
+	xSemaphoreTake(semaUsart1Receive, portMAX_DELAY);
 	data = ringBufferPop(&uart1_rxRingBuffer);
 	
 	//need?
 	if(ringBufferNotEmpty(&uart1_rxRingBuffer))
 	{
-		xSemaphoreGive(semaUsart0Receive);
+		xSemaphoreGive(semaUsart1Receive);
 	}
 	
 	return data;
@@ -182,7 +182,7 @@ unsigned char myUSART_receiveUSART0()
 {
 	unsigned char data;
 	
-	xSemaphoreTake(semaUsart1Receive, portMAX_DELAY);
+	xSemaphoreTake(semaUsart0Receive, portMAX_DELAY);
 	
 	data = ringBufferPop(&uart0_rxRingBuffer);
 	
