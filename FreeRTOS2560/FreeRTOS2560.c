@@ -159,10 +159,25 @@ void Sonar_Task(void *p)
 			}
 				 
 	}
+	else if (rightSonar < 30 && leftSonar > 30)
+	{	
+		// narrow path
+		// too close to right
+		MOTOR_RIGHT_STOP();
+		MOTOR_LEFT_START();
+	}
+	else if (leftSonar < 30 && rightSonar > 30)
+	{
+		// narrow path
+		// too close to left
+		MOTOR_RIGHT_START();
+		MOTOR_LEFT_STOP();		
+	}
 	else
 	{
-		MOTOR_RIGHT_STOP();
-		MOTOR_LEFT_STOP();
+		// narrow path or no obstacle infront.
+			MOTOR_RIGHT_STOP();
+			MOTOR_LEFT_STOP();
 	}
 		
 		

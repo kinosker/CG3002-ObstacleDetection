@@ -10,14 +10,15 @@
 SemaphoreHandle_t semaGuardStartADC;
 SemaphoreHandle_t semaReadADC;
 
-volatile unsigned char adcReading;
+volatile unsigned char adcReading_H;
+volatile unsigned char adcReading_L;
 
 
 /*ADC Conversion Complete Interrupt Service Routine (ISR)*/
 ISR(ADC_vect)
 {	
-	adcReading = ADCH; // read value
-	
+	adcReading_L = ADCL; // dont change the ORDER L first then H!!! Reading L will hold H value.
+	adcReading_H = ADCH; // read value of H (not used, 640cm and 1280cm for the resolution)
 	// give semaphore, dont run block task immediately..
 	xSemaphoreGiveFromISR(semaReadADC, pdFALSE);
 }
@@ -27,7 +28,7 @@ void myADC_Init()
 	
 	ADCSRA = ( 1<<ADEN ) | ( 1<<ADIE ) | ADC_PRESCALER; // enable ADC, enable interrupt, set prescaler
 	ADCSRB = 0; // No auto trigger (0 for ADATE), No analog compare... 
-	ADMUX = ( 1 << REFS0 ) | (1 << ADLAR ); // use AVCC as reference, Left adjust (dont need 2 LSB)
+	ADMUX = ( 1 << REFS0 ) ; // use AVCC as reference, right adjust (take LSB but not 2 MSB)
 	
 	// initialize semaphore..
 	semaReadADC = xSemaphoreCreateBinary();
@@ -72,5 +73,13 @@ unsigned char myADC_readADC(char channel)
 {
 	xSemaphoreTake(semaReadADC, portMAX_DELAY); // wait for reading...
 	xSemaphoreGive(semaGuardStartADC); // reading done, nxt task can start ADC
-	return adcReading;
+
+	if(adcReading_H)
+	{
+		return 0xFF; // return max reading if got high reading..
+	}
+	else
+	{
+			return adcReading_L; // return L bits reading dont need far distance...		
+	}
 }

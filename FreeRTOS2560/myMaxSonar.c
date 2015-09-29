@@ -25,8 +25,8 @@ int myMaxSonar_Read(char analogChannel)
 	int reading = 0;
 	
 	unsigned char adcReading = myADC_analogRead(analogChannel);
-	reading = adcReading * valueToCM;
-	reading = reading + (adcReading/12); // divided by 12 for float compensation
+	reading = adcReading /FLOAT_TO_CM; // get the decimal point of ADC
+	reading += adcReading; // add the exact adcReading
 	
 	return reading;
 }
