@@ -9,7 +9,7 @@
 
 SemaphoreHandle_t semaUsart1Receive;
 SemaphoreHandle_t semaUsart0Receive;
-
+SemaphoreHandle_t semaUsart1HandShake;
 
  ringBuffer uart0_rxRingBuffer;
  ringBuffer uart0_txRingBuffer;
@@ -118,6 +118,7 @@ void myUSART_USART1_Init(void)
 	
 	// Semaphore
 	semaUsart1Receive = xSemaphoreCreateBinary();
+	semaUsart1HandShake = xSemaphoreCreateBinary();
 }
 
 
@@ -201,16 +202,10 @@ char myUSART_startHandShake()
 	
 	myUSART_transmitUSART1_c(HANDSHAKE_START);
 
-	if (! myUSART_receiveHandShakeAck(myUSART_receiveUSART1()))
-	{
-			myUSART_transmitUSART0("RUBBISH\n");
+	xSemaphoreTake(semaUsart1HandShake, portMAX_DELAY); // wait for handshake to be ack...
 
-		return -1; //error handling
-	}
+	myUSART_transmitUSART0("HS ack\n");
 
-	myUSART_transmitUSART0("Received\n");
-
-	
 	myUSART_transmitUSART1_c(HANDSHAKE_FIN);
 	
 	return 0;
@@ -235,6 +230,11 @@ char myUSART_waitForHandshake()
 	return 0;		
 }
 
+void myUSART_completeHandShake()
+{
+	xSemaphoreGive(semaUsart1HandShake);	
+}
+
 char myUSART_receiveHandShakeAck(unsigned char message)
 {
 	return (message == HANDSHAKE_ACK);
@@ -249,4 +249,27 @@ char myUSART_receiveHandShakeStart(unsigned char message)
 char myUSART_receiveHandShakeFin(unsigned char message)
 {
 	return (message == HANDSHAKE_FIN);
+}
+
+
+char myUSART_receiveMessageACK(unsigned char message)
+{
+	return (message == MESSAGE_ACK);
+}
+
+
+unsigned char myUSART_peekReceiveUSART1()
+{
+	unsigned char data;
+	
+	xSemaphoreTake(semaUsart1Receive, portMAX_DELAY);
+	data = ringBufferPeek(&uart1_rxRingBuffer);
+	
+	//need?
+	if(ringBufferNotEmpty(&uart1_rxRingBuffer))
+	{
+		xSemaphoreGive(semaUsart1Receive);
+	}
+	
+	return data;
 }

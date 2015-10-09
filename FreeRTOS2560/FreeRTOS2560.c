@@ -32,6 +32,7 @@ void init();
 xQueueHandle queueObstacleData;
 xQueueHandle queueObstacleNumber;
 
+
 #define MOTOR_LEFT_START()			PORTE |= ( 1 << 4 )	// start motor left
 #define MOTOR_LEFT_STOP()			PORTE &= ~( 1 << 4 ) // stop motor left
 
@@ -47,56 +48,87 @@ typedef struct
 } obstacleData;
 
 
-
-
-
+// receive task should peek........
+// if is handshake ACK give semaphore...
+//
 void RPI_receiveTask(void *p)
 {
+	unsigned char data;
 	while(1)
 	{
-		myUSART_waitForHandshake();
-		myUSART_transmitUSART0("\n\nRPI Handshake Done\n\n");
+		data = myUSART_peekReceiveUSART1();
+		//myUSART_transmitUSART0("R = ");	
+		//myUSART_transmitUSART0(data);
+		//myUSART_transmitUSART0("\n");
 		
+		if (myUSART_receiveHandShakeAck(data))
+		{
+			myUSART_receiveUSART1(); // pop the data
+			myUSART_completeHandShake();
+		}
+		else if (myUSART_receiveMessageACK(data))
+		{
+			// clear buffer for RPI_SEND
+			myUSART_receiveUSART1(); // pop the data
+			myUSART_transmitUSART0("MSG ACk!\n");
+		}
+		else if (myUSART_receiveHandShakeStart(data))
+		{
+			myUSART_waitForHandshake();
+			//myUSART_transmitUSART0("\n\nRPI Handshake Done\n\n");
+				
+		}
+		else
+		{
+			myUSART_receiveUSART1(); // pop the data		
+			
+		}
 	}
 
 }
 
 void RPI_sendTask(void *p)
 {
-	//myUSART_startHandShake();
-	//myUSART_transmitUSART0("\n\nMy Handshake Done\n\n");
+	
 	
 	obstacleData dataToSend;
 	char obstacleDetected;
-	
 
 	
 	while(1)
 	{
+		myUSART_transmitUSART0("Init\n");
+		myUSART_startHandShake();
+		myUSART_transmitUSART0("Hs Done\n");
+			
+			
 		xQueueReceive(queueObstacleNumber, &(obstacleDetected), portMAX_DELAY);
-		
+	
+		myUSART_transmitUSART1_c(obstacleDetected+'0');
+		myUSART_transmitUSART1_c('\n');
+	
 		
 		while(obstacleDetected--)
 		{
 
 			xQueueReceive(queueObstacleData, &(dataToSend), portMAX_DELAY);
-			myUSART_transmitUSART0_c(dataToSend.deviceID);
-			myUSART_transmitUSART0(": ");
-			myUSART_transmitUSART0(dataToSend.data);
-			myUSART_transmitUSART0(", ");
 			
-
-		}
+			myUSART_transmitUSART0_c(dataToSend.deviceID);
+			myUSART_transmitUSART1_c(dataToSend.deviceID);
+				
+			myUSART_transmitUSART0(": ");
+			
+			myUSART_transmitUSART0(dataToSend.data);
+			myUSART_transmitUSART1(dataToSend.data);
+			myUSART_transmitUSART1_c('\n');
+				
+			myUSART_transmitUSART0(", ");
+			//myUSART_transmitUSART1(", ");
+			
+		}	
 		myUSART_transmitUSART0_c('\n');
 		
-		vTaskDelay(500);
 	}
-
-	
-
-	
-	
-
 }
 
 
@@ -120,7 +152,7 @@ void Sonar_Task(void *p)
 {
 	TickType_t xLastWakeTime;
 	char obstacleDetected = 0;
-	int frontSonar, leftSonar, rightSonar, btmSonar;
+	int frontSonar, leftSonar, rightSonar, btmIR;
 	char deviceToSend[4] = {0};
 	char end= '\n';
 	
@@ -129,15 +161,14 @@ void Sonar_Task(void *p)
 	while(1)
 	{
 		myMaxSonar_Start();
-		frontSonar = myMaxSonar_Read(AN15);
-		leftSonar = myMaxSonar_Read(AN14);
-		rightSonar = myMaxSonar_Read(AN13) - 10; // for offset...
+		frontSonar	= myMaxSonar_Read(AN15);
+		leftSonar	= myMaxSonar_Read(AN14);
+		rightSonar	= myMaxSonar_Read(AN13); // for offset...
+		btmIR		= mySharpIR_Read(AN12);
 		vTaskDelay(50);
-		btmSonar = myHcSonar_Read();
 		
-	
-		if (btmSonar > 999)
-			btmSonar = 888;
+		//btmSonar = myHcSonar_Read();
+		
 	
 	
 		if(frontSonar < 70)
@@ -205,25 +236,20 @@ void Sonar_Task(void *p)
 	//	if(obstacleDetected > 0)
 		{	
 			//obstacleDetected + '0'; // simple conversion to ascii..
-			
+	
 			xQueueSendToBack(queueObstacleNumber,  &obstacleDetected, portMAX_DELAY); // send obstacle...
 			
-			// start handshake...
-			//myUSART_startHandShake();
-			//myUSART_transmitUSART0("\n\nMy Handshake Done\n\n");
-			// end handshake
-			
+
 			//myUSART_transmitUSART0(obstacleDetected);
 			//myUSART_transmitUSART0_c(end);
 			
 			obstacleSend(deviceToSend[FRONT_DEVICE], frontSonar);
-//			myUSART_transmitUSART0_c(end);
+
 			obstacleSend(deviceToSend[LEFT_DEVICE], leftSonar);
-	//		myUSART_transmitUSART0_c(end);
+
 			obstacleSend(deviceToSend[RIGHT_DEVICE], rightSonar);
-		//	myUSART_transmitUSART0_c(end);
-			obstacleSend(deviceToSend[BTM_DEVICE], btmSonar);
-			//myUSART_transmitUSART0_c(end);
+
+			obstacleSend(deviceToSend[BTM_DEVICE], btmIR);
 
 			obstacleDetected = 0; // reset back...
 			
@@ -262,7 +288,7 @@ int main(void)
 	while(1)
 	{
 		TaskHandle_t t_maxSonar, t_rx, t_tx, t_delay, t1;
-		
+	
 		init();
 
 		xTaskCreate(task1, "Task 1", BLINK_1_STACK, NULL, BLINK_1_PRIORITY, &t1);
@@ -272,6 +298,7 @@ int main(void)
 		xTaskCreate(Sonar_Task, "maxSonar", MAXSONAR_STACK, NULL, MAXSONAR_PRIORITY, &t_maxSonar);
 
 		
+		// Need fix receive concurrency issues.
 		xTaskCreate(RPI_receiveTask, "RPI_Receive", RPI_RECEIVE_STACK, NULL, RPI_RECEIVE_PRIORITY, &t_rx);
 		xTaskCreate(RPI_sendTask, "RPI_Send", RPI_SEND_STACK, NULL, RPI_SEND_PRIORITY, &t_tx);
 	

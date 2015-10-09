@@ -22,9 +22,10 @@
 #define RX_SIZE 32
 #define TX_SIZE 32
 
-#define HANDSHAKE_START 0x00
-#define HANDSHAKE_ACK 0x55
-#define HANDSHAKE_FIN 0xFF
+#define HANDSHAKE_START 22 // (SYN)
+#define HANDSHAKE_ACK 5 // (ENQ)
+#define HANDSHAKE_FIN 2 // (Start of text)
+#define MESSAGE_ACK 6
 
  void myUSART_USART0_Init(void);
  
@@ -54,5 +55,8 @@
  
  char myUSART_receiveHandShakeFin(unsigned char message);
  
+void myUSART_completeHandShake();
+
+char myUSART_receiveMessageACK(unsigned char message);
 
 #endif /* MYUSART_H_ */

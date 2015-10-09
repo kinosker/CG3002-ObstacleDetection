@@ -17,6 +17,10 @@ void ringBufferInit(ringBuffer *ring, unsigned char* buffer, unsigned char size)
 	ring->rLength = 0;	 
 }
 
+unsigned char ringBufferPeek(ringBuffer *ring)
+{
+	   return ring->rBuffer[ ring->rIndex ];	
+}
 
 // int?
 unsigned char ringBufferPop(ringBuffer *ring)
@@ -33,6 +37,7 @@ unsigned char ringBufferPop(ringBuffer *ring)
     
     return element;
 }
+
 
 
 void ringBufferPush( ringBuffer *ring, unsigned char element )

@@ -37,7 +37,7 @@ void myADC_Init()
 }
 
 
-unsigned char myADC_analogRead(char channel)
+int myADC_analogRead(char channel)
 {
 	myADC_startADC(channel);
 	return myADC_readADC(channel);
@@ -69,17 +69,14 @@ void myADC_startADC(char channel)
 	ADCSRA |= ( 1 << ADSC );	// READY TO SEND!!
 }
 
-unsigned char myADC_readADC(char channel)
+int myADC_readADC(char channel)
 {
+	int adcReading;
 	xSemaphoreTake(semaReadADC, portMAX_DELAY); // wait for reading...
 	xSemaphoreGive(semaGuardStartADC); // reading done, nxt task can start ADC
 
-	if(adcReading_H)
-	{
-		return 0xFF; // return max reading if got high reading..
-	}
-	else
-	{
-			return adcReading_L; // return L bits reading dont need far distance...		
-	}
+	adcReading = ((adcReading_H &0b11) << 8);
+	adcReading += adcReading_L;
+	
+	return adcReading;
 }

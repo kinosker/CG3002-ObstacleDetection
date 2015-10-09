@@ -16,6 +16,8 @@ myMaxSonar.c
 
 myADC.c
 
+mySharpIR.c
+
 myTimer.c
 
 myUSART.c

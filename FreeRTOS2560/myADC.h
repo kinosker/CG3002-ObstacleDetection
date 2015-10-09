@@ -39,12 +39,12 @@
 	
 void myADC_Init();
 
-unsigned char myADC_analogRead(char channel);
+int myADC_analogRead(char channel);
 
 // channel = AN0 to AN15, use the macro...
 void myADC_startADC(char channel);
 
-unsigned char myADC_readADC(char channel);
+int myADC_readADC(char channel);
 
 
 

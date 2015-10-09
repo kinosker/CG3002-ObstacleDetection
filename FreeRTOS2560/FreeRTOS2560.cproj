@@ -155,6 +155,12 @@
     <Compile Include="myADC.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="mySharpIR.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mySharpIR.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="myTaskConfig.h">
       <SubType>compile</SubType>
     </Compile>

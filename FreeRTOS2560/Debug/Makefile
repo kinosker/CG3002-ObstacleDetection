@@ -44,6 +44,7 @@ C_SRCS +=  \
 ../myHcSonar.c \
 ../myMaxSonar.c \
 ../myADC.c \
+../mySharpIR.c \
 ../myTimer.c \
 ../myUSART.c \
 ../port.c \
@@ -66,6 +67,7 @@ list.o \
 myHcSonar.o \
 myMaxSonar.o \
 myADC.o \
+mySharpIR.o \
 myTimer.o \
 myUSART.o \
 port.o \
@@ -81,6 +83,7 @@ list.o \
 myHcSonar.o \
 myMaxSonar.o \
 myADC.o \
+mySharpIR.o \
 myTimer.o \
 myUSART.o \
 port.o \
@@ -96,6 +99,7 @@ list.d \
 myHcSonar.d \
 myMaxSonar.d \
 myADC.d \
+mySharpIR.d \
 myTimer.d \
 myUSART.d \
 port.d \
@@ -111,6 +115,7 @@ list.d \
 myHcSonar.d \
 myMaxSonar.d \
 myADC.d \
+mySharpIR.d \
 myTimer.d \
 myUSART.d \
 port.d \
@@ -133,6 +138,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

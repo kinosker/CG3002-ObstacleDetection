@@ -13,6 +13,7 @@
 #define MaxSonar_TriggerStart()		PORTG |= ( 1 << 1 )	// start trigger pin (Pin 40)		
 #define MaxSonar_TriggerStop()		PORTG &= ~( 1 << 1 ) // stop trigger pin (Pin 40)
 
+
 // Resolution for MaxSonar = 5v/512 per inch
 // ADC resolution = 5/1024..
 // CM = 1/2 * 2.54  = 1.27 (0.27 left over ~ 1/4 or 1/3) 
