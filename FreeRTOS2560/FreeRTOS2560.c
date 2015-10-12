@@ -131,6 +131,68 @@ void RPI_sendTask(void *p)
 	}
 }
 
+char checkWithinRange(int reading, int * checkReading, const char range)
+{
+	return reading > (*checkReading + range) || reading < (*checkReading - range);
+}
+
+// Calibrate if initial reading, firstCheck reading and final reading is within range. ( Stable reading after ....)
+// final reading = btmIR reading (i = CALIBRATE_COUNT)
+// firstCheck reading = btmIR reading ( i = CALIBRATE_COUNT/2)
+// initial reading  = btmIR reading (i = 0)
+// Write new calibrate value if all matches..
+void activeCalibration(int* calibratedReading, int reading)
+{
+	static const char range = 5; // put at header file later...
+	static const char CALIBRATE_COUNT = 20; // put at header file later...
+	static int i = 0;
+	static int checkReading[2] = {0};
+	
+	if(checkWithinRange(reading, calibratedReading, range) && i == 0)
+	{
+		// if current reading and calibratedReading is within range and no checking in progess
+		// skip the calibration process... not needed
+		return;
+	}
+	
+	
+	if (i == 0)
+	{
+		checkReading[0] = reading;
+	}
+	else if (i == CALIBRATE_COUNT/2)
+	{
+		if(checkWithinRange(reading, checkReading, range))
+		{
+			// Out of range.. restart to find new calibration point..
+			checkReading[0] = reading;
+			i = 0; // reset to count...
+		}
+		else
+		{	// within range.. need more confirmation
+			checkReading[1] = reading;
+		}
+	}
+	else if (i == CALIBRATE_COUNT)
+	{
+		i = 0; // reset to count..
+
+		if(checkWithinRange(reading, checkReading, range))
+		{
+			// Out of range.. restart to find new calibration point..
+			checkReading[0] = reading;
+		}
+		else
+		{
+			// all 3 readings within range... can calibrate as new stable.
+			*calibratedReading = checkReading[0]; // btmIR is calibrated..
+		}
+	}
+	
+	i = (i+1) % CALIBRATE_COUNT;
+	return -1; // failed to calibrate.
+}
+
 
 
 void obstacleSend(char deviceToSend, int reading)
@@ -149,39 +211,20 @@ void obstacleSend(char deviceToSend, int reading)
 }
 
 
-void storeBtmReadings(int * btmStairs, int btmIR, int offset, int * upStairs)
+char detectStairs(int calibratedBtmIR, int btmIR)
 {
-		static int i = 0;
-		
-		btmStairs[i] = btmIR + offset;
-		upStairs[i] = btmIR - offset;
-		i = (i+1) % 5;
-}
-
-char detectStairs(int *btmStairs, int * upStairs, int btmIR)
-{
-	int i;
-	
-	for (i = 0; i < 5; i ++)
+	if(btmIR > calibratedBtmIR + 15 || btmIR < calibratedBtmIR - 15)
 	{
-		
-		if(btmStairs[i] == 0 || upStairs[i] == 0)
-		{
-			// values not stored yet...
-			continue;
-		}
-		
-		if(btmIR > btmStairs[i] || btmStairs < upStairs)
-		{
-			return 1; // stairs found
-		}
+		return 1; // stairs found
 	}
-	
-	return 0; // no stairs
-	
+	else
+	{
+		return 0; // no stairs
+		
+	}
 }
 
-void obstacleDetection(int frontSonar, int leftSonar, int rightSonar, int * btmStairs, int * upStairs, int btmIR)
+void obstacleDetection(int frontSonar, int leftSonar, int rightSonar, int btmIR, int calibratedBtmIR)
 {
 	if(frontSonar < 70)
 		{
@@ -216,7 +259,7 @@ void obstacleDetection(int frontSonar, int leftSonar, int rightSonar, int * btmS
 			MOTOR_RIGHT_START();
 			MOTOR_LEFT_STOP();
 		}
-		else if (detectStairs(btmStairs, upStairs, btmIR))
+		else if (detectStairs(calibratedBtmIR, btmIR))
 		{
 			// stairs detection
 			MOTOR_LEFT_START();
@@ -237,12 +280,8 @@ void Sonar_Task(void *p)
 	int frontSonar, leftSonar, rightSonar, btmIR;
 	char deviceToSend[4] = {0};
 	char end= '\n';
-	
-	
-	int i = 0;
-	int offset = 15;
-	int btmStairs[5] = {0}; // take 5 values + offset to detect stairs (down)
-	int upStairs[5] = {0}; // take 5 values + offset to detect stairs (up)
+
+	int calibratedBtmIR = mySharpIR_Read(AN12);
 	
 	xLastWakeTime = xTaskGetTickCount(); // get tick count
 		
@@ -254,9 +293,8 @@ void Sonar_Task(void *p)
 		rightSonar	= myMaxSonar_Read(AN13); // for offset...
 		btmIR		= mySharpIR_Read(AN12);	
 	
-		storeBtmReadings(btmStairs, btmIR, offset, upStairs); // Store 5 most recent reading...
-		
-		obstacleDetection(frontSonar, leftSonar, rightSonar, btmStairs, upStairs, btmIR);
+		activeCalibration(&calibratedBtmIR, btmIR); // attempt to re-calibrate btm ir sensor if stable enough..
+		obstacleDetection(frontSonar, leftSonar, rightSonar, btmIR, calibratedBtmIR);
 		
 		
 		
