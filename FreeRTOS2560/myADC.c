@@ -47,10 +47,8 @@ int myADC_analogRead(char channel)
 void myADC_startADC(char channel)
 {
 	
-	 //char buffer [10];
-	
-	
-	xSemaphoreTake(semaGuardStartADC, portMAX_DELAY);
+	 //char buffer [10];	
+	xSemaphoreTake(semaGuardStartADC, portMAX_DELAY); // guard against concurrent task starting adc at same time
     ADMUX = ( ADMUX & 11100000 ) | ( channel & 0b00011111 ); // keep bit 5:7, set bit 0:4 as Mux
 	
 	//transmitUSART0("ADMUX = ");
@@ -71,12 +69,13 @@ void myADC_startADC(char channel)
 
 int myADC_readADC(char channel)
 {
-	int adcReading;
+	int adcReading=0;
 	xSemaphoreTake(semaReadADC, portMAX_DELAY); // wait for reading...
-	xSemaphoreGive(semaGuardStartADC); // reading done, nxt task can start ADC
 
-	adcReading = ((adcReading_H &0b11) << 8);
+	adcReading = ((adcReading_H & 0b11) << 8);
 	adcReading += adcReading_L;
+
+	xSemaphoreGive(semaGuardStartADC); // reading done, nxt task can start ADC
 	
 	return adcReading;
 }

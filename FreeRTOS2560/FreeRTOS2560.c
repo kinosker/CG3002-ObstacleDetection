@@ -33,11 +33,11 @@ xQueueHandle queueObstacleData;
 xQueueHandle queueObstacleNumber;
 
 
-#define MOTOR_LEFT_START()			PORTE |= ( 1 << 4 )	// start motor left
-#define MOTOR_LEFT_STOP()			PORTE &= ~( 1 << 4 ) // stop motor left
+#define MOTOR_LEFT_START()			PORTE |= ( 1 << 4 )	// start motor Left (Pin 2)
+#define MOTOR_LEFT_STOP()			PORTE &= ~( 1 << 4 ) // stop motor Left
 
-#define MOTOR_RIGHT_START()			PORTH |= ( 1 << 4 )	// start motor left
-#define MOTOR_RIGHT_STOP()			PORTH &= ~( 1 << 4 ) // stop motor left
+#define MOTOR_RIGHT_START()			PORTH |= ( 1 << 4 )	// start motor Right (Pin 7)
+#define MOTOR_RIGHT_STOP()			PORTH &= ~( 1 << 4 ) // stop motor Right
 
 
 typedef struct 
@@ -70,7 +70,7 @@ void RPI_receiveTask(void *p)
 		{
 			// clear buffer for RPI_SEND
 			myUSART_receiveUSART1(); // pop the data
-			myUSART_transmitUSART0("MSG ACk!\n");
+			//myUSART_transmitUSART0("MSG ACk!\n");
 		}
 		else if (myUSART_receiveHandShakeStart(data))
 		{
@@ -97,9 +97,9 @@ void RPI_sendTask(void *p)
 	
 	while(1)
 	{
-		myUSART_transmitUSART0("Init\n");
-		myUSART_startHandShake();
-		myUSART_transmitUSART0("Hs Done\n");
+	//	myUSART_transmitUSART0("Init\n");
+	//	myUSART_startHandShake();
+	//	myUSART_transmitUSART0("Hs Done\n");
 			
 			
 		xQueueReceive(queueObstacleNumber, &(obstacleDetected), portMAX_DELAY);
@@ -148,30 +148,42 @@ void obstacleSend(char deviceToSend, int reading)
 	}
 }
 
-void Sonar_Task(void *p)
+
+void storeBtmReadings(int * btmStairs, int btmIR, int offset, int * upStairs)
 {
-	TickType_t xLastWakeTime;
-	char obstacleDetected = 0;
-	int frontSonar, leftSonar, rightSonar, btmIR;
-	char deviceToSend[4] = {0};
-	char end= '\n';
-	
-	xLastWakeTime = xTaskGetTickCount(); // get tick count
+		static int i = 0;
 		
-	while(1)
+		btmStairs[i] = btmIR + offset;
+		upStairs[i] = btmIR - offset;
+		i = (i+1) % 5;
+}
+
+char detectStairs(int *btmStairs, int * upStairs, int btmIR)
+{
+	int i;
+	
+	for (i = 0; i < 5; i ++)
 	{
-		myMaxSonar_Start();
-		frontSonar	= myMaxSonar_Read(AN15);
-		leftSonar	= myMaxSonar_Read(AN14);
-		rightSonar	= myMaxSonar_Read(AN13); // for offset...
-		btmIR		= mySharpIR_Read(AN12);
-		vTaskDelay(50);
 		
-		//btmSonar = myHcSonar_Read();
+		if(btmStairs[i] == 0 || upStairs[i] == 0)
+		{
+			// values not stored yet...
+			continue;
+		}
 		
+		if(btmIR > btmStairs[i] || btmStairs < upStairs)
+		{
+			return 1; // stairs found
+		}
+	}
 	
+	return 0; // no stairs
 	
-		if(frontSonar < 70)
+}
+
+void obstacleDetection(int frontSonar, int leftSonar, int rightSonar, int * btmStairs, int * upStairs, int btmIR)
+{
+	if(frontSonar < 70)
 		{
 			if(leftSonar < 45 && rightSonar < 45)
 			{
@@ -188,28 +200,64 @@ void Sonar_Task(void *p)
 				MOTOR_LEFT_STOP();
 				MOTOR_RIGHT_START();
 			}
-				 
-	}
-	else if (rightSonar < 30 && leftSonar > 30)
-	{	
-		// narrow path
-		// too close to right
-		MOTOR_RIGHT_STOP();
-		MOTOR_LEFT_START();
-	}
-	else if (leftSonar < 30 && rightSonar > 30)
-	{
-		// narrow path
-		// too close to left
-		MOTOR_RIGHT_START();
-		MOTOR_LEFT_STOP();		
-	}
-	else
-	{
-		// narrow path or no obstacle infront.
+			
+		}
+		else if (rightSonar < 30 && leftSonar > 30)
+		{
+			// narrow path
+			// too close to right
+			MOTOR_RIGHT_STOP();
+			MOTOR_LEFT_START();
+		}
+		else if (leftSonar < 30 && rightSonar > 30)
+		{
+			// narrow path
+			// too close to left
+			MOTOR_RIGHT_START();
+			MOTOR_LEFT_STOP();
+		}
+		else if (detectStairs(btmStairs, upStairs, btmIR))
+		{
+			// stairs detection
+			MOTOR_LEFT_START();
+			MOTOR_RIGHT_START();
+		}
+		else
+		{
+			// narrow path or no obstacle infront.
 			MOTOR_RIGHT_STOP();
 			MOTOR_LEFT_STOP();
-	}
+		}
+}
+
+void Sonar_Task(void *p)
+{
+	TickType_t xLastWakeTime;
+	char obstacleDetected = 0;
+	int frontSonar, leftSonar, rightSonar, btmIR;
+	char deviceToSend[4] = {0};
+	char end= '\n';
+	
+	
+	int i = 0;
+	int offset = 15;
+	int btmStairs[5] = {0}; // take 5 values + offset to detect stairs (down)
+	int upStairs[5] = {0}; // take 5 values + offset to detect stairs (up)
+	
+	xLastWakeTime = xTaskGetTickCount(); // get tick count
+		
+	while(1)
+	{	
+		myMaxSonar_Start();
+		frontSonar	= myMaxSonar_Read(AN15);
+		leftSonar	= myMaxSonar_Read(AN14);
+		rightSonar	= myMaxSonar_Read(AN13); // for offset...
+		btmIR		= mySharpIR_Read(AN12);	
+	
+		storeBtmReadings(btmStairs, btmIR, offset, upStairs); // Store 5 most recent reading...
+		
+		obstacleDetection(frontSonar, leftSonar, rightSonar, btmStairs, upStairs, btmIR);
+		
 		
 		
 	//	if(frontSonar < OBSTACLE_DISTANCE)
@@ -257,7 +305,9 @@ void Sonar_Task(void *p)
 			
 		}
 		
-		vTaskDelayUntil( &xLastWakeTime, 200);  // delay 150 ms for 3 sonar chain...
+		//prevIR = btmIR;
+		
+		vTaskDelayUntil( &xLastWakeTime, 150);  // delay 150 ms for 3 sonar chain...
 	}
 }
 
@@ -313,10 +363,10 @@ int main(void)
 
 void setDigitalInputPowerReduction()
 {
-	// Set when confirm which ADC pin not used..
-	//DIDR0 =s
-	//DIDR1 =
-	//DIDR2 =
+	// Set when confirm which ADC pin not used for digital..
+	DIDR0 = 0b11111111; // all adc pin not used for digital
+	DIDR1 |= (1<<AIN1D) | (1<<AIN0D);
+	DIDR2 = 0b11111111; // add adc pin not used for digital
 }
 
 // Shut down unused...
