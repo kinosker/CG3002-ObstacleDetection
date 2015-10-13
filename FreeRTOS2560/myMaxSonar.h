@@ -9,9 +9,12 @@
 #ifndef MAXSONAR_H_
 #define MAXSONAR_H_
 
-#define MaxSonar_Init()				DDRG |= (1 << DDG1) // Set pin G1 as output (Pin 40)
-#define MaxSonar_TriggerStart()		PORTG |= ( 1 << 1 )	// start trigger pin (Pin 40)		
-#define MaxSonar_TriggerStop()		PORTG &= ~( 1 << 1 ) // stop trigger pin (Pin 40)
+#define MaxSonar_Init()					DDRG |= (1 << DDG1) | (1 << DDG0) // Set pin G1,G0 as output (Pin 40, 41)
+#define MaxSonar_BtmTriggerStart()		PORTG |= ( 1 << DDG1 )		// start trigger pin (Pin 40)		
+#define MaxSonar_BtmTriggerStop()		PORTG &= ~( 1 << DDG1 )		// stop trigger pin (Pin 40)
+
+#define MaxSonar_TopTriggerStart()		PORTG |= ( 1 << DDG0 )		// start trigger pin (Pin 41)
+#define MaxSonar_TopTriggerStop()		PORTG &= ~( 1 << DDG0 )		// stop trigger pin (Pin 41)
 
 
 // Resolution for MaxSonar = 5v/512 per inch
@@ -20,7 +23,9 @@
 // FLOAT to CM should be /3
 #define FLOAT_TO_CM 3
 
-void myMaxSonar_Start();
+
+void myMaxSonar_BtmStart();
+void myMaxSonar_TopStart();
 
 // Return distance in cm
 int myMaxSonar_Read(char analogChannel);

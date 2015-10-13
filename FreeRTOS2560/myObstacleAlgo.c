@@ -12,7 +12,7 @@
 
 char detectStairs(int calibratedBtmIR, int btmIR)
 {
-	if(btmIR > calibratedBtmIR + 15 || btmIR < calibratedBtmIR - 15)
+	if(btmIR > calibratedBtmIR + STAIRS_OFFSET || btmIR < calibratedBtmIR - STAIRS_OFFSET)
 	{
 		return 1; // stairs found
 	}
@@ -25,10 +25,11 @@ char detectStairs(int calibratedBtmIR, int btmIR)
 
 void obstacleAvoidance(int frontSonar, int leftSonar, int rightSonar, int btmIR, int calibratedBtmIR)
 {
-	if(frontSonar < 70)
+	if(frontSonar < FRONT_OBSTACLE_DISTANCE)
 	{
-		if(leftSonar < 45 && rightSonar < 45)
+		if(leftSonar < SIDE_OBSTACLE_DISTANCE && rightSonar < SIDE_OBSTACLE_DISTANCE)
 		{
+			// dead end... block on 3 side...
 			MOTOR_LEFT_START();
 			MOTOR_RIGHT_START();
 		}
@@ -44,16 +45,14 @@ void obstacleAvoidance(int frontSonar, int leftSonar, int rightSonar, int btmIR,
 		}
 		
 	}
-	else if (rightSonar < 30 && leftSonar > 30)
+	else if (rightSonar < SIDE_OBSTACLE_DISTANCE && leftSonar > SIDE_OBSTACLE_DISTANCE)
 	{
-		// narrow path
 		// too close to right
 		MOTOR_RIGHT_STOP();
 		MOTOR_LEFT_START();
 	}
-	else if (leftSonar < 30 && rightSonar > 30)
+	else if (leftSonar < SIDE_OBSTACLE_DISTANCE && rightSonar > SIDE_OBSTACLE_DISTANCE)
 	{
-		// narrow path
 		// too close to left
 		MOTOR_RIGHT_START();
 		MOTOR_LEFT_STOP();
@@ -74,29 +73,35 @@ void obstacleAvoidance(int frontSonar, int leftSonar, int rightSonar, int btmIR,
 
 // return number of obstacle detected...
 // implicitly return the device to send.
-char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceToSend, int leftSonar, int rightSonar)
+char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceToSend, int leftSonar, int rightSonar, int topSonar)
 {
 	// Commented out when debuggin.
 
-	//	if(frontSonar < OBSTACLE_DISTANCE)
+	//	if(frontSonar < FRONT_OBSTACLE_DISTANCE)
 	{
 		obstacleDetected ++;
 		deviceToSend[FRONT_DEVICE] = FRONT_SONAR_ID;
 	}
-	//	if (leftSonar < OBSTACLE_DISTANCE)
+	//	if (leftSonar < SIDE_OBSTACLE_DISTANCE)
 	{
 		obstacleDetected ++;
 		deviceToSend[LEFT_DEVICE] = LEFT_SONAR_ID;
 	}
-	//	if (rightSonar < OBSTACLE_DISTANCE)
+	//	if (rightSonar < SIDE_OBSTACLE_DISTANCE)
 	{
 		obstacleDetected++;
 		deviceToSend[RIGHT_DEVICE] = RIGHT_SONAR_ID;
 	}
-	//	if (btmSonar < OBSTACLE_DISTANCE)
+	//	if (detectStairs(calibratedBtmIR, btmIR))
 	{
 		obstacleDetected++;
 		deviceToSend[BTM_DEVICE] = BTM_SONAR_ID;
+	}
+	// if (...)
+	{
+		
+		obstacleDetected++;
+		deviceToSend[TOP_DEVICE] = TOP_SONAR_ID;
 	}
 	
 	return obstacleDetected;

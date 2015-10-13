@@ -9,14 +9,24 @@
 #include <myADC.h>
 #include <myTimer.h>
 
-void myMaxSonar_Start()
+void myMaxSonar_BtmStart()
 {
-	MaxSonar_TriggerStart();
+	MaxSonar_BtmTriggerStart();
 	
 	myTimer_DelayMicro(25); // delay 25 micro seconds...
 	//vTaskDelay(1);	// delay 1ms using vTaskDelay
 	
-	MaxSonar_TriggerStop();
+	MaxSonar_BtmTriggerStop();
+}
+
+void myMaxSonar_TopStart()
+{
+	MaxSonar_TopTriggerStart();
+	
+	myTimer_DelayMicro(25); // delay 25 micro seconds...
+	//vTaskDelay(1);	// delay 1ms using vTaskDelay
+	
+	MaxSonar_TopTriggerStart();
 }
 
 // Return distance in cm

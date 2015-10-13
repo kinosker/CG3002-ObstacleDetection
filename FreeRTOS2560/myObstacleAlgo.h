@@ -13,19 +13,22 @@
 #define LEFT_DEVICE							1
 #define RIGHT_DEVICE						2
 #define BTM_DEVICE							3
+#define TOP_DEVICE							4
 
+#define TOP_SONAR_ID						84
 #define FRONT_SONAR_ID						70
 #define LEFT_SONAR_ID						76
 #define RIGHT_SONAR_ID						82
 #define BTM_SONAR_ID						66
 
-#define OBSTACLE_DISTANCE					55
+#define FRONT_OBSTACLE_DISTANCE				70
+#define SIDE_OBSTACLE_DISTANCE				30
+#define STAIRS_OFFSET						15
 
 
 char detectStairs(int calibratedBtmIR, int btmIR);
 void obstacleAvoidance(int frontSonar, int leftSonar, int rightSonar, int btmIR, int calibratedBtmIR);
-char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceToSend, int leftSonar, int rightSonar);
-void sendObstacleDetected(char obstacleDetected, char * deviceToSend, int frontSonar, int leftSonar, int rightSonar, int btmIR);
+char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceToSend, int leftSonar, int rightSonar, int topSonar);
 
 
 

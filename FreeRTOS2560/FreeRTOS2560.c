@@ -33,7 +33,7 @@ void task4(void *p);
 void init();
 
 void obstacleSend(char deviceToSend, int reading);
-void sendObstacleDetected(char obstacleDetected, char * deviceToSend, int frontSonar, int leftSonar, int rightSonar, int btmIR);
+void sendObstacleDetected(char obstacleDetected, char * deviceToSend, int frontSonar, int leftSonar, int rightSonar, int btmIR, int topSonar);
 
 xQueueHandle queueObstacleData;
 xQueueHandle queueObstacleNumber;
@@ -136,30 +136,36 @@ void Sonar_Task(void *p)
 {
 	TickType_t xLastWakeTime;
 	char obstacleDetected = 0;
-	int frontSonar, leftSonar, rightSonar, btmIR;
-	char deviceToSend[4] = {0}; // flag to indicate if we should send the reading to RPI
+	int topSonar, frontSonar, leftSonar, rightSonar, btmIR;
+	char deviceToSend[5] = {0}; // flag to indicate if we should send the reading to RPI
 	
 	int calibratedBtmIR = mySharpIR_Read(AN12); // get first value...
 	
 	xLastWakeTime = xTaskGetTickCount(); // get tick count
 		
 	while(1)
-	{	
-		myMaxSonar_Start();
+	{
+		// why i need delay?	
+		vTaskDelay(40);
+		myMaxSonar_TopStart();
+		topSonar = myMaxSonar_Read(AN11);
+		myMaxSonar_BtmStart();
+		
 		frontSonar	= myMaxSonar_Read(AN15);
 		leftSonar	= myMaxSonar_Read(AN14);
 		rightSonar	= myMaxSonar_Read(AN13); 
 		btmIR		= mySharpIR_Read(AN12);	
+		
 	
 		mySharpIR_ReCalibrate(&calibratedBtmIR, btmIR); // attempt to re-calibrate btm ir sensor if stable enough..
 	
-		obstacleDetected = obstacleDetection(frontSonar, obstacleDetected, deviceToSend, leftSonar, rightSonar);
+		obstacleDetected = obstacleDetection(frontSonar, obstacleDetected, deviceToSend, leftSonar, rightSonar, topSonar);
 		obstacleAvoidance(frontSonar, leftSonar, rightSonar, btmIR, calibratedBtmIR);
-		sendObstacleDetected(obstacleDetected, deviceToSend, frontSonar, leftSonar, rightSonar, btmIR);
+		sendObstacleDetected(obstacleDetected, deviceToSend, frontSonar, leftSonar, rightSonar, btmIR, topSonar);
 	
 		// reset the variables back to 0
 		obstacleDetected = 0; 
-		deviceToSend[0] = deviceToSend[1] = deviceToSend[2] = deviceToSend[3] = 0;
+		deviceToSend[0] = deviceToSend[1] = deviceToSend[2] = deviceToSend[3] = deviceToSend[4] = 0;
 		
 		vTaskDelayUntil( &xLastWakeTime, 150);  // delay 150 ms for 3 sonar chain...
 	}
@@ -308,7 +314,7 @@ void obstacleSend(char deviceToSend, int reading)
 
 
 // Queue the obstacle to send..
-void sendObstacleDetected(char obstacleDetected, char * deviceToSend, int frontSonar, int leftSonar, int rightSonar, int btmIR)
+void sendObstacleDetected(char obstacleDetected, char * deviceToSend, int frontSonar, int leftSonar, int rightSonar, int btmIR, int topSonar)
 {
 	//if(obstacleDetected > 0)
 	{
@@ -322,6 +328,8 @@ void sendObstacleDetected(char obstacleDetected, char * deviceToSend, int frontS
 		obstacleSend(deviceToSend[RIGHT_DEVICE], rightSonar);
 
 		obstacleSend(deviceToSend[BTM_DEVICE], btmIR);
+		
+		obstacleSend(deviceToSend[TOP_DEVICE], topSonar);
 		
 	}
 }
