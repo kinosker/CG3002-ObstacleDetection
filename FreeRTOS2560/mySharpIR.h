@@ -12,6 +12,7 @@
 
 
 int mySharpIR_Read(char analogChannel);
-
+void mySharpIR_ReCalibrate(int* calibratedReading, int reading);
+char checkWithinRange(int reading, int * checkReading, const char range);
 
 #endif /* MYSHARPIR_H_ */

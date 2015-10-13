@@ -59,4 +59,7 @@ void myUSART_completeHandShake();
 
 char myUSART_receiveMessageACK(unsigned char message);
 
+unsigned char myUSART_peekReceiveUSART1();
+
+
 #endif /* MYUSART_H_ */

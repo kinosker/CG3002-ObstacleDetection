@@ -16,6 +16,8 @@ myMaxSonar.c
 
 myADC.c
 
+myObstacleAlgo.c
+
 mySharpIR.c
 
 myTimer.c

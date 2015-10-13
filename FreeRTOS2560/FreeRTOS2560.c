@@ -16,7 +16,11 @@
 #include <myADC.h>
 #include <myMaxSonar.h>
 #include <myHcSonar.h>
+#include <mySharpIR.h>
 #include <myTimer.h>
+#include <mySharpIR.h>
+#include <myObstacleAlgo.h>
+#include <myMotor.h>
 
 #include <stdlib.h>
 #include <queue.h>
@@ -28,16 +32,11 @@ void task3(void *p);
 void task4(void *p);
 void init();
 
+void obstacleSend(char deviceToSend, int reading);
+void sendObstacleDetected(char obstacleDetected, char * deviceToSend, int frontSonar, int leftSonar, int rightSonar, int btmIR);
 
 xQueueHandle queueObstacleData;
 xQueueHandle queueObstacleNumber;
-
-
-#define MOTOR_LEFT_START()			PORTE |= ( 1 << 4 )	// start motor Left (Pin 2)
-#define MOTOR_LEFT_STOP()			PORTE &= ~( 1 << 4 ) // stop motor Left
-
-#define MOTOR_RIGHT_START()			PORTH |= ( 1 << 4 )	// start motor Right (Pin 7)
-#define MOTOR_RIGHT_STOP()			PORTH &= ~( 1 << 4 ) // stop motor Right
 
 
 typedef struct 
@@ -46,6 +45,7 @@ typedef struct
 	char data[4];
 	
 } obstacleData;
+
 
 
 // receive task should peek........
@@ -87,6 +87,7 @@ void RPI_receiveTask(void *p)
 
 }
 
+	
 void RPI_sendTask(void *p)
 {
 	
@@ -123,7 +124,6 @@ void RPI_sendTask(void *p)
 			myUSART_transmitUSART1_c('\n');
 				
 			myUSART_transmitUSART0(", ");
-			//myUSART_transmitUSART1(", ");
 			
 		}	
 		myUSART_transmitUSART0_c('\n');
@@ -131,157 +131,15 @@ void RPI_sendTask(void *p)
 	}
 }
 
-char checkWithinRange(int reading, int * checkReading, const char range)
-{
-	return reading > (*checkReading + range) || reading < (*checkReading - range);
-}
-
-// Calibrate if initial reading, firstCheck reading and final reading is within range. ( Stable reading after ....)
-// final reading = btmIR reading (i = CALIBRATE_COUNT)
-// firstCheck reading = btmIR reading ( i = CALIBRATE_COUNT/2)
-// initial reading  = btmIR reading (i = 0)
-// Write new calibrate value if all matches..
-void activeCalibration(int* calibratedReading, int reading)
-{
-	static const char range = 5; // put at header file later...
-	static const char CALIBRATE_COUNT = 20; // put at header file later...
-	static int i = 0;
-	static int checkReading[2] = {0};
-	
-	if(checkWithinRange(reading, calibratedReading, range) && i == 0)
-	{
-		// if current reading and calibratedReading is within range and no checking in progess
-		// skip the calibration process... not needed
-		return;
-	}
-	
-	
-	if (i == 0)
-	{
-		checkReading[0] = reading;
-	}
-	else if (i == CALIBRATE_COUNT/2)
-	{
-		if(checkWithinRange(reading, checkReading, range))
-		{
-			// Out of range.. restart to find new calibration point..
-			checkReading[0] = reading;
-			i = 0; // reset to count...
-		}
-		else
-		{	// within range.. need more confirmation
-			checkReading[1] = reading;
-		}
-	}
-	else if (i == CALIBRATE_COUNT)
-	{
-		i = 0; // reset to count..
-
-		if(checkWithinRange(reading, checkReading, range))
-		{
-			// Out of range.. restart to find new calibration point..
-			checkReading[0] = reading;
-		}
-		else
-		{
-			// all 3 readings within range... can calibrate as new stable.
-			*calibratedReading = checkReading[0]; // btmIR is calibrated..
-		}
-	}
-	
-	i = (i+1) % CALIBRATE_COUNT;
-	return -1; // failed to calibrate.
-}
-
-
-
-void obstacleSend(char deviceToSend, int reading)
-{
-	obstacleData queueData;
-
-	
-	if(deviceToSend)
-	{
-		itoa(reading, queueData.data, 10); // convert to ascii
-		
-		queueData.deviceID = deviceToSend;
-			
-		xQueueSendToBack(queueObstacleData, &queueData, portMAX_DELAY); // send data to queueData
-	}
-}
-
-
-char detectStairs(int calibratedBtmIR, int btmIR)
-{
-	if(btmIR > calibratedBtmIR + 15 || btmIR < calibratedBtmIR - 15)
-	{
-		return 1; // stairs found
-	}
-	else
-	{
-		return 0; // no stairs
-		
-	}
-}
-
-void obstacleDetection(int frontSonar, int leftSonar, int rightSonar, int btmIR, int calibratedBtmIR)
-{
-	if(frontSonar < 70)
-		{
-			if(leftSonar < 45 && rightSonar < 45)
-			{
-				MOTOR_LEFT_START();
-				MOTOR_RIGHT_START();
-			}
-			else if( (leftSonar+10) > rightSonar)
-			{
-				MOTOR_RIGHT_STOP();
-				MOTOR_LEFT_START();
-			}
-			else if (rightSonar > (leftSonar+10))
-			{
-				MOTOR_LEFT_STOP();
-				MOTOR_RIGHT_START();
-			}
-			
-		}
-		else if (rightSonar < 30 && leftSonar > 30)
-		{
-			// narrow path
-			// too close to right
-			MOTOR_RIGHT_STOP();
-			MOTOR_LEFT_START();
-		}
-		else if (leftSonar < 30 && rightSonar > 30)
-		{
-			// narrow path
-			// too close to left
-			MOTOR_RIGHT_START();
-			MOTOR_LEFT_STOP();
-		}
-		else if (detectStairs(calibratedBtmIR, btmIR))
-		{
-			// stairs detection
-			MOTOR_LEFT_START();
-			MOTOR_RIGHT_START();
-		}
-		else
-		{
-			// narrow path or no obstacle infront.
-			MOTOR_RIGHT_STOP();
-			MOTOR_LEFT_STOP();
-		}
-}
 
 void Sonar_Task(void *p)
 {
 	TickType_t xLastWakeTime;
 	char obstacleDetected = 0;
 	int frontSonar, leftSonar, rightSonar, btmIR;
-	char deviceToSend[4] = {0};
-	char end= '\n';
-
-	int calibratedBtmIR = mySharpIR_Read(AN12);
+	char deviceToSend[4] = {0}; // flag to indicate if we should send the reading to RPI
+	
+	int calibratedBtmIR = mySharpIR_Read(AN12); // get first value...
 	
 	xLastWakeTime = xTaskGetTickCount(); // get tick count
 		
@@ -290,60 +148,18 @@ void Sonar_Task(void *p)
 		myMaxSonar_Start();
 		frontSonar	= myMaxSonar_Read(AN15);
 		leftSonar	= myMaxSonar_Read(AN14);
-		rightSonar	= myMaxSonar_Read(AN13); // for offset...
+		rightSonar	= myMaxSonar_Read(AN13); 
 		btmIR		= mySharpIR_Read(AN12);	
 	
-		activeCalibration(&calibratedBtmIR, btmIR); // attempt to re-calibrate btm ir sensor if stable enough..
-		obstacleDetection(frontSonar, leftSonar, rightSonar, btmIR, calibratedBtmIR);
-		
-		
-		
-	//	if(frontSonar < OBSTACLE_DISTANCE)
-		{
-			obstacleDetected ++;
-			deviceToSend[FRONT_DEVICE] = FRONT_SONAR_ID;
-		}
-	//	if (leftSonar < OBSTACLE_DISTANCE)
-		{
-			obstacleDetected ++;
-			deviceToSend[LEFT_DEVICE] = LEFT_SONAR_ID;		
-		}
-	//	if (rightSonar < OBSTACLE_DISTANCE)
-		{	
-			obstacleDetected++;
-			deviceToSend[RIGHT_DEVICE] = RIGHT_SONAR_ID;
-		}
-	//	if (btmSonar < OBSTACLE_DISTANCE)
-		{
-			obstacleDetected++;
-			deviceToSend[BTM_DEVICE] = BTM_SONAR_ID;
-		}
-		
-	//	if(obstacleDetected > 0)
-		{	
-			//obstacleDetected + '0'; // simple conversion to ascii..
+		mySharpIR_ReCalibrate(&calibratedBtmIR, btmIR); // attempt to re-calibrate btm ir sensor if stable enough..
 	
-			xQueueSendToBack(queueObstacleNumber,  &obstacleDetected, portMAX_DELAY); // send obstacle...
-			
-
-			//myUSART_transmitUSART0(obstacleDetected);
-			//myUSART_transmitUSART0_c(end);
-			
-			obstacleSend(deviceToSend[FRONT_DEVICE], frontSonar);
-
-			obstacleSend(deviceToSend[LEFT_DEVICE], leftSonar);
-
-			obstacleSend(deviceToSend[RIGHT_DEVICE], rightSonar);
-
-			obstacleSend(deviceToSend[BTM_DEVICE], btmIR);
-
-			obstacleDetected = 0; // reset back...
-			
-			deviceToSend[0] = deviceToSend[1] = deviceToSend[2] = deviceToSend[3] = 0;
-			
-		}
-		
-		//prevIR = btmIR;
+		obstacleDetected = obstacleDetection(frontSonar, obstacleDetected, deviceToSend, leftSonar, rightSonar);
+		obstacleAvoidance(frontSonar, leftSonar, rightSonar, btmIR, calibratedBtmIR);
+		sendObstacleDetected(obstacleDetected, deviceToSend, frontSonar, leftSonar, rightSonar, btmIR);
+	
+		// reset the variables back to 0
+		obstacleDetected = 0; 
+		deviceToSend[0] = deviceToSend[1] = deviceToSend[2] = deviceToSend[3] = 0;
 		
 		vTaskDelayUntil( &xLastWakeTime, 150);  // delay 150 ms for 3 sonar chain...
 	}
@@ -463,8 +279,8 @@ void init()
 		queueObstacleNumber = xQueueCreate(QUEUE_SIZE, sizeof (char)); // create queue
 		queueObstacleData = xQueueCreate( (QUEUE_SIZE*SONAR_NUM), sizeof (obstacleData)); // create queue
 		
-		DDRE |= (1 << DDE4) ; // E4 => digitial pin 2 (LEFT)
-		DDRH |= (1 << DDH4) ; // H4 => digital pin 7 (RIGHT)
+		MOTOR_LEFT_INIT();
+		MOTOR_RIGHT_INIT();
 		
 		
 	}
@@ -473,7 +289,42 @@ void init()
 }
 
 
+void obstacleSend(char deviceToSend, int reading)
+{
+	obstacleData queueData;
+	
+	
+	
+	if(deviceToSend)
+	{
+		itoa(reading, queueData.data, 10); // convert to ascii
+		
+		queueData.deviceID = deviceToSend;
+		
+		xQueueSendToBack(queueObstacleData, &queueData, portMAX_DELAY); // send data to queueData
+	}
+}
 
+
+
+// Queue the obstacle to send..
+void sendObstacleDetected(char obstacleDetected, char * deviceToSend, int frontSonar, int leftSonar, int rightSonar, int btmIR)
+{
+	//if(obstacleDetected > 0)
+	{
+		
+		xQueueSendToBack(queueObstacleNumber,  &obstacleDetected, portMAX_DELAY); // send obstacle...
+		
+		obstacleSend(deviceToSend[FRONT_DEVICE], frontSonar);
+
+		obstacleSend(deviceToSend[LEFT_DEVICE], leftSonar);
+
+		obstacleSend(deviceToSend[RIGHT_DEVICE], rightSonar);
+
+		obstacleSend(deviceToSend[BTM_DEVICE], btmIR);
+		
+	}
+}
 
 
 

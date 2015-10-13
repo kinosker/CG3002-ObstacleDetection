@@ -155,6 +155,15 @@
     <Compile Include="myADC.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="myMotor.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="myObstacleAlgo.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="myObstacleAlgo.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="mySharpIR.c">
       <SubType>compile</SubType>
     </Compile>
