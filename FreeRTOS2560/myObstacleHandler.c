@@ -27,6 +27,7 @@ char detectStairs(int calibratedBtmIR, int btmIR)
 // Priority => BTM, Front, Side
 void obstacleAvoidance(int frontSonar, int leftSonar, int rightSonar, int btmIR, char * deviceBlocked)
 {
+	
 	if(deviceBlocked[BTM_DEVICE])
 	{
 		// stairs detected
@@ -36,10 +37,16 @@ void obstacleAvoidance(int frontSonar, int leftSonar, int rightSonar, int btmIR,
 	else if(deviceBlocked[FRONT_DEVICE])
 	{
 		// front sensor detected
+		if(!deviceBlocked[LEFT_DEVICE] && !deviceBlocked[RIGHT_DEVICE])
+		{
+			// both not blocked... so select any side... (left safer to turn - see product)
+				MOTOR_LEFT_START();
+				MOTOR_RIGHT_STOP();
+		}
 		if(deviceBlocked[LEFT_DEVICE] && !(deviceBlocked[RIGHT_DEVICE]))
 		{
 			// left is blocked but not right
-			if((rightSonar - leftSonar) > 5) // if there's enough difference, prompt the user to move..
+			if((rightSonar - leftSonar) > INDISTINGUISHABLE_RANGE) // if there's enough difference, prompt the user to move..
 			{
 				MOTOR_LEFT_STOP();
 				MOTOR_RIGHT_START();	
@@ -48,7 +55,7 @@ void obstacleAvoidance(int frontSonar, int leftSonar, int rightSonar, int btmIR,
 		else if (deviceBlocked[RIGHT_DEVICE] && !(deviceBlocked[LEFT_DEVICE]))
 		{
 			// right is blocked but not left..
-			if((leftSonar - rightSonar) > 5) // if there's enought different, prompt the user to move...
+			if((leftSonar - rightSonar) > INDISTINGUISHABLE_RANGE) // if there's enough different, prompt the user to move...
 			{
 				MOTOR_LEFT_START();
 				MOTOR_RIGHT_STOP();
