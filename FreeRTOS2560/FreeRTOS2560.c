@@ -145,23 +145,25 @@ void Sonar_Task(void *p)
 		
 	while(1)
 	{
-		// why i need delay?	
-		//vTaskDelay(10);
 		myMaxSonar_TopStart();
 		topSonar = myMaxSonar_Read(AN11);
 	
 		myMaxSonar_BtmStart();
-		
 		frontSonar	= myMaxSonar_Read(AN15);
 		leftSonar	= myMaxSonar_Read(AN14);
 		rightSonar	= myMaxSonar_Read(AN13); 
+		
 		btmIR		= mySharpIR_Read(AN12);	
 		
-	
 		mySharpIR_ReCalibrate(&calibratedBtmIR, btmIR); // attempt to re-calibrate btm ir sensor if stable enough..
 	
-		obstacleDetected = obstacleDetection(frontSonar, obstacleDetected, deviceBlocked, leftSonar, rightSonar, topSonar);
-		obstacleAvoidance(frontSonar, leftSonar, rightSonar, btmIR, calibratedBtmIR);
+		obstacleDetected = obstacleDetection(frontSonar, obstacleDetected, deviceBlocked, leftSonar, rightSonar, topSonar, calibratedBtmIR, btmIR);
+		obstacleAvoidance(frontSonar, leftSonar, rightSonar, btmIR, deviceBlocked);
+		
+		// for debuggin to print all...
+		cheatPrintAll(deviceBlocked, &obstacleDetected); 
+		// remove top statement... when not debuggin..
+		
 		sendObstacleDetected(obstacleDetected, deviceBlocked, frontSonar, leftSonar, rightSonar, btmIR, topSonar);
 	
 		// reset the variables back to 0

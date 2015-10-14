@@ -23,12 +23,18 @@
 
 #define FRONT_OBSTACLE_DISTANCE				70
 #define SIDE_OBSTACLE_DISTANCE				30
-#define STAIRS_OFFSET						15
+#define LEFT_OBSTACLE_DISTANCE				40
+#define RIGHT_OBSTACLE_DISTANCE				30
+#define LEFT_TOO_NEAR						28
+#define RIGHT_TOO_NEAR						18
+#define STAIRS_OFFSET						10
 
 
+void cheatPrintAll(char* deviceBlocked, char *obstacleDetected);
 char detectStairs(int calibratedBtmIR, int btmIR);
-void obstacleAvoidance(int frontSonar, int leftSonar, int rightSonar, int btmIR, int calibratedBtmIR);
-char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceBlocked, int leftSonar, int rightSonar, int topSonar);
+void obstacleAvoidance(int frontSonar, int leftSonar, int rightSonar, int btmIR, char * deviceBlocked);
+char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceBlocked, int leftSonar, int rightSonar, int topSonar, int calibratedBtmIR, int btmIR);
+
 
 
 
