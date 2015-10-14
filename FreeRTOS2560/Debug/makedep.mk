@@ -16,7 +16,7 @@ myMaxSonar.c
 
 myADC.c
 
-myObstacleAlgo.c
+myObstacleHandler.c
 
 mySharpIR.c
 

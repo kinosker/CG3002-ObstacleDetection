@@ -158,10 +158,10 @@
     <Compile Include="myMotor.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="myObstacleAlgo.c">
+    <Compile Include="myObstacleHandler.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="myObstacleAlgo.h">
+    <Compile Include="myObstacleHandler.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="mySharpIR.c">

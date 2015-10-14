@@ -4,7 +4,7 @@
  * Created: 10/13/2015 3:27:56 PM
  *  Author: tienlong
  */ 
-#include <myObstacleAlgo.h>
+#include <myObstacleHandler.h>
 #include <FreeRTOS.h>
 #include <myMotor.h>
 
@@ -73,35 +73,35 @@ void obstacleAvoidance(int frontSonar, int leftSonar, int rightSonar, int btmIR,
 
 // return number of obstacle detected...
 // implicitly return the device to send.
-char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceToSend, int leftSonar, int rightSonar, int topSonar)
+char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceBlocked, int leftSonar, int rightSonar, int topSonar)
 {
 	// Commented out when debuggin.
 
 	//	if(frontSonar < FRONT_OBSTACLE_DISTANCE)
 	{
 		obstacleDetected ++;
-		deviceToSend[FRONT_DEVICE] = FRONT_SONAR_ID;
+		deviceBlocked[FRONT_DEVICE] = FRONT_SONAR_ID;
 	}
 	//	if (leftSonar < SIDE_OBSTACLE_DISTANCE)
 	{
 		obstacleDetected ++;
-		deviceToSend[LEFT_DEVICE] = LEFT_SONAR_ID;
+		deviceBlocked[LEFT_DEVICE] = LEFT_SONAR_ID;
 	}
 	//	if (rightSonar < SIDE_OBSTACLE_DISTANCE)
 	{
 		obstacleDetected++;
-		deviceToSend[RIGHT_DEVICE] = RIGHT_SONAR_ID;
+		deviceBlocked[RIGHT_DEVICE] = RIGHT_SONAR_ID;
 	}
 	//	if (detectStairs(calibratedBtmIR, btmIR))
 	{
 		obstacleDetected++;
-		deviceToSend[BTM_DEVICE] = BTM_SONAR_ID;
+		deviceBlocked[BTM_DEVICE] = BTM_SONAR_ID;
 	}
 	// if (...)
 	{
 		
 		obstacleDetected++;
-		deviceToSend[TOP_DEVICE] = TOP_SONAR_ID;
+		deviceBlocked[TOP_DEVICE] = TOP_SONAR_ID;
 	}
 	
 	return obstacleDetected;

@@ -19,7 +19,7 @@
 #include <mySharpIR.h>
 #include <myTimer.h>
 #include <mySharpIR.h>
-#include <myObstacleAlgo.h>
+#include <myObstacleHandler.h>
 #include <myMotor.h>
 
 #include <stdlib.h>
@@ -32,8 +32,8 @@ void task3(void *p);
 void task4(void *p);
 void init();
 
-void obstacleSend(char deviceToSend, int reading);
-void sendObstacleDetected(char obstacleDetected, char * deviceToSend, int frontSonar, int leftSonar, int rightSonar, int btmIR, int topSonar);
+void obstacleSend(char deviceBlocked, int reading);
+void sendObstacleDetected(char obstacleDetected, char * deviceBlocked, int frontSonar, int leftSonar, int rightSonar, int btmIR, int topSonar);
 
 xQueueHandle queueObstacleData;
 xQueueHandle queueObstacleNumber;
@@ -137,7 +137,7 @@ void Sonar_Task(void *p)
 	TickType_t xLastWakeTime;
 	char obstacleDetected = 0;
 	int topSonar, frontSonar, leftSonar, rightSonar, btmIR;
-	char deviceToSend[5] = {0}; // flag to indicate if we should send the reading to RPI
+	char deviceBlocked[5] = {0}; // flag to indicate if we should send the reading to RPI
 	
 	int calibratedBtmIR = mySharpIR_Read(AN12); // get first value...
 	
@@ -146,9 +146,10 @@ void Sonar_Task(void *p)
 	while(1)
 	{
 		// why i need delay?	
-		vTaskDelay(40);
+		//vTaskDelay(10);
 		myMaxSonar_TopStart();
 		topSonar = myMaxSonar_Read(AN11);
+	
 		myMaxSonar_BtmStart();
 		
 		frontSonar	= myMaxSonar_Read(AN15);
@@ -159,13 +160,13 @@ void Sonar_Task(void *p)
 	
 		mySharpIR_ReCalibrate(&calibratedBtmIR, btmIR); // attempt to re-calibrate btm ir sensor if stable enough..
 	
-		obstacleDetected = obstacleDetection(frontSonar, obstacleDetected, deviceToSend, leftSonar, rightSonar, topSonar);
+		obstacleDetected = obstacleDetection(frontSonar, obstacleDetected, deviceBlocked, leftSonar, rightSonar, topSonar);
 		obstacleAvoidance(frontSonar, leftSonar, rightSonar, btmIR, calibratedBtmIR);
-		sendObstacleDetected(obstacleDetected, deviceToSend, frontSonar, leftSonar, rightSonar, btmIR, topSonar);
+		sendObstacleDetected(obstacleDetected, deviceBlocked, frontSonar, leftSonar, rightSonar, btmIR, topSonar);
 	
 		// reset the variables back to 0
 		obstacleDetected = 0; 
-		deviceToSend[0] = deviceToSend[1] = deviceToSend[2] = deviceToSend[3] = deviceToSend[4] = 0;
+		deviceBlocked[0] = deviceBlocked[1] = deviceBlocked[2] = deviceBlocked[3] = deviceBlocked[4] = 0;
 		
 		vTaskDelayUntil( &xLastWakeTime, 150);  // delay 150 ms for 3 sonar chain...
 	}
@@ -278,7 +279,9 @@ void init()
 		myUSART_USART0_Init();
 		myUSART_USART1_Init();
 		myADC_Init();
+		
 		MaxSonar_Init();
+		
 		myHcSonar_Init();
 		
 		
@@ -295,17 +298,17 @@ void init()
 }
 
 
-void obstacleSend(char deviceToSend, int reading)
+void obstacleSend(char deviceBlocked, int reading)
 {
 	obstacleData queueData;
 	
 	
 	
-	if(deviceToSend)
+	if(deviceBlocked)
 	{
 		itoa(reading, queueData.data, 10); // convert to ascii
 		
-		queueData.deviceID = deviceToSend;
+		queueData.deviceID = deviceBlocked;
 		
 		xQueueSendToBack(queueObstacleData, &queueData, portMAX_DELAY); // send data to queueData
 	}
@@ -314,22 +317,22 @@ void obstacleSend(char deviceToSend, int reading)
 
 
 // Queue the obstacle to send..
-void sendObstacleDetected(char obstacleDetected, char * deviceToSend, int frontSonar, int leftSonar, int rightSonar, int btmIR, int topSonar)
+void sendObstacleDetected(char obstacleDetected, char * deviceBlocked, int frontSonar, int leftSonar, int rightSonar, int btmIR, int topSonar)
 {
 	//if(obstacleDetected > 0)
 	{
 		
 		xQueueSendToBack(queueObstacleNumber,  &obstacleDetected, portMAX_DELAY); // send obstacle...
 		
-		obstacleSend(deviceToSend[FRONT_DEVICE], frontSonar);
+		obstacleSend(deviceBlocked[FRONT_DEVICE], frontSonar);
 
-		obstacleSend(deviceToSend[LEFT_DEVICE], leftSonar);
+		obstacleSend(deviceBlocked[LEFT_DEVICE], leftSonar);
 
-		obstacleSend(deviceToSend[RIGHT_DEVICE], rightSonar);
+		obstacleSend(deviceBlocked[RIGHT_DEVICE], rightSonar);
 
-		obstacleSend(deviceToSend[BTM_DEVICE], btmIR);
+		obstacleSend(deviceBlocked[BTM_DEVICE], btmIR);
 		
-		obstacleSend(deviceToSend[TOP_DEVICE], topSonar);
+		obstacleSend(deviceBlocked[TOP_DEVICE], topSonar);
 		
 	}
 }

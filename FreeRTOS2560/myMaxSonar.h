@@ -9,7 +9,8 @@
 #ifndef MAXSONAR_H_
 #define MAXSONAR_H_
 
-#define MaxSonar_Init()					DDRG |= (1 << DDG1) | (1 << DDG0) // Set pin G1,G0 as output (Pin 40, 41)
+#define MaxSonar_Init()					DDRG |= ((1 << DDG1) | (1 << DDG0)) // Set pin G1,G0 as output (Pin 40, 41)
+
 #define MaxSonar_BtmTriggerStart()		PORTG |= ( 1 << DDG1 )		// start trigger pin (Pin 40)		
 #define MaxSonar_BtmTriggerStop()		PORTG &= ~( 1 << DDG1 )		// stop trigger pin (Pin 40)
 

@@ -44,7 +44,7 @@ C_SRCS +=  \
 ../myHcSonar.c \
 ../myMaxSonar.c \
 ../myADC.c \
-../myObstacleAlgo.c \
+../myObstacleHandler.c \
 ../mySharpIR.c \
 ../myTimer.c \
 ../myUSART.c \
@@ -68,7 +68,7 @@ list.o \
 myHcSonar.o \
 myMaxSonar.o \
 myADC.o \
-myObstacleAlgo.o \
+myObstacleHandler.o \
 mySharpIR.o \
 myTimer.o \
 myUSART.o \
@@ -85,7 +85,7 @@ list.o \
 myHcSonar.o \
 myMaxSonar.o \
 myADC.o \
-myObstacleAlgo.o \
+myObstacleHandler.o \
 mySharpIR.o \
 myTimer.o \
 myUSART.o \
@@ -102,7 +102,7 @@ list.d \
 myHcSonar.d \
 myMaxSonar.d \
 myADC.d \
-myObstacleAlgo.d \
+myObstacleHandler.d \
 mySharpIR.d \
 myTimer.d \
 myUSART.d \
@@ -119,7 +119,7 @@ list.d \
 myHcSonar.d \
 myMaxSonar.d \
 myADC.d \
-myObstacleAlgo.d \
+myObstacleHandler.d \
 mySharpIR.d \
 myTimer.d \
 myUSART.d \

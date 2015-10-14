@@ -28,7 +28,7 @@
 
 char detectStairs(int calibratedBtmIR, int btmIR);
 void obstacleAvoidance(int frontSonar, int leftSonar, int rightSonar, int btmIR, int calibratedBtmIR);
-char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceToSend, int leftSonar, int rightSonar, int topSonar);
+char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceBlocked, int leftSonar, int rightSonar, int topSonar);
 
 
 
