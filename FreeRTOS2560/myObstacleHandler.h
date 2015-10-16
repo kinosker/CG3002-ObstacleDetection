@@ -28,9 +28,9 @@
 #define SIDE_OBSTACLE_DISTANCE				30
 #define LEFT_OBSTACLE_DISTANCE				30 // same as right although position difference because... detecting infront of user.
 #define RIGHT_OBSTACLE_DISTANCE				30
-#define LEFT_TOO_NEAR						20
+#define LEFT_TOO_NEAR						38
 #define RIGHT_TOO_NEAR						20
-#define STAIRS_OFFSET						10
+#define STAIRS_OFFSET						12
 #define INDISTINGUISHABLE_RANGE				8 
 
 

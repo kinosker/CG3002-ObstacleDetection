@@ -29,6 +29,43 @@ void myMaxSonar_TopStart()
 	MaxSonar_TopTriggerStop();
 }
 
+
+int myMaxSonar_getMedian(int currentReading, int* prevReading, int *sample, int sampleSize)
+{
+	currentReading = myMaxSonar_Stabilizer(currentReading, prevReading);
+	myMaxSonar_AddSample(currentReading, sample, sampleSize);
+	return sample[sampleSize/2];
+}
+
+
+
+void myMaxSonar_AddSample(int currentReading ,int *sample, int sampleSize)
+{
+	int i;
+	int temp;
+	
+	for( i = 0 ; i < sampleSize ; i++)
+	{
+		if(currentReading < sample[i])
+		{
+			temp = sample[i];
+			sample[i] = currentReading;
+			currentReading = temp;
+		}
+	}
+}
+
+int myMaxSonar_Stabilizer(const int currentReading, int* prevReading)
+{
+	if(currentReading > (*prevReading + NOISE_RANGE) || currentReading < (*prevReading - NOISE_RANGE))
+	{
+		*prevReading = currentReading;
+		return currentReading; // when current reading exceed noise range.... return current reading
+	}
+	else
+		return *prevReading; // return prevReading if in noise range..
+}
+
 // Return distance in cm
 int myMaxSonar_Read(char analogChannel)
 {

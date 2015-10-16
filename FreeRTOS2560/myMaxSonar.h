@@ -9,6 +9,8 @@
 #ifndef MAXSONAR_H_
 #define MAXSONAR_H_
 
+#define NOISE_RANGE 8
+
 #define MaxSonar_Init()					DDRG |= ((1 << DDG1) | (1 << DDG0)) // Set pin G1,G0 as output (Pin 40, 41)
 
 #define MaxSonar_BtmTriggerStart()		PORTG |= ( 1 << DDG1 )		// start trigger pin (Pin 40)		
@@ -27,6 +29,12 @@
 
 void myMaxSonar_BtmStart();
 void myMaxSonar_TopStart();
+
+int myMaxSonar_getMedian(int currentReading, int* prevReading, int *sample, int sampleSize);
+void myMaxSonar_AddSample(int currentReading ,int *sample, int sampleSize);
+
+// Get new value only if it exceed noise limit.
+int myMaxSonar_Stabilizer(const int currentReading, int* prevReading);
 
 // Return distance in cm
 int myMaxSonar_Read(char analogChannel);

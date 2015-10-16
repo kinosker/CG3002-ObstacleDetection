@@ -40,8 +40,17 @@ void obstacleAvoidance(int frontSonar, int leftSonar, int rightSonar, int btmIR,
 		if(!deviceBlocked[LEFT_DEVICE] && !deviceBlocked[RIGHT_DEVICE])
 		{
 			// both not blocked... so select any side... (left safer to turn - see product)
-				MOTOR_LEFT_START();
-				MOTOR_RIGHT_STOP();
+				if(rightSonar > leftSonar + 14) // if right sonar greater than....
+				{
+					MOTOR_LEFT_STOP();
+					MOTOR_RIGHT_START();
+				}
+				else 
+				{
+					MOTOR_LEFT_START();
+					MOTOR_RIGHT_STOP();
+					
+				}
 		}
 		if(deviceBlocked[LEFT_DEVICE] && !(deviceBlocked[RIGHT_DEVICE]))
 		{

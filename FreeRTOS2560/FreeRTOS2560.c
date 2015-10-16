@@ -136,7 +136,9 @@ void Sonar_Task(void *p)
 {
 	TickType_t xLastWakeTime;
 	char obstacleDetected = 0;
+	int prevTopSonar = 0, prevFrontSonar = 0, prevLeftSonar = 0, prevRightSonar = 0;
 	int topSonar, frontSonar, leftSonar, rightSonar, btmIR;
+	int topSonarSample[3] = {0}, frontSonarSample[3] = {0}, leftSonarSample[3] = {0}, rightSonarSample[3] = {0};
 	char deviceBlocked[5] = {0}; // flag to indicate if we should send the reading to RPI
 	
 	int calibratedBtmIR = mySharpIR_Read(AN12); // get first value...
@@ -146,14 +148,22 @@ void Sonar_Task(void *p)
 	while(1)
 	{
 		myMaxSonar_TopStart();
-		topSonar = myMaxSonar_Read(AN11);
-	
+		topSonar = myMaxSonar_getMedian(myMaxSonar_Read(AN11), &prevTopSonar, topSonarSample, 3);
+		
 		myMaxSonar_BtmStart();
-		frontSonar	= myMaxSonar_Read(AN15);
-		leftSonar	= myMaxSonar_Read(AN14);
-		rightSonar	= myMaxSonar_Read(AN13); 
+		frontSonar	= myMaxSonar_getMedian(myMaxSonar_Read(AN15), &prevFrontSonar, frontSonarSample, 3);
+		leftSonar	= myMaxSonar_getMedian(myMaxSonar_Read(AN14), &prevLeftSonar, leftSonarSample, 3);
+		rightSonar	= myMaxSonar_getMedian(myMaxSonar_Read(AN13), &prevRightSonar, rightSonarSample, 3); 
 		
 		btmIR		= mySharpIR_Read(AN12);	
+		
+		
+		//// Stabilize sonar reading, get new value only when exceed noise threshold.
+		//topSonar = myMaxSonar_Stabilizer(topSonar, &prevTopSonar);
+		//frontSonar = myMaxSonar_Stabilizer(frontSonar, &prevFrontSonar);
+		//leftSonar = myMaxSonar_Stabilizer(leftSonar, &prevLeftSonar);
+		//rightSonar = myMaxSonar_Stabilizer(rightSonar, &prevRightSonar);
+		
 		
 		mySharpIR_ReCalibrate(&calibratedBtmIR, btmIR); // attempt to re-calibrate btm ir sensor if stable enough..
 	
