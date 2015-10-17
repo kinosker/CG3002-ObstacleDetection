@@ -25,16 +25,17 @@
 // CM = 1/2 * 2.54  = 1.27 (0.27 left over ~ 1/4 or 1/3) 
 // FLOAT to CM should be /3
 #define FLOAT_TO_CM 3
+#define SONAR_SAMPLE_SIZE 3
 
 
 void myMaxSonar_BtmStart();
 void myMaxSonar_TopStart();
 
-int myMaxSonar_getFilteredReading(int currentReading, int* prevReading, int *sample, int sampleSize);
-void myMaxSonar_AddSample(int currentReading ,int *sample, int sampleSize);
+int myMaxSonar_getFilteredReading(int currentReading, int *sample);
+void myMaxSonar_AddSample(int currentReading ,int *sample);
 
 // Get new value only if it exceed noise limit.
-int myMaxSonar_Stabilizer(const int currentReading, int* prevReading);
+int myMaxSonar_Stabilizer(const int currentReading, int prevReading);
 
 // Return distance in cm
 int myMaxSonar_Read(char analogChannel);

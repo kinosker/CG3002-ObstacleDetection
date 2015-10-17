@@ -137,9 +137,8 @@ void Sonar_Task(void *p)
 {
 	TickType_t xLastWakeTime;
 	char obstacleDetected = 0;
-	int prevTopSonar = 0, prevFrontSonar = 0, prevLeftSonar = 0, prevRightSonar = 0;
 	int topSonar, frontSonar, leftSonar, rightSonar, btmIR;
-	int topSonarSample[3] = {999,999,999}, frontSonarSample[3] = {999,999,999}, leftSonarSample[3] = {999,999,999}, rightSonarSample[3] = {999,999,999};
+	int topSonarSample[SONAR_SAMPLE_SIZE] = {0}, frontSonarSample[SONAR_SAMPLE_SIZE] = {0}, leftSonarSample[SONAR_SAMPLE_SIZE] = {0}, rightSonarSample[SONAR_SAMPLE_SIZE] = {0};
 	char deviceBlocked[5] = {0}; // flag to indicate if we should send the reading to RPI
 	
 	int calibratedBtmIR = mySharpIR_Read(AN12); // get first value...
@@ -149,12 +148,12 @@ void Sonar_Task(void *p)
 	while(1)
 	{
 		myMaxSonar_TopStart();
-		topSonar = myMaxSonar_getFilteredReading(myMaxSonar_Read(AN11), &prevTopSonar, topSonarSample, 3);
+		topSonar = myMaxSonar_getFilteredReading(myMaxSonar_Read(AN11), topSonarSample);
 		
 		myMaxSonar_BtmStart();
-		frontSonar	= myMaxSonar_getFilteredReading(myMaxSonar_Read(AN15), &prevFrontSonar, frontSonarSample, 3);
-		leftSonar	= myMaxSonar_getFilteredReading(myMaxSonar_Read(AN14), &prevLeftSonar, leftSonarSample, 3);
-		rightSonar	= myMaxSonar_getFilteredReading(myMaxSonar_Read(AN13), &prevRightSonar, rightSonarSample, 3); 
+		frontSonar	= myMaxSonar_getFilteredReading(myMaxSonar_Read(AN15), frontSonarSample);
+		leftSonar	= myMaxSonar_getFilteredReading(myMaxSonar_Read(AN14), leftSonarSample);
+		rightSonar	= myMaxSonar_getFilteredReading(myMaxSonar_Read(AN13), rightSonarSample); 
 		
 		btmIR		= mySharpIR_Read(AN12);	
 		
@@ -211,7 +210,7 @@ int main(void)
 {
 	while(1)
 	{
-		TaskHandle_t t_maxSonar, t_rx, t_tx, t_delay, t1;
+		TaskHandle_t t_maxSonar, t_rx, t_tx, t_delay;
 	
 		init();
 
