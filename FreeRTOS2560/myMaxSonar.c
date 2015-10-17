@@ -29,30 +29,57 @@ void myMaxSonar_TopStart()
 	MaxSonar_TopTriggerStop();
 }
 
+int myMaxSonar_extractMedian(int * sample)
+{
+	if (sample[0] > sample[1])
+	{
+		if (sample[1] > sample[2])
+		{
+			return sample[1];
+		}
+		else if (sample[0] > sample[2]) 
+		{
+			return sample[2];
+		}
+		else 
+		{
+			return sample[0];
+		}
+	}
+	else 
+	{
+		if (sample[0] > sample[2])
+		{
+			return sample[0];
+		} 
+		else if (sample[1] > sample[2]) 
+		{
+			return sample[2];
+		}	
+		else 
+		{
+			return sample[1];
+		}
+	}
+}
 
-int myMaxSonar_getMedian(int currentReading, int* prevReading, int *sample, int sampleSize)
+
+int myMaxSonar_getFilteredReading(int currentReading, int* prevReading, int *sample, int sampleSize)
 {
 	currentReading = myMaxSonar_Stabilizer(currentReading, prevReading);
 	myMaxSonar_AddSample(currentReading, sample, sampleSize);
-	return sample[sampleSize/2];
+	return myMaxSonar_extractMedian(sample);
+
 }
 
 
 
 void myMaxSonar_AddSample(int currentReading ,int *sample, int sampleSize)
 {
-	int i;
-	int temp;
+	static int i = 0; 
 	
-	for( i = 0 ; i < sampleSize ; i++)
-	{
-		if(currentReading < sample[i])
-		{
-			temp = sample[i];
-			sample[i] = currentReading;
-			currentReading = temp;
-		}
-	}
+	sample[i] = currentReading;
+	i = (i+1) % sampleSize;
 }
 
 int myMaxSonar_Stabilizer(const int currentReading, int* prevReading)

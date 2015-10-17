@@ -115,6 +115,7 @@ Discarded input sections
  .bss           0x00000000        0x0 FreeRTOS2560.o
  .text.vApplicationIdleHook
                 0x00000000        0x2 FreeRTOS2560.o
+ .text.task1    0x00000000       0x1a FreeRTOS2560.o
  .text          0x00000000        0x0 heap_1.o
  .data          0x00000000        0x0 heap_1.o
  .bss           0x00000000        0x0 heap_1.o
@@ -202,6 +203,8 @@ Discarded input sections
                 0x00000000        0xc tasks.o
  .text.uxTaskGetNumberOfTasks
                 0x00000000        0x6 tasks.o
+ .text.vTaskDelay
+                0x00000000       0x40 tasks.o
  .text.vTaskPlaceOnUnorderedEventList
                 0x00000000       0x66 tasks.o
  .text.xTaskRemoveFromUnorderedEventList
@@ -502,7 +505,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x2ed8
+.text           0x00000000     0x2eb2
  *(.vectors)
  .vectors       0x00000000       0xe4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6/crtm2560.o
                 0x00000000                __vector_default
@@ -616,410 +619,408 @@ END GROUP
                 0x000001a8                . = ALIGN (0x2)
  *(.text.*)
  .text.RPI_receiveTask
-                0x000001a8       0x38 FreeRTOS2560.o
+                0x000001a8       0x3a FreeRTOS2560.o
                 0x000001a8                RPI_receiveTask
  .text.RPI_sendTask
-                0x000001e0       0x88 FreeRTOS2560.o
-                0x000001e0                RPI_sendTask
+                0x000001e2       0x88 FreeRTOS2560.o
+                0x000001e2                RPI_sendTask
  .text.myTimerTask
-                0x00000268        0x6 FreeRTOS2560.o
-                0x00000268                myTimerTask
- .text.task1    0x0000026e       0x1a FreeRTOS2560.o
-                0x0000026e                task1
+                0x0000026a        0x6 FreeRTOS2560.o
+                0x0000026a                myTimerTask
  .text.setDigitalInputPowerReduction
-                0x00000288       0x16 FreeRTOS2560.o
-                0x00000288                setDigitalInputPowerReduction
+                0x00000270       0x16 FreeRTOS2560.o
+                0x00000270                setDigitalInputPowerReduction
  .text.setPowerReduction
-                0x0000029e       0x10 FreeRTOS2560.o
-                0x0000029e                setPowerReduction
+                0x00000286       0x10 FreeRTOS2560.o
+                0x00000286                setPowerReduction
  .text.clearTimer
-                0x000002ae       0x3e FreeRTOS2560.o
-                0x000002ae                clearTimer
- .text.init     0x000002ec       0x50 FreeRTOS2560.o
-                0x000002ec                init
- .text.main     0x0000033c       0xae FreeRTOS2560.o
-                0x0000033c                main
+                0x00000296       0x3e FreeRTOS2560.o
+                0x00000296                clearTimer
+ .text.init     0x000002d4       0x50 FreeRTOS2560.o
+                0x000002d4                init
+ .text.main     0x00000324       0x92 FreeRTOS2560.o
+                0x00000324                main
  .text.obstacleSend
-                0x000003ea       0x50 FreeRTOS2560.o
-                0x000003ea                obstacleSend
+                0x000003b6       0x50 FreeRTOS2560.o
+                0x000003b6                obstacleSend
  .text.sendObstacleDetected
-                0x0000043a       0x8a FreeRTOS2560.o
-                0x0000043a                sendObstacleDetected
+                0x00000406       0x8a FreeRTOS2560.o
+                0x00000406                sendObstacleDetected
  .text.Sonar_Task
-                0x000004c4      0x14e FreeRTOS2560.o
-                0x000004c4                Sonar_Task
+                0x00000490      0x166 FreeRTOS2560.o
+                0x00000490                Sonar_Task
  .text.pvPortMalloc
-                0x00000612       0x6a heap_1.o
-                0x00000612                pvPortMalloc
+                0x000005f6       0x6a heap_1.o
+                0x000005f6                pvPortMalloc
  .text.vPortFree
-                0x0000067c        0x2 heap_1.o
-                0x0000067c                vPortFree
+                0x00000660        0x2 heap_1.o
+                0x00000660                vPortFree
  .text.vListInitialise
-                0x0000067e       0x1c list.o
-                0x0000067e                vListInitialise
+                0x00000662       0x1c list.o
+                0x00000662                vListInitialise
  .text.vListInitialiseItem
-                0x0000069a        0x8 list.o
-                0x0000069a                vListInitialiseItem
+                0x0000067e        0x8 list.o
+                0x0000067e                vListInitialiseItem
  .text.vListInsertEnd
-                0x000006a2       0x42 list.o
-                0x000006a2                vListInsertEnd
+                0x00000686       0x42 list.o
+                0x00000686                vListInsertEnd
  .text.vListInsert
-                0x000006e4       0x62 list.o
-                0x000006e4                vListInsert
+                0x000006c8       0x62 list.o
+                0x000006c8                vListInsert
  .text.uxListRemove
-                0x00000746       0x4c list.o
-                0x00000746                uxListRemove
+                0x0000072a       0x4c list.o
+                0x0000072a                uxListRemove
  .text.__vector_9
-                0x00000792      0x116 myHcSonar.o
-                0x00000792                __vector_9
+                0x00000776      0x116 myHcSonar.o
+                0x00000776                __vector_9
  .text.myHcSonar_Init
-                0x000008a8       0x2a myHcSonar.o
-                0x000008a8                myHcSonar_Init
+                0x0000088c       0x2a myHcSonar.o
+                0x0000088c                myHcSonar_Init
  .text.myMaxSonar_BtmStart
-                0x000008d2        0xc myMaxSonar.o
-                0x000008d2                myMaxSonar_BtmStart
+                0x000008b6        0xc myMaxSonar.o
+                0x000008b6                myMaxSonar_BtmStart
  .text.myMaxSonar_TopStart
-                0x000008de        0xc myMaxSonar.o
-                0x000008de                myMaxSonar_TopStart
+                0x000008c2        0xc myMaxSonar.o
+                0x000008c2                myMaxSonar_TopStart
+ .text.myMaxSonar_extractMedian
+                0x000008ce       0x3e myMaxSonar.o
+                0x000008ce                myMaxSonar_extractMedian
  .text.myMaxSonar_AddSample
-                0x000008ea       0x2a myMaxSonar.o
-                0x000008ea                myMaxSonar_AddSample
+                0x0000090c       0x2a myMaxSonar.o
+                0x0000090c                myMaxSonar_AddSample
  .text.myMaxSonar_Stabilizer
-                0x00000914       0x28 myMaxSonar.o
-                0x00000914                myMaxSonar_Stabilizer
- .text.myMaxSonar_getMedian
-                0x0000093c       0x32 myMaxSonar.o
-                0x0000093c                myMaxSonar_getMedian
+                0x00000936       0x28 myMaxSonar.o
+                0x00000936                myMaxSonar_Stabilizer
+ .text.myMaxSonar_getFilteredReading
+                0x0000095e       0x22 myMaxSonar.o
+                0x0000095e                myMaxSonar_getFilteredReading
  .text.myMaxSonar_Read
-                0x0000096e       0x14 myMaxSonar.o
-                0x0000096e                myMaxSonar_Read
+                0x00000980       0x14 myMaxSonar.o
+                0x00000980                myMaxSonar_Read
  .text.__vector_29
-                0x00000982       0x70 myADC.o
-                0x00000982                __vector_29
+                0x00000994       0x70 myADC.o
+                0x00000994                __vector_29
  .text.myADC_Init
-                0x000009f2       0x3a myADC.o
-                0x000009f2                myADC_Init
+                0x00000a04       0x3a myADC.o
+                0x00000a04                myADC_Init
  .text.myADC_startADC
-                0x00000a2c       0x52 myADC.o
-                0x00000a2c                myADC_startADC
+                0x00000a3e       0x52 myADC.o
+                0x00000a3e                myADC_startADC
  .text.myADC_readADC
-                0x00000a7e       0x48 myADC.o
-                0x00000a7e                myADC_readADC
+                0x00000a90       0x48 myADC.o
+                0x00000a90                myADC_readADC
  .text.myADC_analogRead
-                0x00000ac6        0xe myADC.o
-                0x00000ac6                myADC_analogRead
+                0x00000ad8        0xe myADC.o
+                0x00000ad8                myADC_analogRead
  .text.detectStairs
-                0x00000ad4       0x20 myObstacleHandler.o
-                0x00000ad4                detectStairs
+                0x00000ae6       0x20 myObstacleHandler.o
+                0x00000ae6                detectStairs
  .text.obstacleAvoidance
-                0x00000af4       0xce myObstacleHandler.o
-                0x00000af4                obstacleAvoidance
+                0x00000b06       0xce myObstacleHandler.o
+                0x00000b06                obstacleAvoidance
  .text.cheatPrintAll
-                0x00000bc2       0x1e myObstacleHandler.o
-                0x00000bc2                cheatPrintAll
+                0x00000bd4       0x1e myObstacleHandler.o
+                0x00000bd4                cheatPrintAll
  .text.obstacleDetection
-                0x00000be0       0x60 myObstacleHandler.o
-                0x00000be0                obstacleDetection
+                0x00000bf2       0x60 myObstacleHandler.o
+                0x00000bf2                obstacleDetection
  .text.mySharpIR_Read
-                0x00000c40       0x48 mySharpIR.o
-                0x00000c40                mySharpIR_Read
+                0x00000c52       0x48 mySharpIR.o
+                0x00000c52                mySharpIR_Read
  .text.checkWithinRange
-                0x00000c88       0x2a mySharpIR.o
-                0x00000c88                checkWithinRange
+                0x00000c9a       0x2a mySharpIR.o
+                0x00000c9a                checkWithinRange
  .text.mySharpIR_ReCalibrate
-                0x00000cb2       0xc8 mySharpIR.o
-                0x00000cb2                mySharpIR_ReCalibrate
+                0x00000cc4       0xc8 mySharpIR.o
+                0x00000cc4                mySharpIR_ReCalibrate
  .text.myTimer_Init
-                0x00000d7a       0x34 myTimer.o
-                0x00000d7a                myTimer_Init
+                0x00000d8c       0x34 myTimer.o
+                0x00000d8c                myTimer_Init
  .text.myTimer_Read
-                0x00000dae        0x4 myTimer.o
-                0x00000dae                myTimer_Read
+                0x00000dc0        0x4 myTimer.o
+                0x00000dc0                myTimer_Read
  .text.myTimer_DelayMicro
-                0x00000db2       0x48 myTimer.o
-                0x00000db2                myTimer_DelayMicro
+                0x00000dc4       0x48 myTimer.o
+                0x00000dc4                myTimer_DelayMicro
  .text.myTimer_DelayChecker
-                0x00000dfa       0xde myTimer.o
-                0x00000dfa                myTimer_DelayChecker
+                0x00000e0c       0xde myTimer.o
+                0x00000e0c                myTimer_DelayChecker
  .text.__vector_36
-                0x00000ed8       0x70 myUSART.o
-                0x00000ed8                __vector_36
+                0x00000eea       0x70 myUSART.o
+                0x00000eea                __vector_36
  .text.__vector_25
-                0x00000f48       0x70 myUSART.o
-                0x00000f48                __vector_25
+                0x00000f5a       0x70 myUSART.o
+                0x00000f5a                __vector_25
  .text.__vector_37
-                0x00000fb8       0x6c myUSART.o
-                0x00000fb8                __vector_37
+                0x00000fca       0x6c myUSART.o
+                0x00000fca                __vector_37
  .text.__vector_26
-                0x00001024       0x6c myUSART.o
-                0x00001024                __vector_26
+                0x00001036       0x6c myUSART.o
+                0x00001036                __vector_26
  .text.myUSART_USART0_Init
-                0x00001090       0x40 myUSART.o
-                0x00001090                myUSART_USART0_Init
+                0x000010a2       0x40 myUSART.o
+                0x000010a2                myUSART_USART0_Init
  .text.myUSART_USART1_Init
-                0x000010d0       0x50 myUSART.o
-                0x000010d0                myUSART_USART1_Init
+                0x000010e2       0x50 myUSART.o
+                0x000010e2                myUSART_USART1_Init
  .text.myUSART_transmitUSART0_c
-                0x00001120       0x2e myUSART.o
-                0x00001120                myUSART_transmitUSART0_c
+                0x00001132       0x2e myUSART.o
+                0x00001132                myUSART_transmitUSART0_c
  .text.myUSART_transmitUSART1_c
-                0x0000114e       0x2e myUSART.o
-                0x0000114e                myUSART_transmitUSART1_c
+                0x00001160       0x2e myUSART.o
+                0x00001160                myUSART_transmitUSART1_c
  .text.myUSART_transmitUSART1
-                0x0000117c       0x1c myUSART.o
-                0x0000117c                myUSART_transmitUSART1
+                0x0000118e       0x1c myUSART.o
+                0x0000118e                myUSART_transmitUSART1
  .text.myUSART_transmitUSART0
-                0x00001198       0x1c myUSART.o
-                0x00001198                myUSART_transmitUSART0
+                0x000011aa       0x1c myUSART.o
+                0x000011aa                myUSART_transmitUSART0
  .text.myUSART_receiveUSART1
-                0x000011b4       0x42 myUSART.o
-                0x000011b4                myUSART_receiveUSART1
+                0x000011c6       0x42 myUSART.o
+                0x000011c6                myUSART_receiveUSART1
  .text.myUSART_waitForHandshake
-                0x000011f6       0x1e myUSART.o
-                0x000011f6                myUSART_waitForHandshake
+                0x00001208       0x1e myUSART.o
+                0x00001208                myUSART_waitForHandshake
  .text.myUSART_completeHandShake
-                0x00001214       0x16 myUSART.o
-                0x00001214                myUSART_completeHandShake
+                0x00001226       0x16 myUSART.o
+                0x00001226                myUSART_completeHandShake
  .text.myUSART_receiveHandShakeAck
-                0x0000122a        0xc myUSART.o
-                0x0000122a                myUSART_receiveHandShakeAck
+                0x0000123c        0xc myUSART.o
+                0x0000123c                myUSART_receiveHandShakeAck
  .text.myUSART_receiveHandShakeStart
-                0x00001236        0xc myUSART.o
-                0x00001236                myUSART_receiveHandShakeStart
+                0x00001248        0xc myUSART.o
+                0x00001248                myUSART_receiveHandShakeStart
  .text.myUSART_receiveMessageACK
-                0x00001242        0xc myUSART.o
-                0x00001242                myUSART_receiveMessageACK
+                0x00001254        0xc myUSART.o
+                0x00001254                myUSART_receiveMessageACK
  .text.myUSART_peekReceiveUSART1
-                0x0000124e       0x42 myUSART.o
-                0x0000124e                myUSART_peekReceiveUSART1
+                0x00001260       0x42 myUSART.o
+                0x00001260                myUSART_peekReceiveUSART1
  .text.pxPortInitialiseStack
-                0x00001290       0xe4 port.o
-                0x00001290                pxPortInitialiseStack
+                0x000012a2       0xe4 port.o
+                0x000012a2                pxPortInitialiseStack
  .text.xPortStartScheduler
-                0x00001374       0x7a port.o
-                0x00001374                xPortStartScheduler
+                0x00001386       0x7a port.o
+                0x00001386                xPortStartScheduler
  .text.vPortYield
-                0x000013ee       0xc0 port.o
-                0x000013ee                vPortYield
+                0x00001400       0xc0 port.o
+                0x00001400                vPortYield
  .text.vPortYieldFromTick
-                0x000014ae       0xc4 port.o
-                0x000014ae                vPortYieldFromTick
+                0x000014c0       0xc4 port.o
+                0x000014c0                vPortYieldFromTick
  .text.__vector_21
-                0x00001572        0x4 port.o
-                0x00001572                __vector_21
+                0x00001584        0x4 port.o
+                0x00001584                __vector_21
  .text.prvCopyDataToQueue
-                0x00001576       0xc4 queue.o
+                0x00001588       0xc4 queue.o
  .text.prvCopyDataFromQueue
-                0x0000163a       0x34 queue.o
+                0x0000164c       0x34 queue.o
  .text.prvUnlockQueue
-                0x0000166e       0x8c queue.o
+                0x00001680       0x8c queue.o
  .text.xQueueGenericReset
-                0x000016fa       0x76 queue.o
-                0x000016fa                xQueueGenericReset
+                0x0000170c       0x76 queue.o
+                0x0000170c                xQueueGenericReset
  .text.xQueueGenericCreate
-                0x00001770       0x5a queue.o
-                0x00001770                xQueueGenericCreate
+                0x00001782       0x5a queue.o
+                0x00001782                xQueueGenericCreate
  .text.xQueueGenericSend
-                0x000017ca      0x126 queue.o
-                0x000017ca                xQueueGenericSend
+                0x000017dc      0x126 queue.o
+                0x000017dc                xQueueGenericSend
  .text.xQueueCreateMutex
-                0x000018f0       0x56 queue.o
-                0x000018f0                xQueueCreateMutex
+                0x00001902       0x56 queue.o
+                0x00001902                xQueueCreateMutex
  .text.xQueueGenericSendFromISR
-                0x00001946       0x74 queue.o
-                0x00001946                xQueueGenericSendFromISR
+                0x00001958       0x74 queue.o
+                0x00001958                xQueueGenericSendFromISR
  .text.xQueueGenericReceive
-                0x000019ba      0x166 queue.o
-                0x000019ba                xQueueGenericReceive
+                0x000019cc      0x166 queue.o
+                0x000019cc                xQueueGenericReceive
  .text.ringBufferInit
-                0x00001b20        0xe ringBuffer.o
-                0x00001b20                ringBufferInit
+                0x00001b32        0xe ringBuffer.o
+                0x00001b32                ringBufferInit
  .text.ringBufferPeek
-                0x00001b2e       0x14 ringBuffer.o
-                0x00001b2e                ringBufferPeek
+                0x00001b40       0x14 ringBuffer.o
+                0x00001b40                ringBufferPeek
  .text.ringBufferPop
-                0x00001b42       0x24 ringBuffer.o
-                0x00001b42                ringBufferPop
+                0x00001b54       0x24 ringBuffer.o
+                0x00001b54                ringBufferPop
  .text.ringBufferPush
-                0x00001b66       0x2e ringBuffer.o
-                0x00001b66                ringBufferPush
+                0x00001b78       0x2e ringBuffer.o
+                0x00001b78                ringBufferPush
  .text.ringBufferFull
-                0x00001b94        0xe ringBuffer.o
-                0x00001b94                ringBufferFull
+                0x00001ba6        0xe ringBuffer.o
+                0x00001ba6                ringBufferFull
  .text.ringBufferNotEmpty
-                0x00001ba2       0x10 ringBuffer.o
-                0x00001ba2                ringBufferNotEmpty
+                0x00001bb4       0x10 ringBuffer.o
+                0x00001bb4                ringBufferNotEmpty
  .text.prvResetNextTaskUnblockTime
-                0x00001bb2       0x3e tasks.o
+                0x00001bc4       0x3e tasks.o
  .text.prvAddCurrentTaskToDelayedList
-                0x00001bf0       0x6e tasks.o
+                0x00001c02       0x6e tasks.o
  .text.xTaskGenericCreate
-                0x00001c5e      0x22a tasks.o
-                0x00001c5e                xTaskGenericCreate
+                0x00001c70      0x22a tasks.o
+                0x00001c70                xTaskGenericCreate
  .text.vTaskResume
-                0x00001e88       0x96 tasks.o
-                0x00001e88                vTaskResume
+                0x00001e9a       0x96 tasks.o
+                0x00001e9a                vTaskResume
  .text.vTaskStartScheduler
-                0x00001f1e       0x52 tasks.o
-                0x00001f1e                vTaskStartScheduler
+                0x00001f30       0x52 tasks.o
+                0x00001f30                vTaskStartScheduler
  .text.vTaskSuspendAll
-                0x00001f70        0xc tasks.o
-                0x00001f70                vTaskSuspendAll
+                0x00001f82        0xc tasks.o
+                0x00001f82                vTaskSuspendAll
  .text.xTaskGetTickCount
-                0x00001f7c       0x14 tasks.o
-                0x00001f7c                xTaskGetTickCount
+                0x00001f8e       0x14 tasks.o
+                0x00001f8e                xTaskGetTickCount
  .text.xTaskGetTickCountFromISR
-                0x00001f90        0xa tasks.o
-                0x00001f90                xTaskGetTickCountFromISR
+                0x00001fa2        0xa tasks.o
+                0x00001fa2                xTaskGetTickCountFromISR
  .text.xTaskIncrementTick
-                0x00001f9a      0x17c tasks.o
-                0x00001f9a                xTaskIncrementTick
+                0x00001fac      0x17c tasks.o
+                0x00001fac                xTaskIncrementTick
  .text.xTaskResumeAll
-                0x00002116      0x102 tasks.o
-                0x00002116                xTaskResumeAll
+                0x00002128      0x102 tasks.o
+                0x00002128                xTaskResumeAll
  .text.vTaskDelayUntil
-                0x00002218       0x7c tasks.o
-                0x00002218                vTaskDelayUntil
- .text.vTaskDelay
-                0x00002294       0x38 tasks.o
-                0x00002294                vTaskDelay
+                0x0000222a       0x7c tasks.o
+                0x0000222a                vTaskDelayUntil
  .text.prvIdleTask
-                0x000022cc       0x72 tasks.o
+                0x000022a6       0x72 tasks.o
  .text.vTaskSwitchContext
-                0x0000233e       0xbc tasks.o
-                0x0000233e                vTaskSwitchContext
+                0x00002318       0xbc tasks.o
+                0x00002318                vTaskSwitchContext
  .text.vTaskSuspend
-                0x000023fa       0x9a tasks.o
-                0x000023fa                vTaskSuspend
+                0x000023d4       0x9a tasks.o
+                0x000023d4                vTaskSuspend
  .text.vTaskPlaceOnEventList
-                0x00002494       0x56 tasks.o
-                0x00002494                vTaskPlaceOnEventList
+                0x0000246e       0x56 tasks.o
+                0x0000246e                vTaskPlaceOnEventList
  .text.xTaskRemoveFromEventList
-                0x000024ea       0x90 tasks.o
-                0x000024ea                xTaskRemoveFromEventList
+                0x000024c4       0x90 tasks.o
+                0x000024c4                xTaskRemoveFromEventList
  .text.vTaskSetTimeOutState
-                0x0000257a       0x16 tasks.o
-                0x0000257a                vTaskSetTimeOutState
+                0x00002554       0x16 tasks.o
+                0x00002554                vTaskSetTimeOutState
  .text.xTaskCheckForTimeOut
-                0x00002590       0x70 tasks.o
-                0x00002590                xTaskCheckForTimeOut
+                0x0000256a       0x70 tasks.o
+                0x0000256a                xTaskCheckForTimeOut
  .text.vTaskMissedYield
-                0x00002600        0x8 tasks.o
-                0x00002600                vTaskMissedYield
+                0x000025da        0x8 tasks.o
+                0x000025da                vTaskMissedYield
  .text.vTaskPriorityInherit
-                0x00002608       0xbc tasks.o
-                0x00002608                vTaskPriorityInherit
+                0x000025e2       0xbc tasks.o
+                0x000025e2                vTaskPriorityInherit
  .text.xTaskPriorityDisinherit
-                0x000026c4       0x7e tasks.o
-                0x000026c4                xTaskPriorityDisinherit
+                0x0000269e       0x7e tasks.o
+                0x0000269e                xTaskPriorityDisinherit
  .text.pvTaskIncrementMutexHeldCount
-                0x00002742       0x24 tasks.o
-                0x00002742                pvTaskIncrementMutexHeldCount
+                0x0000271c       0x24 tasks.o
+                0x0000271c                pvTaskIncrementMutexHeldCount
  .text.avr-libc.fplib
-                0x00002766        0xa c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(addsf3.o)
-                0x00002766                __subsf3
-                0x00002768                __addsf3
+                0x00002740        0xa c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(addsf3.o)
+                0x00002740                __subsf3
+                0x00002742                __addsf3
  .text.avr-libc.fplib
-                0x00002770       0xc0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(addsf3x.o)
-                0x0000278a                __addsf3x
+                0x0000274a       0xc0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(addsf3x.o)
+                0x00002764                __addsf3x
  .text.avr-libc.fplib
-                0x00002830        0xa c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fixsfsi.o)
-                0x00002830                __fixsfsi
+                0x0000280a        0xa c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fixsfsi.o)
+                0x0000280a                __fixsfsi
  .text.avr-libc.fplib
-                0x0000283a       0x58 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fixunssfsi.o)
-                0x0000283a                __fixunssfsi
+                0x00002814       0x58 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fixunssfsi.o)
+                0x00002814                __fixunssfsi
  .text.avr-libc.fplib
-                0x00002892       0x7a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(floatsisf.o)
-                0x00002892                __floatunsisf
-                0x00002896                __floatsisf
+                0x0000286c       0x7a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(floatsisf.o)
+                0x0000286c                __floatunsisf
+                0x00002870                __floatsisf
  .text.avr-libc.fplib
-                0x0000290c        0xc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_inf.o)
-                0x0000290c                __fp_inf
+                0x000028e6        0xc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_inf.o)
+                0x000028e6                __fp_inf
  .text.avr-libc.fplib
-                0x00002918        0x6 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_nan.o)
-                0x00002918                __fp_nan
+                0x000028f2        0x6 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_nan.o)
+                0x000028f2                __fp_nan
  .text.avr-libc.fplib
-                0x0000291e        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_pscA.o)
-                0x0000291e                __fp_pscA
+                0x000028f8        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_pscA.o)
+                0x000028f8                __fp_pscA
  .text.avr-libc.fplib
-                0x0000292c        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_pscB.o)
-                0x0000292c                __fp_pscB
+                0x00002906        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_pscB.o)
+                0x00002906                __fp_pscB
  .text.avr-libc.fplib
-                0x0000293a       0x22 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_round.o)
-                0x0000293a                __fp_round
+                0x00002914       0x22 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_round.o)
+                0x00002914                __fp_round
  .text.avr-libc.fplib
-                0x0000295c       0x44 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_split3.o)
-                0x0000295c                __fp_split3
-                0x0000296c                __fp_splitA
+                0x00002936       0x44 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_split3.o)
+                0x00002936                __fp_split3
+                0x00002946                __fp_splitA
  .text.avr-libc.fplib
-                0x000029a0        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_zero.o)
-                0x000029a0                __fp_zero
-                0x000029a2                __fp_szero
+                0x0000297a        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_zero.o)
+                0x0000297a                __fp_zero
+                0x0000297c                __fp_szero
  .text.avr-libc.fplib
-                0x000029ae        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(mulsf3.o)
-                0x000029ae                __mulsf3
+                0x00002988        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(mulsf3.o)
+                0x00002988                __mulsf3
  .text.avr-libc.fplib
-                0x000029b2       0xc2 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(mulsf3x.o)
-                0x000029c6                __mulsf3x
-                0x000029ca                __mulsf3_pse
+                0x0000298c       0xc2 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(mulsf3x.o)
+                0x000029a0                __mulsf3x
+                0x000029a4                __mulsf3_pse
  .text.avr-libc.fplib
-                0x00002a74       0x98 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(pow.o)
-                0x00002a74                pow
+                0x00002a4e       0x98 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(pow.o)
+                0x00002a4e                pow
  .text.avr-libc.fplib
-                0x00002b0c       0x62 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(exp.o)
-                0x00002b16                exp
+                0x00002ae6       0x62 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(exp.o)
+                0x00002af0                exp
  .text.avr-libc.fplib
-                0x00002b6e       0x4a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_powser.o)
-                0x00002b6e                __fp_powser
+                0x00002b48       0x4a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_powser.o)
+                0x00002b48                __fp_powser
  .text.avr-libc.fplib
-                0x00002bb8        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(inverse.o)
-                0x00002bb8                inverse
+                0x00002b92        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(inverse.o)
+                0x00002b92                inverse
  .text.avr-libc.fplib
-                0x00002bc6       0x6c c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(ldexp.o)
-                0x00002bca                ldexp
+                0x00002ba0       0x6c c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(ldexp.o)
+                0x00002ba4                ldexp
  .text.avr-libc.fplib
-                0x00002c32       0x8a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(log.o)
-                0x00002c3c                log
+                0x00002c0c       0x8a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(log.o)
+                0x00002c16                log
  .text.avr-libc.fplib
-                0x00002cbc       0x66 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(modf.o)
-                0x00002cbc                modf
-                0x00002cbc                modff
+                0x00002c96       0x66 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(modf.o)
+                0x00002c96                modf
+                0x00002c96                modff
  .text.avr-libc.fplib
-                0x00002d22        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(divsf3.o)
-                0x00002d22                __divsf3
+                0x00002cfc        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(divsf3.o)
+                0x00002cfc                __divsf3
  .text.avr-libc.fplib
-                0x00002d26       0xcc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(divsf3x.o)
-                0x00002d3c                __divsf3x
-                0x00002d40                __divsf3_pse
+                0x00002d00       0xcc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(divsf3x.o)
+                0x00002d16                __divsf3x
+                0x00002d1a                __divsf3_pse
  .text.avr-libc.fplib
-                0x00002df2       0x1c c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_mpack.o)
-                0x00002df2                __fp_mpack
-                0x00002df6                __fp_mpack_finite
+                0x00002dcc       0x1c c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libm.a(fp_mpack.o)
+                0x00002dcc                __fp_mpack
+                0x00002dd0                __fp_mpack_finite
  .text.libgcc.div
-                0x00002e0e       0x26 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr6\libgcc.a(_divmodhi4.o)
-                0x00002e0e                _div
-                0x00002e0e                __divmodhi4
+                0x00002de8       0x26 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr6\libgcc.a(_divmodhi4.o)
+                0x00002de8                _div
+                0x00002de8                __divmodhi4
  .text.libgcc.div
-                0x00002e34       0x28 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr6\libgcc.a(_udivmodhi4.o)
-                0x00002e34                __udivmodhi4
+                0x00002e0e       0x28 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr6\libgcc.a(_udivmodhi4.o)
+                0x00002e0e                __udivmodhi4
  .text.avr-libc
-                0x00002e5c       0x12 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libc.a(memcpy.o)
-                0x00002e5c                memcpy
+                0x00002e36       0x12 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libc.a(memcpy.o)
+                0x00002e36                memcpy
  .text.avr-libc
-                0x00002e6e       0x14 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libc.a(itoa_ncheck.o)
-                0x00002e6e                __itoa_ncheck
+                0x00002e48       0x14 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libc.a(itoa_ncheck.o)
+                0x00002e48                __itoa_ncheck
  .text.avr-libc
-                0x00002e82       0x32 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libc.a(utoa_ncheck.o)
-                0x00002e82                __utoa_ncheck
-                0x00002e84                __utoa_common
+                0x00002e5c       0x32 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libc.a(utoa_ncheck.o)
+                0x00002e5c                __utoa_ncheck
+                0x00002e5e                __utoa_common
  .text.avr-libc
-                0x00002eb4       0x20 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libc.a(strrev.o)
-                0x00002eb4                strrev
-                0x00002ed4                . = ALIGN (0x2)
+                0x00002e8e       0x20 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr6\libc.a(strrev.o)
+                0x00002e8e                strrev
+                0x00002eae                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00002ed4        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr6\libgcc.a(_exit.o)
-                0x00002ed4                _exit
-                0x00002ed4                exit
+ .fini9         0x00002eae        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr6\libgcc.a(_exit.o)
+                0x00002eae                _exit
+                0x00002eae                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -1038,11 +1039,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00002ed4        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr6\libgcc.a(_exit.o)
+ .fini0         0x00002eae        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr6\libgcc.a(_exit.o)
  *(.fini0)
-                0x00002ed8                _etext = .
+                0x00002eb2                _etext = .
 
-.data           0x00800200       0x3e load address 0x00002ed8
+.data           0x00800200       0x3e load address 0x00002eb2
                 0x00800200                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -1055,17 +1056,19 @@ END GROUP
  .data.xNextTaskUnblockTime
                 0x00800204        0x2 tasks.o
  *(.rodata)
+ .rodata        0x00800206        0x6 FreeRTOS2560.o
  *(.rodata*)
  .rodata.str1.1
-                0x00800206       0x33 FreeRTOS2560.o
+                0x0080020c       0x2c FreeRTOS2560.o
  .rodata.str1.1
-                0x00800239        0x5 tasks.o
+                0x00800238        0x5 tasks.o
  *(.gnu.linkonce.d*)
                 0x0080023e                . = ALIGN (0x2)
+ *fill*         0x0080023d        0x1 
                 0x0080023e                _edata = .
                 0x0080023e                PROVIDE (__data_end, .)
 
-.bss            0x0080023e      0x709
+.bss            0x0080023e      0x70b
                 0x0080023e                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
@@ -1074,91 +1077,92 @@ END GROUP
  .bss.xNextFreeByte
                 0x00800240        0x2 heap_1.o
  .bss.ucHeap    0x00800242      0x5dc heap_1.o
+ .bss.i.1838    0x0080081e        0x2 myMaxSonar.o
  .bss.checkReading.1914
-                0x0080081e        0x4 mySharpIR.o
- .bss.i.1913    0x00800822        0x2 mySharpIR.o
+                0x00800820        0x4 mySharpIR.o
+ .bss.i.1913    0x00800824        0x2 mySharpIR.o
  .bss.uxSchedulerSuspended
-                0x00800824        0x1 tasks.o
- .bss.uxTaskNumber
-                0x00800825        0x1 tasks.o
- .bss.xNumOfOverflows
                 0x00800826        0x1 tasks.o
- .bss.xYieldPending
+ .bss.uxTaskNumber
                 0x00800827        0x1 tasks.o
- .bss.uxPendedTicks
+ .bss.xNumOfOverflows
                 0x00800828        0x1 tasks.o
- .bss.xSchedulerRunning
+ .bss.xYieldPending
                 0x00800829        0x1 tasks.o
- .bss.uxTopReadyPriority
+ .bss.uxPendedTicks
                 0x0080082a        0x1 tasks.o
+ .bss.xSchedulerRunning
+                0x0080082b        0x1 tasks.o
+ .bss.uxTopReadyPriority
+                0x0080082c        0x1 tasks.o
  .bss.xTickCount
-                0x0080082b        0x2 tasks.o
+                0x0080082d        0x2 tasks.o
  .bss.uxCurrentNumberOfTasks
-                0x0080082d        0x1 tasks.o
+                0x0080082f        0x1 tasks.o
  .bss.xSuspendedTaskList
-                0x0080082e        0x9 tasks.o
+                0x00800830        0x9 tasks.o
  .bss.uxTasksDeleted
-                0x00800837        0x1 tasks.o
+                0x00800839        0x1 tasks.o
  .bss.xTasksWaitingTermination
-                0x00800838        0x9 tasks.o
+                0x0080083a        0x9 tasks.o
  .bss.xPendingReadyList
-                0x00800841        0x9 tasks.o
+                0x00800843        0x9 tasks.o
  .bss.pxOverflowDelayedTaskList
-                0x0080084a        0x2 tasks.o
- .bss.pxDelayedTaskList
                 0x0080084c        0x2 tasks.o
+ .bss.pxDelayedTaskList
+                0x0080084e        0x2 tasks.o
  .bss.xDelayedTaskList2
-                0x0080084e        0x9 tasks.o
+                0x00800850        0x9 tasks.o
  .bss.xDelayedTaskList1
-                0x00800857        0x9 tasks.o
+                0x00800859        0x9 tasks.o
  .bss.pxReadyTasksLists
-                0x00800860       0x2d tasks.o
+                0x00800862       0x2d tasks.o
  .bss.pxCurrentTCB
-                0x0080088d        0x2 tasks.o
-                0x0080088d                pxCurrentTCB
+                0x0080088f        0x2 tasks.o
+                0x0080088f                pxCurrentTCB
  *(COMMON)
- COMMON         0x0080088f        0x4 FreeRTOS2560.o
-                0x0080088f                queueObstacleNumber
-                0x00800891                queueObstacleData
- COMMON         0x00800893        0xe myHcSonar.o
-                0x00800893                ms_tickStart
-                0x00800895                ms_tickLapsed
-                0x00800897                us_tickStart
-                0x00800899                us_tickLapsed
-                0x0080089b                semaReadReady
-                0x0080089d                ms_tickEnd
-                0x0080089f                us_tickEnd
- COMMON         0x008008a1        0x6 myADC.o
-                0x008008a1                adcReading_L
-                0x008008a2                adcReading_H
-                0x008008a3                semaGuardStartADC
-                0x008008a5                semaReadADC
- COMMON         0x008008a7        0x6 myTimer.o
-                0x008008a7                semaDelayMicro
-                0x008008a9                semaDelayMicro2
-                0x008008ab                timerTask
- COMMON         0x008008ad       0x9a myUSART.o
-                0x008008ad                uart1_rxBuffer
-                0x008008cd                uart0_rxRingBuffer
-                0x008008d2                uart0_txBuffer
-                0x008008f2                semaUsart1HandShake
-                0x008008f4                uart0_rxBuffer
-                0x00800914                uart1_txBuffer
-                0x00800934                semaUsart0Receive
-                0x00800936                semaUsart1Receive
-                0x00800938                uart1_txRingBuffer
-                0x0080093d                uart0_txRingBuffer
-                0x00800942                uart1_rxRingBuffer
-                0x00800947                PROVIDE (__bss_end, .)
-                0x00002ed8                __data_load_start = LOADADDR (.data)
-                0x00002f16                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800891        0x4 FreeRTOS2560.o
+                0x00800891                queueObstacleNumber
+                0x00800893                queueObstacleData
+ COMMON         0x00800895        0xe myHcSonar.o
+                0x00800895                ms_tickStart
+                0x00800897                ms_tickLapsed
+                0x00800899                us_tickStart
+                0x0080089b                us_tickLapsed
+                0x0080089d                semaReadReady
+                0x0080089f                ms_tickEnd
+                0x008008a1                us_tickEnd
+ COMMON         0x008008a3        0x6 myADC.o
+                0x008008a3                adcReading_L
+                0x008008a4                adcReading_H
+                0x008008a5                semaGuardStartADC
+                0x008008a7                semaReadADC
+ COMMON         0x008008a9        0x6 myTimer.o
+                0x008008a9                semaDelayMicro
+                0x008008ab                semaDelayMicro2
+                0x008008ad                timerTask
+ COMMON         0x008008af       0x9a myUSART.o
+                0x008008af                uart1_rxBuffer
+                0x008008cf                uart0_rxRingBuffer
+                0x008008d4                uart0_txBuffer
+                0x008008f4                semaUsart1HandShake
+                0x008008f6                uart0_rxBuffer
+                0x00800916                uart1_txBuffer
+                0x00800936                semaUsart0Receive
+                0x00800938                semaUsart1Receive
+                0x0080093a                uart1_txRingBuffer
+                0x0080093f                uart0_txRingBuffer
+                0x00800944                uart1_rxRingBuffer
+                0x00800949                PROVIDE (__bss_end, .)
+                0x00002eb2                __data_load_start = LOADADDR (.data)
+                0x00002ef0                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800947        0x0
-                0x00800947                PROVIDE (__noinit_start, .)
+.noinit         0x00800949        0x0
+                0x00800949                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800947                PROVIDE (__noinit_end, .)
-                0x00800947                _end = .
-                0x00800947                PROVIDE (__heap_start, .)
+                0x00800949                PROVIDE (__noinit_end, .)
+                0x00800949                _end = .
+                0x00800949                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -1230,7 +1234,7 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x568
+.debug_aranges  0x00000000      0x570
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x80 FreeRTOS2560.o
@@ -1241,144 +1245,144 @@ END GROUP
  .debug_aranges
                 0x000000f8       0x38 myHcSonar.o
  .debug_aranges
-                0x00000130       0x50 myMaxSonar.o
+                0x00000130       0x58 myMaxSonar.o
  .debug_aranges
-                0x00000180       0x40 myADC.o
+                0x00000188       0x40 myADC.o
  .debug_aranges
-                0x000001c0       0x38 myObstacleHandler.o
+                0x000001c8       0x38 myObstacleHandler.o
  .debug_aranges
-                0x000001f8       0x30 mySharpIR.o
+                0x00000200       0x30 mySharpIR.o
  .debug_aranges
-                0x00000228       0x40 myTimer.o
+                0x00000230       0x40 myTimer.o
  .debug_aranges
-                0x00000268       0xb8 myUSART.o
+                0x00000270       0xb8 myUSART.o
  .debug_aranges
-                0x00000320       0x48 port.o
+                0x00000328       0x48 port.o
  .debug_aranges
-                0x00000368       0xa0 queue.o
+                0x00000370       0xa0 queue.o
  .debug_aranges
-                0x00000408       0x50 ringBuffer.o
+                0x00000410       0x50 ringBuffer.o
  .debug_aranges
-                0x00000458      0x110 tasks.o
+                0x00000460      0x110 tasks.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x6077
+.debug_info     0x00000000     0x6046
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000     0x126d FreeRTOS2560.o
- .debug_info    0x0000126d      0x1ad heap_1.o
- .debug_info    0x0000141a      0x2c6 list.o
- .debug_info    0x000016e0      0x344 myHcSonar.o
- .debug_info    0x00001a24      0x2ee myMaxSonar.o
- .debug_info    0x00001d12      0x3bf myADC.o
- .debug_info    0x000020d1      0x215 myObstacleHandler.o
- .debug_info    0x000022e6      0x27b mySharpIR.o
- .debug_info    0x00002561      0x3e1 myTimer.o
- .debug_info    0x00002942      0xb5a myUSART.o
- .debug_info    0x0000349c      0x20d port.o
- .debug_info    0x000036a9     0x1023 queue.o
- .debug_info    0x000046cc      0x23b ringBuffer.o
- .debug_info    0x00004907     0x1770 tasks.o
+ .debug_info    0x00000000     0x11ff FreeRTOS2560.o
+ .debug_info    0x000011ff      0x1ad heap_1.o
+ .debug_info    0x000013ac      0x2c6 list.o
+ .debug_info    0x00001672      0x344 myHcSonar.o
+ .debug_info    0x000019b6      0x32b myMaxSonar.o
+ .debug_info    0x00001ce1      0x3bf myADC.o
+ .debug_info    0x000020a0      0x215 myObstacleHandler.o
+ .debug_info    0x000022b5      0x27b mySharpIR.o
+ .debug_info    0x00002530      0x3e1 myTimer.o
+ .debug_info    0x00002911      0xb5a myUSART.o
+ .debug_info    0x0000346b      0x20d port.o
+ .debug_info    0x00003678     0x1023 queue.o
+ .debug_info    0x0000469b      0x23b ringBuffer.o
+ .debug_info    0x000048d6     0x1770 tasks.o
 
-.debug_abbrev   0x00000000     0x1734
+.debug_abbrev   0x00000000     0x1743
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x3c2 FreeRTOS2560.o
- .debug_abbrev  0x000003c2      0x12e heap_1.o
- .debug_abbrev  0x000004f0       0xf8 list.o
- .debug_abbrev  0x000005e8      0x153 myHcSonar.o
- .debug_abbrev  0x0000073b      0x14f myMaxSonar.o
- .debug_abbrev  0x0000088a      0x119 myADC.o
- .debug_abbrev  0x000009a3       0xe1 myObstacleHandler.o
- .debug_abbrev  0x00000a84      0x140 mySharpIR.o
- .debug_abbrev  0x00000bc4      0x149 myTimer.o
- .debug_abbrev  0x00000d0d      0x250 myUSART.o
- .debug_abbrev  0x00000f5d      0x13d port.o
- .debug_abbrev  0x0000109a      0x2b6 queue.o
- .debug_abbrev  0x00001350       0xd9 ringBuffer.o
- .debug_abbrev  0x00001429      0x30b tasks.o
+ .debug_abbrev  0x00000000      0x3d1 FreeRTOS2560.o
+ .debug_abbrev  0x000003d1      0x12e heap_1.o
+ .debug_abbrev  0x000004ff       0xf8 list.o
+ .debug_abbrev  0x000005f7      0x153 myHcSonar.o
+ .debug_abbrev  0x0000074a      0x14f myMaxSonar.o
+ .debug_abbrev  0x00000899      0x119 myADC.o
+ .debug_abbrev  0x000009b2       0xe1 myObstacleHandler.o
+ .debug_abbrev  0x00000a93      0x140 mySharpIR.o
+ .debug_abbrev  0x00000bd3      0x149 myTimer.o
+ .debug_abbrev  0x00000d1c      0x250 myUSART.o
+ .debug_abbrev  0x00000f6c      0x13d port.o
+ .debug_abbrev  0x000010a9      0x2b6 queue.o
+ .debug_abbrev  0x0000135f       0xd9 ringBuffer.o
+ .debug_abbrev  0x00001438      0x30b tasks.o
 
-.debug_line     0x00000000     0x3872
+.debug_line     0x00000000     0x3887
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x00000000      0x68d FreeRTOS2560.o
- .debug_line    0x0000068d      0x26e heap_1.o
- .debug_line    0x000008fb      0x282 list.o
- .debug_line    0x00000b7d      0x2a4 myHcSonar.o
- .debug_line    0x00000e21      0x209 myMaxSonar.o
- .debug_line    0x0000102a      0x23e myADC.o
- .debug_line    0x00001268      0x233 myObstacleHandler.o
- .debug_line    0x0000149b      0x1b1 mySharpIR.o
- .debug_line    0x0000164c      0x291 myTimer.o
- .debug_line    0x000018dd      0x50f myUSART.o
- .debug_line    0x00001dec      0x343 port.o
- .debug_line    0x0000212f      0x8f0 queue.o
- .debug_line    0x00002a1f      0x16c ringBuffer.o
- .debug_line    0x00002b8b      0xce7 tasks.o
+ .debug_line    0x00000000      0x683 FreeRTOS2560.o
+ .debug_line    0x00000683      0x26e heap_1.o
+ .debug_line    0x000008f1      0x282 list.o
+ .debug_line    0x00000b73      0x2a4 myHcSonar.o
+ .debug_line    0x00000e17      0x228 myMaxSonar.o
+ .debug_line    0x0000103f      0x23e myADC.o
+ .debug_line    0x0000127d      0x233 myObstacleHandler.o
+ .debug_line    0x000014b0      0x1b1 mySharpIR.o
+ .debug_line    0x00001661      0x291 myTimer.o
+ .debug_line    0x000018f2      0x50f myUSART.o
+ .debug_line    0x00001e01      0x343 port.o
+ .debug_line    0x00002144      0x8f0 queue.o
+ .debug_line    0x00002a34      0x16c ringBuffer.o
+ .debug_line    0x00002ba0      0xce7 tasks.o
 
-.debug_frame    0x00000000      0xf54
+.debug_frame    0x00000000      0xf64
  *(.debug_frame)
  .debug_frame   0x00000000      0x180 FreeRTOS2560.o
  .debug_frame   0x00000180       0x60 heap_1.o
  .debug_frame   0x000001e0       0x88 list.o
  .debug_frame   0x00000268       0x9c myHcSonar.o
- .debug_frame   0x00000304       0x98 myMaxSonar.o
- .debug_frame   0x0000039c       0xc8 myADC.o
- .debug_frame   0x00000464       0x90 myObstacleHandler.o
- .debug_frame   0x000004f4       0x58 mySharpIR.o
- .debug_frame   0x0000054c       0x70 myTimer.o
- .debug_frame   0x000005bc      0x2b4 myUSART.o
- .debug_frame   0x00000870       0x74 port.o
- .debug_frame   0x000008e4      0x23c queue.o
- .debug_frame   0x00000b20       0x84 ringBuffer.o
- .debug_frame   0x00000ba4      0x3b0 tasks.o
+ .debug_frame   0x00000304       0xa8 myMaxSonar.o
+ .debug_frame   0x000003ac       0xc8 myADC.o
+ .debug_frame   0x00000474       0x90 myObstacleHandler.o
+ .debug_frame   0x00000504       0x58 mySharpIR.o
+ .debug_frame   0x0000055c       0x70 myTimer.o
+ .debug_frame   0x000005cc      0x2b4 myUSART.o
+ .debug_frame   0x00000880       0x74 port.o
+ .debug_frame   0x000008f4      0x23c queue.o
+ .debug_frame   0x00000b30       0x84 ringBuffer.o
+ .debug_frame   0x00000bb4      0x3b0 tasks.o
 
-.debug_str      0x00000000     0x17b5
+.debug_str      0x00000000     0x17d2
  *(.debug_str)
- .debug_str     0x00000000      0x6f7 FreeRTOS2560.o
-                                0x740 (size before relaxing)
- .debug_str     0x000006f7       0xaf heap_1.o
+ .debug_str     0x00000000      0x700 FreeRTOS2560.o
+                                0x749 (size before relaxing)
+ .debug_str     0x00000700       0xaf heap_1.o
                                 0x226 (size before relaxing)
- .debug_str     0x000007a6      0x129 list.o
+ .debug_str     0x000007af      0x129 list.o
                                 0x2a1 (size before relaxing)
- .debug_str     0x000008cf      0x10c myHcSonar.o
+ .debug_str     0x000008d8      0x10c myHcSonar.o
                                 0x2e0 (size before relaxing)
- .debug_str     0x000009db       0xbf myMaxSonar.o
-                                0x277 (size before relaxing)
- .debug_str     0x00000a9a       0x88 myADC.o
+ .debug_str     0x000009e4       0xd3 myMaxSonar.o
+                                0x294 (size before relaxing)
+ .debug_str     0x00000ab7       0x88 myADC.o
                                 0x2b1 (size before relaxing)
- .debug_str     0x00000b22       0x26 myObstacleHandler.o
+ .debug_str     0x00000b3f       0x26 myObstacleHandler.o
                                 0x210 (size before relaxing)
- .debug_str     0x00000b48       0x64 mySharpIR.o
+ .debug_str     0x00000b65       0x64 mySharpIR.o
                                 0x216 (size before relaxing)
- .debug_str     0x00000bac       0x7d myTimer.o
+ .debug_str     0x00000bc9       0x7d myTimer.o
                                 0x2cf (size before relaxing)
- .debug_str     0x00000c29      0x1dd myUSART.o
+ .debug_str     0x00000c46      0x1dd myUSART.o
                                 0x523 (size before relaxing)
- .debug_str     0x00000e06       0xda port.o
+ .debug_str     0x00000e23       0xda port.o
                                 0x277 (size before relaxing)
- .debug_str     0x00000ee0      0x3b9 queue.o
+ .debug_str     0x00000efd      0x3b9 queue.o
                                 0x6ea (size before relaxing)
- .debug_str     0x00001299       0x36 ringBuffer.o
+ .debug_str     0x000012b6       0x36 ringBuffer.o
                                 0x21b (size before relaxing)
- .debug_str     0x000012cf      0x4e6 tasks.o
+ .debug_str     0x000012ec      0x4e6 tasks.o
                                 0xa53 (size before relaxing)
 
-.debug_loc      0x00000000     0x424e
+.debug_loc      0x00000000     0x4210
  *(.debug_loc)
  .debug_loc     0x00000000      0x5e7 FreeRTOS2560.o
  .debug_loc     0x000005e7       0xf1 heap_1.o
  .debug_loc     0x000006d8      0x155 list.o
  .debug_loc     0x0000082d       0xf2 myHcSonar.o
- .debug_loc     0x0000091f      0x25f myMaxSonar.o
- .debug_loc     0x00000b7e      0x1eb myADC.o
- .debug_loc     0x00000d69      0x315 myObstacleHandler.o
- .debug_loc     0x0000107e      0x1a3 mySharpIR.o
- .debug_loc     0x00001221       0xd3 myTimer.o
- .debug_loc     0x000012f4      0x61b myUSART.o
- .debug_loc     0x0000190f      0x29b port.o
- .debug_loc     0x00001baa     0x10b5 queue.o
- .debug_loc     0x00002c5f       0xe6 ringBuffer.o
- .debug_loc     0x00002d45     0x1509 tasks.o
+ .debug_loc     0x0000091f      0x221 myMaxSonar.o
+ .debug_loc     0x00000b40      0x1eb myADC.o
+ .debug_loc     0x00000d2b      0x315 myObstacleHandler.o
+ .debug_loc     0x00001040      0x1a3 mySharpIR.o
+ .debug_loc     0x000011e3       0xd3 myTimer.o
+ .debug_loc     0x000012b6      0x61b myUSART.o
+ .debug_loc     0x000018d1      0x29b port.o
+ .debug_loc     0x00001b6c     0x10b5 queue.o
+ .debug_loc     0x00002c21       0xe6 ringBuffer.o
+ .debug_loc     0x00002d07     0x1509 tasks.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -1398,22 +1402,22 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x4f8
+.debug_ranges   0x00000000      0x500
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x70 FreeRTOS2560.o
  .debug_ranges  0x00000070       0x28 heap_1.o
  .debug_ranges  0x00000098       0x30 list.o
  .debug_ranges  0x000000c8       0x28 myHcSonar.o
- .debug_ranges  0x000000f0       0x40 myMaxSonar.o
- .debug_ranges  0x00000130       0x30 myADC.o
- .debug_ranges  0x00000160       0x28 myObstacleHandler.o
- .debug_ranges  0x00000188       0x20 mySharpIR.o
- .debug_ranges  0x000001a8       0x30 myTimer.o
- .debug_ranges  0x000001d8       0xa8 myUSART.o
- .debug_ranges  0x00000280       0x38 port.o
- .debug_ranges  0x000002b8       0x90 queue.o
- .debug_ranges  0x00000348       0x40 ringBuffer.o
- .debug_ranges  0x00000388      0x170 tasks.o
+ .debug_ranges  0x000000f0       0x48 myMaxSonar.o
+ .debug_ranges  0x00000138       0x30 myADC.o
+ .debug_ranges  0x00000168       0x28 myObstacleHandler.o
+ .debug_ranges  0x00000190       0x20 mySharpIR.o
+ .debug_ranges  0x000001b0       0x30 myTimer.o
+ .debug_ranges  0x000001e0       0xa8 myUSART.o
+ .debug_ranges  0x00000288       0x38 port.o
+ .debug_ranges  0x000002c0       0x90 queue.o
+ .debug_ranges  0x00000350       0x40 ringBuffer.o
+ .debug_ranges  0x00000390      0x170 tasks.o
 
 .debug_macro
  *(.debug_macro)

@@ -30,7 +30,7 @@
 void myMaxSonar_BtmStart();
 void myMaxSonar_TopStart();
 
-int myMaxSonar_getMedian(int currentReading, int* prevReading, int *sample, int sampleSize);
+int myMaxSonar_getFilteredReading(int currentReading, int* prevReading, int *sample, int sampleSize);
 void myMaxSonar_AddSample(int currentReading ,int *sample, int sampleSize);
 
 // Get new value only if it exceed noise limit.
