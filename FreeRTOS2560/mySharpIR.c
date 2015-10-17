@@ -13,8 +13,8 @@ int mySharpIR_Read(char analogChannel)
 {
 	int adcReading = myADC_analogRead(analogChannel);
 	adcReading = 10650.08 * pow(adcReading,-0.935) - 10;
-	if(adcReading > 999)
-		adcReading = 999;
+	if(adcReading > IR_MAX_VALUE)
+		adcReading = IR_MAX_VALUE;
 	
 	return adcReading;
 }
@@ -31,12 +31,10 @@ char checkWithinRange(int reading, int * checkReading, const char range)
 // Write new calibrate value if all matches..
 void mySharpIR_ReCalibrate(int* calibratedReading, int reading)
 {
-	static const char range = 5; // put at header file later...
-	static const char CALIBRATE_COUNT = 20; // put at header file later...
 	static int i = 0;
 	static int checkReading[2] = {0};
 	
-	if(checkWithinRange(reading, calibratedReading, range) && i == 0)
+	if(checkWithinRange(reading, calibratedReading, CALIBRATE_RANGE) && i == 0)
 	{
 		// if current reading and calibratedReading is within range and no checking in progess
 		// skip the calibration process... not needed
@@ -50,7 +48,7 @@ void mySharpIR_ReCalibrate(int* calibratedReading, int reading)
 	}
 	else if (i == CALIBRATE_COUNT/2)
 	{
-		if(checkWithinRange(reading, checkReading, range))
+		if(checkWithinRange(reading, checkReading, CALIBRATE_RANGE))
 		{
 			// Out of range.. restart to find new calibration point..
 			checkReading[0] = reading;
@@ -65,7 +63,7 @@ void mySharpIR_ReCalibrate(int* calibratedReading, int reading)
 	{
 		i = 0; // reset to count..
 
-		if(checkWithinRange(reading, checkReading, range))
+		if(checkWithinRange(reading, checkReading, CALIBRATE_RANGE))
 		{
 			// Out of range.. restart to find new calibration point..
 			checkReading[0] = reading;

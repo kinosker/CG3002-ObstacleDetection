@@ -9,7 +9,9 @@
 #ifndef MYSHARPIR_H_
 #define MYSHARPIR_H_
 
-
+#define IR_MAX_VALUE 999
+#define CALIBRATE_RANGE 5 
+#define CALIBRATE_COUNT 20 
 
 int mySharpIR_Read(char analogChannel);
 void mySharpIR_ReCalibrate(int* calibratedReading, int reading);

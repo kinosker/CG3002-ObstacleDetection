@@ -13,19 +13,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   4 .debug_aranges 00000570  00000000  00000000  00002f98  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00005f5b  00000000  00000000  00003508  2**0
+  5 .debug_info   00005f43  00000000  00000000  00003508  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 000016b9  00000000  00000000  00009463  2**0
+  6 .debug_abbrev 000016aa  00000000  00000000  0000944b  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   0000387d  00000000  00000000  0000ab1c  2**0
+  7 .debug_line   0000387d  00000000  00000000  0000aaf5  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000f64  00000000  00000000  0000e39c  2**2
+  8 .debug_frame  00000f64  00000000  00000000  0000e374  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    000017c0  00000000  00000000  0000f300  2**0
+  9 .debug_str    000017b0  00000000  00000000  0000f2d8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00004277  00000000  00000000  00010ac0  2**0
+ 10 .debug_loc    00004277  00000000  00000000  00010a88  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000500  00000000  00000000  00014d37  2**0
+ 11 .debug_ranges 00000500  00000000  00000000  00014cff  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -2355,8 +2355,8 @@ int mySharpIR_Read(char analogChannel)
      cdc:	14 f0       	brlt	.+4      	; 0xce2 <mySharpIR_Read+0x46>
      cde:	87 ee       	ldi	r24, 0xE7	; 231
      ce0:	93 e0       	ldi	r25, 0x03	; 3
-	if(adcReading > 999)
-		adcReading = 999;
+	if(adcReading > IR_MAX_VALUE)
+		adcReading = IR_MAX_VALUE;
 	
 	return adcReading;
 }
@@ -2403,12 +2403,10 @@ void mySharpIR_ReCalibrate(int* calibratedReading, int reading)
      d14:	df 93       	push	r29
      d16:	8c 01       	movw	r16, r24
      d18:	eb 01       	movw	r28, r22
-	static const char range = 5; // put at header file later...
-	static const char CALIBRATE_COUNT = 20; // put at header file later...
 	static int i = 0;
 	static int checkReading[2] = {0};
 	
-	if(checkWithinRange(reading, calibratedReading, range) && i == 0)
+	if(checkWithinRange(reading, calibratedReading, CALIBRATE_RANGE) && i == 0)
      d1a:	45 e0       	ldi	r20, 0x05	; 5
      d1c:	bc 01       	movw	r22, r24
      d1e:	ce 01       	movw	r24, r28
@@ -2443,7 +2441,7 @@ void mySharpIR_ReCalibrate(int* calibratedReading, int reading)
      d50:	31 05       	cpc	r19, r1
      d52:	a9 f4       	brne	.+42     	; 0xd7e <mySharpIR_ReCalibrate+0x70>
 	{
-		if(checkWithinRange(reading, checkReading, range))
+		if(checkWithinRange(reading, checkReading, CALIBRATE_RANGE))
      d54:	45 e0       	ldi	r20, 0x05	; 5
      d56:	60 e2       	ldi	r22, 0x20	; 32
      d58:	78 e0       	ldi	r23, 0x08	; 8
@@ -2478,7 +2476,7 @@ void mySharpIR_ReCalibrate(int* calibratedReading, int reading)
      d84:	10 92 25 08 	sts	0x0825, r1
      d88:	10 92 24 08 	sts	0x0824, r1
 
-		if(checkWithinRange(reading, checkReading, range))
+		if(checkWithinRange(reading, checkReading, CALIBRATE_RANGE))
      d8c:	45 e0       	ldi	r20, 0x05	; 5
      d8e:	60 e2       	ldi	r22, 0x20	; 32
      d90:	78 e0       	ldi	r23, 0x08	; 8

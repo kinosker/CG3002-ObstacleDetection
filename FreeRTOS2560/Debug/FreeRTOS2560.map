@@ -1054,9 +1054,9 @@ END GROUP
                 0x00800240        0x2 heap_1.o
  .bss.ucHeap    0x00800242      0x5dc heap_1.o
  .bss.i.1838    0x0080081e        0x2 myMaxSonar.o
- .bss.checkReading.1914
+ .bss.checkReading.1912
                 0x00800820        0x4 mySharpIR.o
- .bss.i.1913    0x00800824        0x2 mySharpIR.o
+ .bss.i.1911    0x00800824        0x2 mySharpIR.o
  .bss.uxSchedulerSuspended
                 0x00800826        0x1 tasks.o
  .bss.uxTaskNumber
@@ -1244,7 +1244,7 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x5f5b
+.debug_info     0x00000000     0x5f43
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x1114 FreeRTOS2560.o
  .debug_info    0x00001114      0x1ad heap_1.o
@@ -1253,15 +1253,15 @@ END GROUP
  .debug_info    0x000018cb      0x32b myMaxSonar.o
  .debug_info    0x00001bf6      0x3bf myADC.o
  .debug_info    0x00001fb5      0x215 myObstacleHandler.o
- .debug_info    0x000021ca      0x27b mySharpIR.o
- .debug_info    0x00002445      0x3e1 myTimer.o
- .debug_info    0x00002826      0xb5a myUSART.o
- .debug_info    0x00003380      0x20d port.o
- .debug_info    0x0000358d     0x1023 queue.o
- .debug_info    0x000045b0      0x23b ringBuffer.o
- .debug_info    0x000047eb     0x1770 tasks.o
+ .debug_info    0x000021ca      0x263 mySharpIR.o
+ .debug_info    0x0000242d      0x3e1 myTimer.o
+ .debug_info    0x0000280e      0xb5a myUSART.o
+ .debug_info    0x00003368      0x20d port.o
+ .debug_info    0x00003575     0x1023 queue.o
+ .debug_info    0x00004598      0x23b ringBuffer.o
+ .debug_info    0x000047d3     0x1770 tasks.o
 
-.debug_abbrev   0x00000000     0x16b9
+.debug_abbrev   0x00000000     0x16aa
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x347 FreeRTOS2560.o
  .debug_abbrev  0x00000347      0x12e heap_1.o
@@ -1270,13 +1270,13 @@ END GROUP
  .debug_abbrev  0x000006c0      0x14f myMaxSonar.o
  .debug_abbrev  0x0000080f      0x119 myADC.o
  .debug_abbrev  0x00000928       0xe1 myObstacleHandler.o
- .debug_abbrev  0x00000a09      0x140 mySharpIR.o
- .debug_abbrev  0x00000b49      0x149 myTimer.o
- .debug_abbrev  0x00000c92      0x250 myUSART.o
- .debug_abbrev  0x00000ee2      0x13d port.o
- .debug_abbrev  0x0000101f      0x2b6 queue.o
- .debug_abbrev  0x000012d5       0xd9 ringBuffer.o
- .debug_abbrev  0x000013ae      0x30b tasks.o
+ .debug_abbrev  0x00000a09      0x131 mySharpIR.o
+ .debug_abbrev  0x00000b3a      0x149 myTimer.o
+ .debug_abbrev  0x00000c83      0x250 myUSART.o
+ .debug_abbrev  0x00000ed3      0x13d port.o
+ .debug_abbrev  0x00001010      0x2b6 queue.o
+ .debug_abbrev  0x000012c6       0xd9 ringBuffer.o
+ .debug_abbrev  0x0000139f      0x30b tasks.o
 
 .debug_line     0x00000000     0x387d
  *(.debug_line .debug_line.* .debug_line_end)
@@ -1312,7 +1312,7 @@ END GROUP
  .debug_frame   0x00000b30       0x84 ringBuffer.o
  .debug_frame   0x00000bb4      0x3b0 tasks.o
 
-.debug_str      0x00000000     0x17c0
+.debug_str      0x00000000     0x17b0
  *(.debug_str)
  .debug_str     0x00000000      0x6ea FreeRTOS2560.o
                                 0x72e (size before relaxing)
@@ -1328,19 +1328,19 @@ END GROUP
                                 0x2b1 (size before relaxing)
  .debug_str     0x00000b29       0x26 myObstacleHandler.o
                                 0x210 (size before relaxing)
- .debug_str     0x00000b4f       0x64 mySharpIR.o
-                                0x216 (size before relaxing)
- .debug_str     0x00000bb3       0x7d myTimer.o
+ .debug_str     0x00000b4f       0x54 mySharpIR.o
+                                0x206 (size before relaxing)
+ .debug_str     0x00000ba3       0x7d myTimer.o
                                 0x2cf (size before relaxing)
- .debug_str     0x00000c30      0x1dd myUSART.o
+ .debug_str     0x00000c20      0x1dd myUSART.o
                                 0x523 (size before relaxing)
- .debug_str     0x00000e0d       0xda port.o
+ .debug_str     0x00000dfd       0xda port.o
                                 0x277 (size before relaxing)
- .debug_str     0x00000ee7      0x3b9 queue.o
+ .debug_str     0x00000ed7      0x3b9 queue.o
                                 0x6ea (size before relaxing)
- .debug_str     0x000012a0       0x2f ringBuffer.o
+ .debug_str     0x00001290       0x2f ringBuffer.o
                                 0x21b (size before relaxing)
- .debug_str     0x000012cf      0x4f1 tasks.o
+ .debug_str     0x000012bf      0x4f1 tasks.o
                                 0xa53 (size before relaxing)
 
 .debug_loc      0x00000000     0x4277
