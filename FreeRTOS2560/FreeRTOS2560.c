@@ -22,7 +22,7 @@
 #include <myObstacleHandler.h>
 #include <myMotor.h>
 
-#include <stdlib.h>
+//#include <stdlib.h>
 #include <queue.h>
 
 
@@ -34,6 +34,7 @@ void init();
 
 void obstacleSend(char deviceBlocked, int reading);
 void sendObstacleDetected(char obstacleDetected, char * deviceBlocked, int frontSonar, int leftSonar, int rightSonar, int btmIR, int topSonar);
+void myItoa(int input, char * buffer);
 
 xQueueHandle queueObstacleData;
 xQueueHandle queueObstacleNumber;
@@ -44,7 +45,7 @@ typedef struct
 	unsigned char deviceID;
 	char data[4];
 	
-} obstacleData;
+} obstacleStruct;
 
 
 
@@ -92,7 +93,7 @@ void RPI_sendTask(void *p)
 {
 	
 	
-	obstacleData dataToSend;
+	obstacleStruct dataToSend;
 	char obstacleDetected;
 
 	
@@ -298,7 +299,7 @@ void init()
 		
 		
 		queueObstacleNumber = xQueueCreate(QUEUE_SIZE, sizeof (char)); // create queue
-		queueObstacleData = xQueueCreate( (QUEUE_SIZE*SONAR_NUM), sizeof (obstacleData)); // create queue
+		queueObstacleData = xQueueCreate( (QUEUE_SIZE*SONAR_NUM), sizeof (obstacleStruct)); // create queue
 		
 		MOTOR_LEFT_INIT();
 		MOTOR_RIGHT_INIT();
@@ -312,17 +313,17 @@ void init()
 
 void obstacleSend(char deviceBlocked, int reading)
 {
-	obstacleData queueData;
+	obstacleStruct obstacleInfo;
 	
 	
 	
 	if(deviceBlocked)
 	{
-		itoa(reading, queueData.data, 10); // convert to ascii
+		myItoa(reading, obstacleInfo.data); // convert to ascii
 		
-		queueData.deviceID = deviceBlocked;
+		obstacleInfo.deviceID = deviceBlocked;
 		
-		xQueueSendToBack(queueObstacleData, &queueData, portMAX_DELAY); // send data to queueData
+		xQueueSendToBack(queueObstacleData, &obstacleInfo, portMAX_DELAY); // send data to queueData
 	}
 }
 
@@ -350,23 +351,42 @@ void sendObstacleDetected(char obstacleDetected, char * deviceBlocked, int front
 }
 
 
-
-
+// either 2 or 3 digit +ve int
+void myItoa(int input, char * buffer)
+{
+	int temp = input;
+	input /= 100; // get 100s digit
+	
+	if(input)
+		*buffer++ = input + '0';
+		
+	temp = temp - input * 100; // get remainder
+	
+	
+	input = temp / 10; // get 10s digit
+	*buffer++ = input + '0';
+	 
+	 input = temp - input * 10; // get 1s digit
+	 *buffer++ = input + '0';
+	 
+	 *buffer = '\0';
+	 
+}
 
 //// Tasks flash LEDs at Pins 12 and 13 at 1Hz and 2Hz respectively.
-void task1(void *p)
-{
-		DDRB |= (1 <<DDB6 ); // led
-		
-while(1)
-{
-PORTB |= ( 1 << 6 );
-vTaskDelay(1000); // Delay for 500 ticks. Since each tick is 1ms,
-//this delays for 500ms.
-PORTB &= ( 0 << 6 );
-vTaskDelay(1000);
-}
-}
+//void task1(void *p)
+//{
+		//DDRB |= (1 <<DDB6 ); // led
+		//
+//while(1)
+//{
+//PORTB |= ( 1 << 6 );
+//vTaskDelay(1000); // Delay for 500 ticks. Since each tick is 1ms,
+////this delays for 500ms.
+//PORTB &= ( 0 << 6 );
+//vTaskDelay(1000);
+//}
+//}
 
 
 //void task2(void *p)

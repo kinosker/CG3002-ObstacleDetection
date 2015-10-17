@@ -34,7 +34,6 @@ FreeRTOS2560.d FreeRTOS2560.o: .././FreeRTOS2560.c \
  C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/mySharpIR.h \
  C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myObstacleHandler.h \
  C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myMotor.h \
- c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdlib.h \
  C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/queue.h
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h:
@@ -106,7 +105,5 @@ C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/mySharpIR.h:
 C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myObstacleHandler.h:
 
 C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myMotor.h:
-
-c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\stdlib.h:
 
 C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/queue.h:

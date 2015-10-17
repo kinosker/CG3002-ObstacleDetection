@@ -29,6 +29,7 @@ void myMaxSonar_TopStart()
 	MaxSonar_TopTriggerStop();
 }
 
+// extract the median of 3 values in the sample array
 int myMaxSonar_extractMedian(int * sample)
 {
 	if (sample[0] > sample[1])
@@ -64,6 +65,7 @@ int myMaxSonar_extractMedian(int * sample)
 }
 
 
+// Return filtered reading of maxSonar (Median of 3 values, with noise eliminated)
 int myMaxSonar_getFilteredReading(int currentReading, int* prevReading, int *sample, int sampleSize)
 {
 	currentReading = myMaxSonar_Stabilizer(currentReading, prevReading);
@@ -72,8 +74,7 @@ int myMaxSonar_getFilteredReading(int currentReading, int* prevReading, int *sam
 
 }
 
-
-
+// Add sample circular buffer way...
 void myMaxSonar_AddSample(int currentReading ,int *sample, int sampleSize)
 {
 	static int i = 0; 
@@ -82,6 +83,7 @@ void myMaxSonar_AddSample(int currentReading ,int *sample, int sampleSize)
 	i = (i+1) % sampleSize;
 }
 
+// return currentReading if it is more than the noise threshold..
 int myMaxSonar_Stabilizer(const int currentReading, int* prevReading)
 {
 	if(currentReading > (*prevReading + NOISE_RANGE) || currentReading < (*prevReading - NOISE_RANGE))
