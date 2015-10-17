@@ -31,7 +31,7 @@ char checkWithinRange(int reading, int * checkReading, const char range)
 // Write new calibrate value if all matches..
 void mySharpIR_ReCalibrate(int* calibratedReading, int reading)
 {
-	static int i = 0;
+	static uint8_t i = 0;
 	static int checkReading[2] = {0};
 	
 	if(checkWithinRange(reading, calibratedReading, CALIBRATE_RANGE) && i == 0)

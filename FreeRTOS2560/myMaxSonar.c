@@ -83,7 +83,7 @@ void myMaxSonar_AddSample(int currentReading ,int *sample)
 	
 	i = (i+1) % SONAR_SAMPLE_SIZE; // at correct index already..
 	
-	sample[i] = currentReading;
+	sample[i] = currentReading; //store..
 }
 
 // return currentReading if it is more than the noise threshold..
