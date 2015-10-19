@@ -45,6 +45,7 @@ char ringBufferNotEmpty(ringBuffer *ring);
 char ringBufferFull(ringBuffer *ring);
 
 
+unsigned char ringBufferPeek(ringBuffer *ring);
 
 
 

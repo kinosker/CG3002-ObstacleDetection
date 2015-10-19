@@ -19,6 +19,10 @@
 #define USART_BAUDRATE 9600 // baud rate..
 #define BAUD_PRESCALE (((F_CPU / (16UL * USART_BAUDRATE))) - 1) // macro to get prescale value (8UL if using 2x, 16 UL if using 1x)
 
+#define RX_IDLE_STATE 0
+#define RX_HS_START_STATE 1
+#define	RX_HS_FIN_STATE 2
+
 #define RX_SIZE 32
 #define TX_SIZE 32
 
@@ -26,6 +30,8 @@
 #define HANDSHAKE_ACK 5 // (ENQ)
 #define HANDSHAKE_FIN 2 // (Start of text)
 #define MESSAGE_ACK 6
+
+#define HANDSHAKE_TIMEOUT 250 // 1 tick = 4ms... 250 => 1 sec timeout
 
  void myUSART_USART0_Init(void);
  
@@ -44,11 +50,9 @@
  unsigned char myUSART_receiveUSART0();
  
  
- // -1 if fail, 0 success
+ // 0 if fail, 1 = success
  char myUSART_startHandShake();
  
- char myUSART_waitForHandshake();
-
  char myUSART_receiveHandShakeAck(unsigned char message);
  
  char myUSART_receiveHandShakeStart(unsigned char message);

@@ -54,13 +54,17 @@ typedef struct
 //
 void RPI_receiveTask(void *p)
 {
+	static char receiveState = 0;
+	
 	unsigned char data;
+	
 	while(1)
 	{
 		data = myUSART_peekReceiveUSART1();
 		//myUSART_transmitUSART0("R = ");	
-		//myUSART_transmitUSART0(data);
+		//myUSART_transmitUSART0_c(data);
 		//myUSART_transmitUSART0("\n");
+		
 		
 		if (myUSART_receiveHandShakeAck(data))
 		{
@@ -73,14 +77,34 @@ void RPI_receiveTask(void *p)
 			myUSART_receiveUSART1(); // pop the data
 			//myUSART_transmitUSART0("MSG ACk!\n");
 		}
-		else if (myUSART_receiveHandShakeStart(data))
+		else if (receiveState == RX_IDLE_STATE)
 		{
-			myUSART_waitForHandshake();
-			//myUSART_transmitUSART0("\n\nRPI Handshake Done\n\n");
+			if(myUSART_receiveHandShakeStart(data))
+			{
+				// receive SYNC
+				myUSART_receiveUSART1(); // pop the data
+				myUSART_transmitUSART1_c(HANDSHAKE_ACK);
+				receiveState = RX_HS_START_STATE;	
+			}
 				
 		}
-		else
+		else if(receiveState == RX_HS_START_STATE)
 		{
+			if(myUSART_receiveHandShakeFin(data))
+			{
+				// Handshake completed, state change.
+				receiveState = RX_HS_FIN_STATE;
+			}
+			else
+			{
+				// Invalid received..
+				receiveState = RX_IDLE_STATE;
+			}
+		}
+
+		else if(receiveState == RX_HS_FIN_STATE)
+		{
+			// accepting data...
 			myUSART_receiveUSART1(); // pop the data		
 			
 		}
@@ -95,19 +119,23 @@ void RPI_sendTask(void *p)
 	
 	obstacleStruct dataToSend;
 	char obstacleDetected;
+	char handShakeState = 0;
 
 	
 	while(1)
 	{
 	//	myUSART_transmitUSART0("Init\n");
-	//	myUSART_startHandShake();
+		handShakeState = myUSART_startHandShake(); // 1 = success, 0 = timeout
 	//	myUSART_transmitUSART0("Hs Done\n");
 			
 			
 		xQueueReceive(queueObstacleNumber, &(obstacleDetected), portMAX_DELAY);
 	
-		myUSART_transmitUSART1_c(obstacleDetected+'0');
-		myUSART_transmitUSART1_c('\n');
+		if(handShakeState)
+		{
+			myUSART_transmitUSART1_c(obstacleDetected+'0');
+			myUSART_transmitUSART1_c('\n');		
+		}
 	
 		
 		while(obstacleDetected--)
@@ -116,15 +144,17 @@ void RPI_sendTask(void *p)
 			xQueueReceive(queueObstacleData, &(dataToSend), portMAX_DELAY);
 			
 			myUSART_transmitUSART0_c(dataToSend.deviceID);
-			myUSART_transmitUSART1_c(dataToSend.deviceID);
-				
 			myUSART_transmitUSART0(": ");
-			
 			myUSART_transmitUSART0(dataToSend.data);
-			myUSART_transmitUSART1(dataToSend.data);
-			myUSART_transmitUSART1_c('\n');
-				
 			myUSART_transmitUSART0(", ");
+			
+			
+			if(handShakeState)
+			{
+				myUSART_transmitUSART1_c(dataToSend.deviceID);
+				myUSART_transmitUSART1(dataToSend.data);
+				myUSART_transmitUSART1_c('\n');
+			}
 			
 		}	
 		myUSART_transmitUSART0_c('\n');

@@ -6,6 +6,7 @@
  */ 
 
 #include <myUSART.h>
+#include <ringBuffer.h>
 
 SemaphoreHandle_t semaUsart1Receive;
 SemaphoreHandle_t semaUsart0Receive;
@@ -168,6 +169,8 @@ unsigned char myUSART_receiveUSART1()
 	unsigned char data;
 	
 	xSemaphoreTake(semaUsart1Receive, portMAX_DELAY);
+	//( TickType_t ) 10 ) == pdTRUE ...
+	
 	data = ringBufferPop(&uart1_rxRingBuffer);
 	
 	//need?
@@ -196,39 +199,28 @@ unsigned char myUSART_receiveUSART0()
 	return data;
 }
 
-// -1 if fail, 0 success
+// 0 if fail, 1 success
 char myUSART_startHandShake()
 {
 	
 	myUSART_transmitUSART1_c(HANDSHAKE_START);
 
-	xSemaphoreTake(semaUsart1HandShake, portMAX_DELAY); // wait for handshake to be ack...
+	if( xSemaphoreTake( semaUsart1HandShake, ( TickType_t ) HANDSHAKE_TIMEOUT ) == pdTRUE )
+	{	
+		// got the semaphore
+		myUSART_transmitUSART1_c(HANDSHAKE_FIN);
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
 
-	myUSART_transmitUSART0("HS ack\n");
 
-	myUSART_transmitUSART1_c(HANDSHAKE_FIN);
-	
-	return 0;
+	//xSemaphoreTake(semaUsart1HandShake, portMAX_DELAY); // wait for handshake to be ack...
+	//( TickType_t ) 10 ) == pdTRUE ... if fail return 0 => at main put state to determine when to send to UART1...
 }
 
-
-// -1 if fail, 0 success
-char myUSART_waitForHandshake()
-{
-	if (! myUSART_receiveHandShakeStart(myUSART_receiveUSART1()))
-	{
-		return -1; // error handling
-	}
-	
-	myUSART_transmitUSART1_c(HANDSHAKE_ACK);
-	
-	if (! myUSART_receiveHandShakeStart(myUSART_receiveUSART1()))
-	{
-		return -1; // error handling
-	}
-	
-	return 0;		
-}
 
 void myUSART_completeHandShake()
 {
