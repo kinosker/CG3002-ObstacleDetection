@@ -8,9 +8,12 @@
 #include <myUSART.h>
 #include <ringBuffer.h>
 
-SemaphoreHandle_t semaUsart1Receive;
-SemaphoreHandle_t semaUsart0Receive;
-SemaphoreHandle_t semaUsart1HandShake;
+SemaphoreHandle_t semaUsart1Receive = NULL;
+SemaphoreHandle_t semaUsart0Receive = NULL;
+SemaphoreHandle_t semaUsart1HandShake = NULL;
+SemaphoreHandle_t mutexUsart0Transmit = NULL;
+SemaphoreHandle_t mutexUsart1Transmit = NULL;
+
 
  ringBuffer uart0_rxRingBuffer;
  ringBuffer uart0_txRingBuffer;
@@ -65,6 +68,7 @@ ISR( USART1_UDRE_vect )
 	{
 		// Nothing more to transmit so disable UDRE interrupts
 		UCSR1B &= ~( 1 << UDRIE1 );
+		xSemaphoreGiveFromISR(mutexUsart1Transmit, pdFALSE);
 	}
 }
 
@@ -78,6 +82,8 @@ ISR( USART0_UDRE_vect )
 	{
 		// Nothing more to transmit so disable UDRE interrupts
 		UCSR0B &= ~( 1 << UDRIE0 );
+		xSemaphoreGiveFromISR(mutexUsart0Transmit, pdFALSE);
+
 	}
 }
 
@@ -100,6 +106,8 @@ ISR( USART0_UDRE_vect )
 	
 	// Semaphore
 	semaUsart0Receive = xSemaphoreCreateBinary();
+	mutexUsart0Transmit = xSemaphoreCreateMutex();
+	
 }
 
 void myUSART_USART1_Init(void)
@@ -120,11 +128,15 @@ void myUSART_USART1_Init(void)
 	// Semaphore
 	semaUsart1Receive = xSemaphoreCreateBinary();
 	semaUsart1HandShake = xSemaphoreCreateBinary();
+	mutexUsart1Transmit = xSemaphoreCreateMutex();
+	
 }
 
 
 void myUSART_transmitUSART0_c(unsigned char data )
 {
+	xSemaphoreTake(mutexUsart0Transmit, portMAX_DELAY);
+
 	while ( ringBufferFull(&uart0_txRingBuffer)); // wait till there is space..
 	
 	ringBufferPush(&uart0_txRingBuffer, data);
@@ -136,6 +148,9 @@ void myUSART_transmitUSART0_c(unsigned char data )
 
 void myUSART_transmitUSART1_c(unsigned char data )
 {
+	xSemaphoreTake(mutexUsart1Transmit, portMAX_DELAY);
+	
+	
 	while ( ringBufferFull(&uart1_txRingBuffer)); // wait till there is space..
 	
 	ringBufferPush(&uart1_txRingBuffer, data);
@@ -146,8 +161,7 @@ void myUSART_transmitUSART1_c(unsigned char data )
 }
 
 void myUSART_transmitUSART1(const unsigned char* data)
-{
-	
+{	
 	while (*data)
 	{
 			myUSART_transmitUSART1_c(*data++);
