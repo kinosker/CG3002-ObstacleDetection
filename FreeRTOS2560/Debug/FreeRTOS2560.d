@@ -23,15 +23,13 @@ FreeRTOS2560.d FreeRTOS2560.o: .././FreeRTOS2560.c \
  C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/task.h \
  C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/list.h \
  C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myUSART.h \
- C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/ringBuffer.h \
- C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/semphr.h \
- C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/queue.h \
  C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myTaskConfig.h \
  C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myADC.h \
  C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myMaxSonar.h \
- C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myHcSonar.h \
- C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myTimer.h \
  C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/mySharpIR.h \
+ C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myTimer.h \
+ C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/semphr.h \
+ C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/queue.h \
  C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myObstacleHandler.h \
  C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myMotor.h \
  C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/queue.h
@@ -84,23 +82,19 @@ C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/list.h
 
 C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myUSART.h:
 
-C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/ringBuffer.h:
-
-C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/semphr.h:
-
-C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/queue.h:
-
 C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myTaskConfig.h:
 
 C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myADC.h:
 
 C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myMaxSonar.h:
 
-C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myHcSonar.h:
+C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/mySharpIR.h:
 
 C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myTimer.h:
 
-C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/mySharpIR.h:
+C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/semphr.h:
+
+C:\Users\tienlong\Desktop\CG3002\FreeRTOS\ V8.1.2\FREERTOS\Source\include/queue.h:
 
 C:\Users\tienlong\Desktop\CG3002\Project\FreeRTOS2560\FreeRTOS2560/myObstacleHandler.h:
 

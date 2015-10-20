@@ -5,11 +5,7 @@
  *  Author: tienlong
  */ 
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <FreeRTOS.h>
-#include <semphr.h>
-#include <myTimer.h>
+
 
 #ifndef MYHCSONAR_H_
 #define MYHCSONAR_H_

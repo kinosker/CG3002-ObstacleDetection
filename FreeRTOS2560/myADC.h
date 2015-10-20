@@ -10,12 +10,6 @@
 #define MYADC_H_
 
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <FreeRTOS.h>
-#include <semphr.h>
-#include <task.h>
-
 // Mux bits to input to read analog channel
 #define AN0 0
 #define AN1 1

@@ -34,13 +34,13 @@ void obstacleAvoidance(int frontSonar, int leftSonar, int rightSonar, int btmIR,
 			MOTOR_LEFT_START();
 			MOTOR_RIGHT_START();
 	}
-	else if(deviceBlocked[FRONT_DEVICE])
+	else if( (deviceBlocked[FRONT_DEVICE] && (!possibleStairs(frontSonar, topSonar))) || deviceBlocked[TOP_DEVICE])
 	{
 		// front sensor detected
 		if(!deviceBlocked[LEFT_DEVICE] && !deviceBlocked[RIGHT_DEVICE])
 		{
 			// both not blocked... so select any side... (left safer to turn - see product)
-				if(rightSonar > leftSonar + 14) // if right sonar greater than....
+				if(rightSonar > leftSonar - 20) // if right sonar greater than....
 				{
 					MOTOR_LEFT_STOP();
 					MOTOR_RIGHT_START();
@@ -109,6 +109,15 @@ void cheatPrintAll(char* deviceBlocked, char *obstacleDetected)
 	deviceBlocked[TOP_DEVICE] = TOP_SONAR_ID;
 }
 
+// detect possibleStairs infront 
+char possibleStairs(int frontSonar, int topSonar)
+{
+	if(frontSonar < FRONT_OBSTACLE_DISTANCE && topSonar < STAIRS_TOP_LIMIT_H && topSonar > STAIRS_TOP_LIMIT_L)
+		return 1;
+	else 
+		return 0;
+	
+}
 
 // return number of obstacle detected...
 // implicitly return the device to send.
@@ -136,11 +145,11 @@ char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceBlock
 		obstacleDetected++;
 		deviceBlocked[BTM_DEVICE] = BTM_SONAR_ID;
 	}
-	// if (??)
-	//{
-	//	obstacleDetected++;
-	//	deviceBlocked[TOP_DEVICE] = TOP_SONAR_ID;
-	//}
+	 if (topSonar < TOP_OBSTACLE_DISTANCE)
+	{
+		obstacleDetected++;
+		deviceBlocked[TOP_DEVICE] = TOP_SONAR_ID;
+	}
 	
 	return obstacleDetected;
 }

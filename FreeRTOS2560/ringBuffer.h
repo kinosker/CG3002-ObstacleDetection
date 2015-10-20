@@ -9,9 +9,6 @@
 #ifndef RINGBUFFER_H_
 #define RINGBUFFER_H_
 
-#include <FreeRTOS.h>
-#include <task.h>
-
 typedef struct
 {
 	unsigned char *rBuffer;

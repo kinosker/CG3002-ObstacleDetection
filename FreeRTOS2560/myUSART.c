@@ -7,6 +7,12 @@
 
 #include <myUSART.h>
 #include <ringBuffer.h>
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <ringBuffer.h>
+#include <FreeRTOS.h>
+#include <semphr.h>
+
 
 SemaphoreHandle_t semaUsart1Receive = NULL;
 SemaphoreHandle_t semaUsart0Receive = NULL;

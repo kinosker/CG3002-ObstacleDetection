@@ -24,15 +24,17 @@
 
 
 // Obstacle detection range...
-#define FRONT_OBSTACLE_DISTANCE				70
+#define FRONT_OBSTACLE_DISTANCE				50
 #define SIDE_OBSTACLE_DISTANCE				30
-#define LEFT_OBSTACLE_DISTANCE				30 // same as right although position difference because... detecting infront of user.
+#define LEFT_OBSTACLE_DISTANCE				35 
 #define RIGHT_OBSTACLE_DISTANCE				30
-#define LEFT_TOO_NEAR						38
+#define TOP_OBSTACLE_DISTANCE				55
+#define LEFT_TOO_NEAR						35
 #define RIGHT_TOO_NEAR						20
-#define STAIRS_OFFSET						12
-#define INDISTINGUISHABLE_RANGE				8 
-
+#define STAIRS_OFFSET						7
+#define INDISTINGUISHABLE_RANGE				4 
+#define STAIRS_TOP_LIMIT_H					110 // 80 to 110(150)
+#define STAIRS_TOP_LIMIT_L					80	
 
 void cheatPrintAll(char* deviceBlocked, char *obstacleDetected);
 char detectStairs(int calibratedBtmIR, int btmIR);

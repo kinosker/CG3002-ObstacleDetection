@@ -11,7 +11,7 @@
 
 #define IR_MAX_VALUE 999
 #define CALIBRATE_RANGE 5 
-#define CALIBRATE_COUNT 20 
+#define CALIBRATE_COUNT 200 
 
 int mySharpIR_Read(char analogChannel);
 void mySharpIR_ReCalibrate(int* calibratedReading, int reading);

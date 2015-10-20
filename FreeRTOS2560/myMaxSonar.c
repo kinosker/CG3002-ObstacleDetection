@@ -23,7 +23,7 @@ void myMaxSonar_TopStart()
 {
 	MaxSonar_TopTriggerStart();
 	
-	myTimer_DelayMicro(25); // delay 25 micro seconds...
+	myTimer_DelayMicro2(25); // delay 25 micro seconds...
 	//vTaskDelay(5000);	// delay 1ms using vTaskDelay
 	
 	MaxSonar_TopTriggerStop();
@@ -106,10 +106,13 @@ int myMaxSonar_Read(char analogChannel)
 	reading = adcReading /FLOAT_TO_CM; // get the decimal point of ADC
 	reading += adcReading; // add the exact adcReading
 	
+	if(reading > 1000)
+		return 999;
+	
 	return reading;
 }
 
-// Return distance in bits 8:2
+// Return distance in bits 
 int myMaxSonar_ReadRaw(char analogChannel)
 {
 	return myADC_analogRead(analogChannel);

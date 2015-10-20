@@ -8,11 +8,6 @@
 #ifndef MYUSART_H_
 #define MYUSART_H_
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <ringBuffer.h>
-#include <FreeRTOS.h>
-#include <semphr.h>
 
 
 #define F_CPU 16000000UL  // freq of clk
@@ -30,6 +25,7 @@
 #define HANDSHAKE_ACK 5 // (ENQ)
 #define HANDSHAKE_FIN 2 // (Start of text)
 #define MESSAGE_ACK 6
+#define MESSAGE_RST 24 // (RST)
 
 #define HANDSHAKE_TIMEOUT 250 // 1 tick = 4ms... 250 => 1 sec timeout
 

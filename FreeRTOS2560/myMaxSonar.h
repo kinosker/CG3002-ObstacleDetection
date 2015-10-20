@@ -9,6 +9,8 @@
 #ifndef MAXSONAR_H_
 #define MAXSONAR_H_
 
+#define MAXSONAR_CHAIN_WAIT 150
+
 #define NOISE_RANGE 8
 
 #define MaxSonar_Init()					DDRG |= ((1 << DDG1) | (1 << DDG0)) // Set pin G1,G0 as output (Pin 40, 41)

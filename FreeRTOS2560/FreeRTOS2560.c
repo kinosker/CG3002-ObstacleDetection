@@ -15,14 +15,12 @@
 #include <myTaskConfig.h>
 #include <myADC.h>
 #include <myMaxSonar.h>
-#include <myHcSonar.h>
+//#include <myHcSonar.h>
 #include <mySharpIR.h>
 #include <myTimer.h>
 #include <mySharpIR.h>
 #include <myObstacleHandler.h>
 #include <myMotor.h>
-
-//#include <stdlib.h>
 #include <queue.h>
 
 
@@ -60,29 +58,21 @@ void RPI_receiveTask(void *p)
 	
 	while(1)
 	{
-		data = myUSART_peekReceiveUSART1();
-		//myUSART_transmitUSART0("R = ");	
-		//myUSART_transmitUSART0_c(data);
-		//myUSART_transmitUSART0("\n");
-		
+		data = myUSART_receiveUSART1();
 		
 		if (myUSART_receiveHandShakeAck(data))
 		{
-			myUSART_receiveUSART1(); // pop the data
 			myUSART_completeHandShake();
 		}
 		else if (myUSART_receiveMessageACK(data))
 		{
-			// clear buffer for RPI_SEND
-			myUSART_receiveUSART1(); // pop the data
-			//myUSART_transmitUSART0("MSG ACk!\n");
+			// ack received..
 		}
 		else if (receiveState == RX_IDLE_STATE)
 		{
 			if(myUSART_receiveHandShakeStart(data))
 			{
 				// receive SYNC
-				myUSART_receiveUSART1(); // pop the data
 				myUSART_transmitUSART1_c(HANDSHAKE_ACK);
 				receiveState = RX_HS_START_STATE;	
 			}
@@ -105,7 +95,14 @@ void RPI_receiveTask(void *p)
 		else if(receiveState == RX_HS_FIN_STATE)
 		{
 			// accepting data...
-			myUSART_receiveUSART1(); // pop the data		
+			if(data == MESSAGE_RST)
+			{
+				receiveState = RX_IDLE_STATE;
+			}
+			else
+			{
+				// data = ????
+			}	
 			
 		}
 	}
@@ -177,24 +174,17 @@ void Sonar_Task(void *p)
 		
 	while(1)
 	{
-		myMaxSonar_TopStart();
-		topSonar = myMaxSonar_getFilteredReading(myMaxSonar_Read(AN11), topSonarSample);
-		
+					
 		myMaxSonar_BtmStart();
 		frontSonar	= myMaxSonar_getFilteredReading(myMaxSonar_Read(AN15), frontSonarSample);
 		leftSonar	= myMaxSonar_getFilteredReading(myMaxSonar_Read(AN14), leftSonarSample);
-		rightSonar	= myMaxSonar_getFilteredReading(myMaxSonar_Read(AN13), rightSonarSample); 
+		rightSonar	= myMaxSonar_getFilteredReading(myMaxSonar_Read(AN13), rightSonarSample); 	
 		
-		btmIR		= mySharpIR_Read(AN12);	
-		
-		
-		//// Stabilize sonar reading, get new value only when exceed noise threshold.
-		//topSonar = myMaxSonar_Stabilizer(topSonar, &prevTopSonar);
-		//frontSonar = myMaxSonar_Stabilizer(frontSonar, &prevFrontSonar);
-		//leftSonar = myMaxSonar_Stabilizer(leftSonar, &prevLeftSonar);
-		//rightSonar = myMaxSonar_Stabilizer(rightSonar, &prevRightSonar);
-		
-		
+		myMaxSonar_TopStart();
+		topSonar = myMaxSonar_getFilteredReading(myMaxSonar_Read(AN11), topSonarSample);
+			
+			
+		btmIR		= mySharpIR_Read(AN12);
 		mySharpIR_ReCalibrate(&calibratedBtmIR, btmIR); // attempt to re-calibrate btm ir sensor if stable enough..
 	
 		obstacleDetected = obstacleDetection(frontSonar, obstacleDetected, deviceBlocked, leftSonar, rightSonar, topSonar, calibratedBtmIR, btmIR);
@@ -210,7 +200,7 @@ void Sonar_Task(void *p)
 		obstacleDetected = 0; 
 		deviceBlocked[0] = deviceBlocked[1] = deviceBlocked[2] = deviceBlocked[3] = deviceBlocked[4] = 0;
 		
-		vTaskDelayUntil( &xLastWakeTime, 150);  // delay 150 ms for 3 sonar chain...
+		vTaskDelayUntil( &xLastWakeTime, MAXSONAR_CHAIN_WAIT);  // delay 150 ms for 3 sonar chain...
 	}
 }
 
@@ -243,10 +233,7 @@ int main(void)
 		TaskHandle_t t_maxSonar, t_rx, t_tx, t_delay;
 	
 		init();
-
-		//xTaskCreate(task1, "Task 1", BLINK_1_STACK, NULL, BLINK_1_PRIORITY, &t1);
-		//xTaskCreate(task2, "Task 2", BLINK_2_STACK, NULL, BLINK_2_PRIORITY, &t2);
-		
+	
 		xTaskCreate(myTimerTask, "myTimer", MY_TIMER_STACK, (&t_delay) , MY_TIMER_PRIORITY, &t_delay); // danger?!?		
 		xTaskCreate(Sonar_Task, "maxSonar", MAXSONAR_STACK, NULL, MAXSONAR_PRIORITY, &t_maxSonar);
 
@@ -324,7 +311,7 @@ void init()
 		
 		MaxSonar_Init();
 		
-		myHcSonar_Init();
+		//myHcSonar_Init();
 		
 		
 		queueObstacleNumber = xQueueCreate(QUEUE_SIZE, sizeof (char)); // create queue

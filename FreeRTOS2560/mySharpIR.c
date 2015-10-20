@@ -7,6 +7,7 @@
 #include <mySharpIR.h>
 #include <myADC.h>
 #include <math.h>
+#include <stdint.h>
 
 // Return distance in cm
 int mySharpIR_Read(char analogChannel)
@@ -75,5 +76,5 @@ void mySharpIR_ReCalibrate(int* calibratedReading, int reading)
 		}
 	}
 	
-	i = (i+1) % CALIBRATE_COUNT;
+	i++;
 }

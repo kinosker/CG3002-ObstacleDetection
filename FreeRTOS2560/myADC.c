@@ -6,6 +6,12 @@
  */ 
 
 #include <myADC.h>
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <FreeRTOS.h>
+#include <semphr.h>
+#include <task.h>
+
 
 SemaphoreHandle_t semaGuardStartADC;
 SemaphoreHandle_t semaReadADC;

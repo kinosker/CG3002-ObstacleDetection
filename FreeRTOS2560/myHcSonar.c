@@ -5,6 +5,11 @@
  *  Author: tienlong
  */ 
 #include <myHcSonar.h>
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <FreeRTOS.h>
+#include <semphr.h>
+#include <myTimer.h>
 
 volatile int ms_tickStart;
 volatile int ms_tickLapsed;

@@ -7,6 +7,8 @@
 
 
 #include <ringBuffer.h>
+#include <FreeRTOS.h>
+#include <task.h>
 
 
 void ringBufferInit(ringBuffer *ring, unsigned char* buffer, unsigned char size)
