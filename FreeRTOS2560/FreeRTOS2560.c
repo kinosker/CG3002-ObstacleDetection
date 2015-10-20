@@ -188,7 +188,8 @@ void Sonar_Task(void *p)
 		mySharpIR_ReCalibrate(&calibratedBtmIR, btmIR); // attempt to re-calibrate btm ir sensor if stable enough..
 	
 		obstacleDetected = obstacleDetection(frontSonar, obstacleDetected, deviceBlocked, leftSonar, rightSonar, topSonar, calibratedBtmIR, btmIR);
-		obstacleAvoidance(frontSonar, leftSonar, rightSonar, btmIR, deviceBlocked);
+		obstacleAvoidance(frontSonar, topSonar, leftSonar, rightSonar, btmIR, deviceBlocked);
+		
 		
 		// for debuggin to print all...
 		cheatPrintAll(deviceBlocked, &obstacleDetected); 

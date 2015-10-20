@@ -38,9 +38,9 @@
 
 void cheatPrintAll(char* deviceBlocked, char *obstacleDetected);
 char detectStairs(int calibratedBtmIR, int btmIR);
-void obstacleAvoidance(int frontSonar, int leftSonar, int rightSonar, int btmIR, char * deviceBlocked);
+void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSonar, int btmIR, char * deviceBlocked);
 char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceBlocked, int leftSonar, int rightSonar, int topSonar, int calibratedBtmIR, int btmIR);
-
+char possibleStairs(int frontSonar, int topSonar);
 
 
 

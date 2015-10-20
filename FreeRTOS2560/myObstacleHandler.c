@@ -25,7 +25,7 @@ char detectStairs(int calibratedBtmIR, int btmIR)
 
 
 // Priority => BTM, Front, Side
-void obstacleAvoidance(int frontSonar, int leftSonar, int rightSonar, int btmIR, char * deviceBlocked)
+void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSonar, int btmIR, char * deviceBlocked)
 {
 	
 	if(deviceBlocked[BTM_DEVICE])
