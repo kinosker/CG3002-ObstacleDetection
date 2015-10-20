@@ -89,7 +89,7 @@ void myMaxSonar_AddSample(int currentReading ,int *sample)
 // return currentReading if it is more than the noise threshold..
 int myMaxSonar_Stabilizer(const int currentReading, int prevReading)
 {
-	if(currentReading > (prevReading + NOISE_RANGE) || currentReading < (prevReading - NOISE_RANGE))
+	if(currentReading > (prevReading + NOISE_THRESHOLD) || currentReading < (prevReading - NOISE_THRESHOLD))
 	{
 		return currentReading; // when current reading exceed noise range.... return current reading
 	}

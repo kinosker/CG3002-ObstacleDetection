@@ -32,7 +32,10 @@
 #define LEFT_TOO_NEAR						35
 #define RIGHT_TOO_NEAR						20
 #define STAIRS_OFFSET						7
-#define INDISTINGUISHABLE_RANGE				4 
+
+#define LEFT_POSITIONAL_OFFSET				20
+#define INDISTINGUISHABLE_RANGE				6
+
 #define STAIRS_TOP_LIMIT_H					110 // 80 to 110(150)
 #define STAIRS_TOP_LIMIT_L					80	
 

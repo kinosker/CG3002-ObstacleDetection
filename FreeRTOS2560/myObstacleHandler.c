@@ -39,8 +39,11 @@ void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSon
 		// front sensor detected
 		if(!deviceBlocked[LEFT_DEVICE] && !deviceBlocked[RIGHT_DEVICE])
 		{
-			// both not blocked... so select any side... (left safer to turn - see product)
-				if(rightSonar > leftSonar - 20) // if right sonar greater than....
+			
+			leftSonar -= LEFT_POSITIONAL_OFFSET;  // left sonar reading is now on approx ...
+			
+			// both not blocked... so select side that have more range... (if both close... left safer to turn - see product)
+				if(rightSonar > leftSonar && (rightSonar - leftSonar > INDISTINGUISHABLE_RANGE)) // if right sonar greater than....
 				{
 					MOTOR_LEFT_STOP();
 					MOTOR_RIGHT_START();
