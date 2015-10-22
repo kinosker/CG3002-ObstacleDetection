@@ -15,11 +15,11 @@
 
 #define MaxSonar_Init()					DDRG |= ((1 << DDG1) | (1 << DDG0)) // Set pin G1,G0 as output (Pin 40, 41)
 
-#define MaxSonar_BtmTriggerStart()		PORTG |= ( 1 << DDG1 )		// start trigger pin (Pin 40)		
-#define MaxSonar_BtmTriggerStop()		PORTG &= ~( 1 << DDG1 )		// stop trigger pin (Pin 40)
+#define MaxSonar_BtmTriggerStart()		PORTG |= ( 1 << PG1 )		// start trigger pin (Pin 40)		
+#define MaxSonar_BtmTriggerStop()		PORTG &= ~( 1 << PG1 )		// stop trigger pin (Pin 40)
 
-#define MaxSonar_TopTriggerStart()		PORTG |= ( 1 << DDG0 )		// start trigger pin (Pin 41)
-#define MaxSonar_TopTriggerStop()		PORTG &= ~( 1 << DDG0 )		// stop trigger pin (Pin 41)
+#define MaxSonar_TopTriggerStart()		PORTG |= ( 1 << PG0 )		// start trigger pin (Pin 41)
+#define MaxSonar_TopTriggerStop()		PORTG &= ~( 1 << PG0 )		// stop trigger pin (Pin 41)
 
 
 // Resolution for MaxSonar = 5v/512 per inch

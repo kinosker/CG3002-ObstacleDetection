@@ -25,7 +25,7 @@ char detectStairs(int calibratedBtmIR, int btmIR)
 
 
 // Priority => BTM, Front, Side
-void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSonar, int btmIR, char * deviceBlocked)
+void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSonar, int btmIR,  char const * const deviceBlocked)
 {
 	
 	if(deviceBlocked[BTM_DEVICE])
@@ -33,6 +33,7 @@ void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSon
 		// stairs detected
 			MOTOR_LEFT_START();
 			MOTOR_RIGHT_START();
+			MOTOR_FRONT_STOP();
 	}
 	else if( (deviceBlocked[FRONT_DEVICE] && (!possibleStairs(frontSonar, topSonar))) || deviceBlocked[TOP_DEVICE])
 	{
@@ -40,26 +41,28 @@ void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSon
 		if(!deviceBlocked[LEFT_DEVICE] && !deviceBlocked[RIGHT_DEVICE])
 		{
 			
-			leftSonar -= LEFT_POSITIONAL_OFFSET;  // left sonar reading is now on approx ...
+			MOTOR_FRONT_START();
+			//leftSonar -= LEFT_POSITIONAL_OFFSET;  // left sonar reading is now on approx ...
 			
 			// both not blocked... so select side that have more range... (if both close... left safer to turn - see product)
-				if(rightSonar > leftSonar && (rightSonar - leftSonar > INDISTINGUISHABLE_RANGE)) // if right sonar greater than....
-				{
-					MOTOR_LEFT_STOP();
-					MOTOR_RIGHT_START();
-				}
-				else 
-				{
-					MOTOR_LEFT_START();
-					MOTOR_RIGHT_STOP();
-					
-				}
+				//if(rightSonar > leftSonar && (rightSonar - leftSonar > INDISTINGUISHABLE_RANGE)) // if right sonar greater than....
+				//{
+					//MOTOR_LEFT_STOP();
+					//MOTOR_RIGHT_START();
+				//}
+				//else 
+				//{
+					//MOTOR_LEFT_START();
+					//MOTOR_RIGHT_STOP();
+					//
+				//}
 		}
 		if(deviceBlocked[LEFT_DEVICE] && !(deviceBlocked[RIGHT_DEVICE]))
 		{
 			// left is blocked but not right
 			if((rightSonar - leftSonar) > INDISTINGUISHABLE_RANGE) // if there's enough difference, prompt the user to move..
 			{
+				MOTOR_FRONT_STOP();
 				MOTOR_LEFT_STOP();
 				MOTOR_RIGHT_START();	
 			}
@@ -69,6 +72,7 @@ void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSon
 			// right is blocked but not left..
 			if((leftSonar - rightSonar) > INDISTINGUISHABLE_RANGE) // if there's enough different, prompt the user to move...
 			{
+				MOTOR_FRONT_STOP();
 				MOTOR_LEFT_START();
 				MOTOR_RIGHT_STOP();
 			}
@@ -85,17 +89,20 @@ void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSon
 	else if (leftSonar < LEFT_TOO_NEAR)
 	{
 		// front able to walk, too near to wall or obstacle...
+			MOTOR_FRONT_STOP();
 			MOTOR_LEFT_STOP();
 			MOTOR_RIGHT_START();		
 	}
 	else if (rightSonar < RIGHT_TOO_NEAR)
 	{
 		// front able to walk, too near to wall or obstacle...
+			MOTOR_FRONT_STOP();
 			MOTOR_LEFT_START();
 			MOTOR_RIGHT_STOP();
 	}
 	else
 	{
+			MOTOR_FRONT_STOP();
 			MOTOR_LEFT_STOP();
 			MOTOR_RIGHT_STOP();
 	}
@@ -128,6 +135,8 @@ char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceBlock
 {
 	// Commented out when debuggin..
 
+	obstacleDetected = 0;
+	
 	if(frontSonar < FRONT_OBSTACLE_DISTANCE)
 	{
 		obstacleDetected ++;

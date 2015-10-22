@@ -15,7 +15,7 @@ int mySharpIR_Read(char analogChannel)
 {
 	int adcReading = myADC_analogRead(analogChannel);
 	adcReading = 10650.08 * pow(adcReading,-0.935) - 10;
-	if(adcReading > IR_MAX_VALUE)
+	if(adcReading > IR_MAX_VALUE || adcReading < IR_MIN_VALUE)
 		adcReading = IR_MAX_VALUE;
 	
 	return adcReading;

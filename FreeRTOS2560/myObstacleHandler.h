@@ -26,22 +26,30 @@
 // Obstacle detection range...
 #define FRONT_OBSTACLE_DISTANCE				50
 #define SIDE_OBSTACLE_DISTANCE				30
-#define LEFT_OBSTACLE_DISTANCE				31 
+#define LEFT_OBSTACLE_DISTANCE				30 
 #define RIGHT_OBSTACLE_DISTANCE				30
 #define TOP_OBSTACLE_DISTANCE				55
-#define LEFT_TOO_NEAR						31
+#define LEFT_TOO_NEAR						30
 #define RIGHT_TOO_NEAR						22
 #define STAIRS_OFFSET						8
 
 #define LEFT_POSITIONAL_OFFSET				20
 #define INDISTINGUISHABLE_RANGE				7
 
-#define STAIRS_TOP_LIMIT_H					110 // 80 to 110(150)
+#define STAIRS_TOP_LIMIT_H					120 // 80 to 120(150)
 #define STAIRS_TOP_LIMIT_L					80	
+
+
+typedef struct
+{
+	unsigned char deviceID;
+	char data[4];
+	
+} obstacleStruct;
 
 void cheatPrintAll(char* deviceBlocked, char *obstacleDetected);
 char detectStairs(int calibratedBtmIR, int btmIR);
-void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSonar, int btmIR, char * deviceBlocked);
+void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSonar, int btmIR,  char const * const deviceBlocked);
 char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceBlocked, int leftSonar, int rightSonar, int topSonar, int calibratedBtmIR, int btmIR);
 char possibleStairs(int frontSonar, int topSonar);
 
