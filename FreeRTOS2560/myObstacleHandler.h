@@ -26,12 +26,12 @@
 // Obstacle detection range...
 #define FRONT_OBSTACLE_DISTANCE				50
 #define SIDE_OBSTACLE_DISTANCE				30
-#define LEFT_OBSTACLE_DISTANCE				35 
+#define LEFT_OBSTACLE_DISTANCE				31 
 #define RIGHT_OBSTACLE_DISTANCE				30
 #define TOP_OBSTACLE_DISTANCE				55
-#define LEFT_TOO_NEAR						35
-#define RIGHT_TOO_NEAR						20
-#define STAIRS_OFFSET						7
+#define LEFT_TOO_NEAR						31
+#define RIGHT_TOO_NEAR						22
+#define STAIRS_OFFSET						8
 
 #define LEFT_POSITIONAL_OFFSET				20
 #define INDISTINGUISHABLE_RANGE				7
