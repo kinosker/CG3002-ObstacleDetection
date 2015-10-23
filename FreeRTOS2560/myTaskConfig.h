@@ -9,7 +9,7 @@
 #ifndef MYTASK_H_
 #define MYTASK_H_
 
-#define QUEUE_SIZE							3
+#define QUEUE_SIZE							5
 #define SONAR_NUM							5
 
 

@@ -27,7 +27,8 @@
 #define MESSAGE_ACK 6
 #define MESSAGE_RST 24 // (RST)
 
-#define HANDSHAKE_TIMEOUT 250 // 1 tick = 4ms... 250 => 1 sec timeout
+#define TRANSMIT_TIMEOUT 500  // 500 ms
+#define HANDSHAKE_TIMEOUT 500 // 500 ms
 
  void myUSART_USART0_Init(void);
  

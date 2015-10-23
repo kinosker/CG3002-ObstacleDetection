@@ -30,8 +30,8 @@ void task3(void *p);
 void task4(void *p);
 void init();
 
-void obstacleSend(char deviceBlocked, int reading, obstacleStruct * obstacleInfo_ptr);
-void sendObstacleDetected(obstacleStruct * obstacleInfo_ptr ,char obstacleDetected, char * deviceBlocked, int frontSonar, int leftSonar, int rightSonar, int btmIR, int topSonar);
+void obstacleSend(char deviceBlocked, int reading);
+void sendObstacleDetected(char obstacleDetected, char * deviceBlocked, int frontSonar, int leftSonar, int rightSonar, int btmIR, int topSonar);
 void myItoa(int input, char * buffer);
 
 xQueueHandle queueObstacleData;
@@ -105,7 +105,7 @@ void RPI_sendTask(void *p)
 {
 	
 	
-	obstacleStruct *dataToSend;
+	obstacleStruct dataToSend;
 	char obstacleDetected;
 	char handShakeState = 0;
 
@@ -116,32 +116,26 @@ void RPI_sendTask(void *p)
 		handShakeState = myUSART_startHandShake(); // 1 = success, 0 = timeout
 	//	myUSART_transmitUSART0("Hs Done\n");
 			
-			
 		xQueueReceive(queueObstacleNumber, &(obstacleDetected), portMAX_DELAY);
 		
-			
-			if(handShakeState)
-			{
-				myUSART_transmitUSART1_c(obstacleDetected+'0');
-				myUSART_transmitUSART1_c('\n');		
-			}
-	
 		
 			while(obstacleDetected--)
 			{
 
 				xQueueReceive(queueObstacleData, &(dataToSend), portMAX_DELAY);
 			
-				myUSART_transmitUSART0_c(dataToSend->deviceID);
-				myUSART_transmitUSART0(": ");
-				myUSART_transmitUSART0(dataToSend->data);
-				myUSART_transmitUSART0(", ");
+				myUSART_transmitUSART0_c(dataToSend.deviceID);
+				myUSART_transmitUSART0(":");
+				myUSART_transmitUSART0(dataToSend.data);
+				myUSART_transmitUSART0(",");
 			
 			
 				if(handShakeState)
 				{
-					myUSART_transmitUSART1_c(dataToSend->deviceID);
-					myUSART_transmitUSART1(dataToSend->data);
+					myUSART_transmitUSART1_c(obstacleDetected+'0');
+					myUSART_transmitUSART1_c('\n');
+					myUSART_transmitUSART1_c(dataToSend.deviceID);
+					myUSART_transmitUSART1(dataToSend.data);
 					myUSART_transmitUSART1_c('\n');
 				}
 			
@@ -160,8 +154,7 @@ void Sonar_Task(void *p)
 	int topSonar, frontSonar, leftSonar, rightSonar, btmIR;
 	int topSonarSample[SONAR_SAMPLE_SIZE] = {0}, frontSonarSample[SONAR_SAMPLE_SIZE] = {0}, leftSonarSample[SONAR_SAMPLE_SIZE] = {0}, rightSonarSample[SONAR_SAMPLE_SIZE] = {0};
 	char deviceBlocked[5] = {0}; // flag to indicate if we should send the reading to RPI
-	obstacleStruct *obstacleInfo_ptr = NULL;
-
+	
 	
 	
 	int calibratedBtmIR = mySharpIR_Read(AN12); // get first value...
@@ -188,14 +181,13 @@ void Sonar_Task(void *p)
 		
 		
 		// for debuggin to print all...
-		cheatPrintAll(deviceBlocked, &obstacleDetected); 
+		//cheatPrintAll(deviceBlocked, &obstacleDetected); 
 		// remove top statement... when not debuggin..
 		
-		sendObstacleDetected(obstacleInfo_ptr, obstacleDetected, deviceBlocked, frontSonar, leftSonar, rightSonar, btmIR, topSonar);
+		
+		
+		sendObstacleDetected(obstacleDetected, deviceBlocked, frontSonar, leftSonar, rightSonar, btmIR, topSonar);
 	
-		// reset the variables back to 0
-		obstacleDetected = 0; 
-		deviceBlocked[0] = deviceBlocked[1] = deviceBlocked[2] = deviceBlocked[3] = deviceBlocked[4] = 0;
 		
 		vTaskDelayUntil( &xLastWakeTime, MAXSONAR_CHAIN_WAIT);  // delay 150 ms for 3 sonar chain...
 	}
@@ -324,43 +316,51 @@ void init()
 }
 
 
-void obstacleSend(char deviceBlocked, int reading, obstacleStruct * obstacleInfo_ptr)
-{
+void obstacleSend(char deviceBlocked, int reading)
+{	
 	obstacleStruct obstacleInfo;
-	
-	
-	
+		
 	if(deviceBlocked)
 	{
 		myItoa(reading, obstacleInfo.data); // convert to ascii
 		
 		obstacleInfo.deviceID = deviceBlocked;
 		
-		obstacleInfo_ptr = &obstacleInfo;
 		
-		xQueueSendToBack(queueObstacleData, (void*) &obstacleInfo_ptr, portMAX_DELAY); // send data to queueData
+		xQueueSendToBack(queueObstacleData, (void*) &obstacleInfo, portMAX_DELAY); // send data to queueData
 	}
 }
 
 
 
 // Queue the obstacle to send..
-void sendObstacleDetected(obstacleStruct * obstacleInfo_ptr ,char obstacleDetected, char * deviceBlocked, int frontSonar, int leftSonar, int rightSonar, int btmIR, int topSonar)
+void sendObstacleDetected(char obstacleDetected, char * deviceBlocked, int frontSonar, int leftSonar, int rightSonar, int btmIR, int topSonar)
 {	
+	
 	if(obstacleDetected > 0)
 	{
 		
+		obstacleSend(deviceBlocked[FRONT_DEVICE], frontSonar);
+
+		obstacleSend(deviceBlocked[LEFT_DEVICE], leftSonar);
+
+		obstacleSend(deviceBlocked[RIGHT_DEVICE], rightSonar);
+
+		obstacleSend(deviceBlocked[BTM_DEVICE], btmIR);
+		
+		obstacleSend(deviceBlocked[TOP_DEVICE], topSonar);
+		
+			//for(i =0; i < 5; i++)
+			//totalObs += (deviceBlocked[i] > 0);
+			//
+			//if(totalObs == obstacleDetected)
+			//{
+				//myUSART_transmitUSART0("p\n");
+				//myUSART_transmitUSART0_c(totalObs + '0');
+				//myUSART_transmitUSART0("M\n");
+			//}
+			
 		xQueueSendToBack(queueObstacleNumber,  &obstacleDetected, portMAX_DELAY); // send obstacle...
-		
-		obstacleSend(deviceBlocked[FRONT_DEVICE], frontSonar, obstacleInfo_ptr);
-
-		obstacleSend(deviceBlocked[LEFT_DEVICE], leftSonar, obstacleInfo_ptr);
-
-		obstacleSend(deviceBlocked[RIGHT_DEVICE], rightSonar, obstacleInfo_ptr);
-
-		obstacleSend(deviceBlocked[BTM_DEVICE], btmIR, obstacleInfo_ptr);
-		
-		obstacleSend(deviceBlocked[TOP_DEVICE], topSonar, obstacleInfo_ptr);
 		
 	}
 }

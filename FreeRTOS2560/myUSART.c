@@ -236,9 +236,6 @@ char myUSART_startHandShake()
 		return 0;
 	}
 
-
-	//xSemaphoreTake(semaUsart1HandShake, portMAX_DELAY); // wait for handshake to be ack...
-	//( TickType_t ) 10 ) == pdTRUE ... if fail return 0 => at main put state to determine when to send to UART1...
 }
 
 

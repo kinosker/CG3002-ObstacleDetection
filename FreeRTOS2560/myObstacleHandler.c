@@ -136,6 +136,7 @@ char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceBlock
 	// Commented out when debuggin..
 
 	obstacleDetected = 0;
+	deviceBlocked[FRONT_DEVICE] = deviceBlocked[LEFT_DEVICE] = deviceBlocked[RIGHT_DEVICE] = deviceBlocked[BTM_DEVICE] = deviceBlocked[TOP_DEVICE] = 0;
 	
 	if(frontSonar < FRONT_OBSTACLE_DISTANCE)
 	{

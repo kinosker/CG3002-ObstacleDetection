@@ -13,8 +13,8 @@ void myMaxSonar_BtmStart()
 {
 	MaxSonar_BtmTriggerStart();
 	
-	myTimer_DelayMicro(25); // delay 25 micro seconds...
-	//vTaskDelay(5000);	// delay 1ms using vTaskDelay
+	//myTimer_DelayMicro(25); // delay 25 micro seconds...
+	vTaskDelay(1);	// delay 1ms using vTaskDelay
 	
 	MaxSonar_BtmTriggerStop();
 }
@@ -23,8 +23,8 @@ void myMaxSonar_TopStart()
 {
 	MaxSonar_TopTriggerStart();
 	
-	myTimer_DelayMicro2(25); // delay 25 micro seconds...
-	//vTaskDelay(5000);	// delay 1ms using vTaskDelay
+	//myTimer_DelayMicro2(25); // delay 25 micro seconds...
+	vTaskDelay(1);	// delay 1ms using vTaskDelay
 	
 	MaxSonar_TopTriggerStop();
 }
