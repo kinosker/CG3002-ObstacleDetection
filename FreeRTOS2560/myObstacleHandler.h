@@ -14,6 +14,8 @@
 #define RIGHT_DEVICE						2
 #define BTM_DEVICE							3
 #define TOP_DEVICE							4
+#define HIGH_DEVICE							5
+
 
 // ASCII to Identify the sensors...
 #define TOP_SONAR_ID						84
@@ -21,6 +23,7 @@
 #define LEFT_SONAR_ID						76
 #define RIGHT_SONAR_ID						82
 #define BTM_SONAR_ID						66
+#define HIGH_SONAR_ID						72
 
 
 // Obstacle detection range...
@@ -29,9 +32,13 @@
 #define LEFT_OBSTACLE_DISTANCE				30 
 #define RIGHT_OBSTACLE_DISTANCE				30
 #define TOP_OBSTACLE_DISTANCE				55
+
+#define HIGH_OBSTACLE_DISTANCE				80
+
 #define LEFT_TOO_NEAR						30
 #define RIGHT_TOO_NEAR						24
 #define STAIRS_OFFSET						8
+
 
 #define LEFT_POSITIONAL_OFFSET				20
 #define INDISTINGUISHABLE_RANGE				7
@@ -62,8 +69,9 @@ typedef struct
 
 void cheatPrintAll(char* deviceBlocked, char *obstacleDetected);
 char detectStairs(int calibratedBtmIR, int btmIR);
-void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSonar, int btmIR,  char const * const deviceBlocked);
-char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceBlocked, int leftSonar, int rightSonar, int topSonar, int calibratedBtmIR, int btmIR);
+void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSonar, int btmIR,  int topIR ,char const * const deviceBlocked);
+char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceBlocked, int leftSonar, int rightSonar, int topSonar, int calibratedBtmIR, int btmIR, int topIR);
+
 char possibleStairs(int frontSonar, int topSonar);
 
 

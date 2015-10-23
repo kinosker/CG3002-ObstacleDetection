@@ -25,7 +25,7 @@ char detectStairs(int calibratedBtmIR, int btmIR)
 
 
 // Priority => BTM, Front, Side
-void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSonar, int btmIR,  char const * const deviceBlocked)
+void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSonar, int btmIR,  int topIR, char const * const deviceBlocked)
 {
 	
 	if(deviceBlocked[BTM_DEVICE])
@@ -35,7 +35,7 @@ void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSon
 			MOTOR_RIGHT_START();
 			MOTOR_FRONT_STOP();
 	}
-	else if( (deviceBlocked[FRONT_DEVICE]  || deviceBlocked[TOP_DEVICE]))
+	else if( (deviceBlocked[FRONT_DEVICE]  || deviceBlocked[TOP_DEVICE]) || deviceBlocked[HIGH_DEVICE])
 	//else if( (deviceBlocked[FRONT_DEVICE] && (!possibleStairs(frontSonar, topSonar))) || deviceBlocked[TOP_DEVICE]) // for stairs... possibleStairs.. for slope
 	{
 		// front sensor detected
@@ -112,12 +112,14 @@ void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSon
 
 void cheatPrintAll(char* deviceBlocked, char *obstacleDetected)
 {
-	*obstacleDetected = 5;
+	*obstacleDetected = 6;
 	deviceBlocked[FRONT_DEVICE] = FRONT_SONAR_ID;
 	deviceBlocked[LEFT_DEVICE] = LEFT_SONAR_ID;
 	deviceBlocked[RIGHT_DEVICE] = RIGHT_SONAR_ID;
 	deviceBlocked[BTM_DEVICE] = BTM_SONAR_ID;
 	deviceBlocked[TOP_DEVICE] = TOP_SONAR_ID;
+	deviceBlocked[HIGH_DEVICE] = HIGH_SONAR_ID;
+
 }
 
 // detect possibleStairs infront 
@@ -132,12 +134,12 @@ char possibleStairs(int frontSonar, int topSonar)
 
 // return number of obstacle detected...
 // implicitly return the device to send.
-char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceBlocked, int leftSonar, int rightSonar, int topSonar, int calibratedBtmIR, int btmIR)
+char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceBlocked, int leftSonar, int rightSonar, int topSonar, int calibratedBtmIR, int btmIR, int topIR)
 {
 	// Commented out when debuggin..
 
 	obstacleDetected = 0;
-	deviceBlocked[FRONT_DEVICE] = deviceBlocked[LEFT_DEVICE] = deviceBlocked[RIGHT_DEVICE] = deviceBlocked[BTM_DEVICE] = deviceBlocked[TOP_DEVICE] = 0;
+	deviceBlocked[FRONT_DEVICE] = deviceBlocked[LEFT_DEVICE] = deviceBlocked[RIGHT_DEVICE] = deviceBlocked[BTM_DEVICE] = deviceBlocked[TOP_DEVICE] = deviceBlocked[HIGH_DEVICE] = 0;
 	
 	if(frontSonar < FRONT_OBSTACLE_DISTANCE)
 	{
@@ -163,6 +165,12 @@ char obstacleDetection(int frontSonar, char obstacleDetected, char * deviceBlock
 	{
 		obstacleDetected++;
 		deviceBlocked[TOP_DEVICE] = TOP_SONAR_ID;
+	}
+	
+	if(topIR < HIGH_OBSTACLE_DISTANCE)
+	{
+		obstacleDetected++;
+		deviceBlocked[HIGH_DEVICE] = HIGH_SONAR_ID;
 	}
 	
 	return obstacleDetected;

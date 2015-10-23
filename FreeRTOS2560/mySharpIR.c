@@ -7,7 +7,6 @@
 #include <mySharpIR.h>
 #include <myADC.h>
 #include <math.h>
-#include <stdint.h>
 #include <myUSART.h>
 
 // Return distance in cm
@@ -32,71 +31,69 @@ char checkOutOfRange(int reading, int * checkReading, const char range)
 // firstCheck reading = btmIR reading ( i = CALIBRATE_COUNT/2)
 // initial reading  = btmIR reading (i = 0)
 // Write new calibrate value if all matches..
-void mySharpIR_ReCalibrate(int* calibratedReading, int reading)
+void mySharpIR_ReCalibrate(int* calibratedReading, int * referenceReading, uint8_t * sampleCount, int reading, const int highThreshold, const int lowThreshold)
 {
-	static uint8_t sampleCount = 0;
-	static int referenceReading = 0;
 	//static int testPrint = 0;
 	
-	if(!checkOutOfRange(reading, calibratedReading, CALIBRATE_RANGE) && sampleCount == 0)
+	if(!checkOutOfRange(reading, calibratedReading, CALIBRATE_RANGE) && *sampleCount == 0)
 	{
 		// if current reading and calibratedReading is within range and no checking in progess
 		// skip the calibration process... not needed
 		return;
 	}
 	
-	if(reading < CALIBRATE_LOW_THRESHOLD || reading > CALIBRATE_HIGH_THRESHOLD)
+	if(reading < lowThreshold || reading > highThreshold)
 	{
 		// Too low or Too high for it to be ground..
-		referenceReading = 0;
+		*referenceReading = 0;
 		return;		
 	}
 	
 	
-	if (sampleCount == 0)
+	if (*sampleCount == 0)
 	{
 		// Possible calibration... take reference from reading
 		//testPrint = 0;
-		referenceReading = reading;
+		*referenceReading = reading;
 		//myUSART_transmitUSART0("\n-----RS----\n");
 
 	}
-	else if ((sampleCount % CALIBRATE_SAMPLE_RATE) == 0) // when count reach 
+	else if ((*sampleCount % CALIBRATE_SAMPLE_RATE) == 0) // when count reach 
 	{
 		//testPrint++;
 		//myUSART_transmitUSART0_c(testPrint + '0');
 		//myUSART_transmitUSART0("\n");
-		if(checkOutOfRange(reading, &referenceReading, CALIBRATE_RANGE))
+		if(checkOutOfRange(reading, referenceReading, CALIBRATE_RANGE))
 		{
 			// Out of range.. restart to find new calibration point..
-			referenceReading = 0;
-			sampleCount = 0; // reset to count...
+			*referenceReading = 0;
+			*sampleCount = 0; // reset to count...
 			return;
 		}
 		else
 		{	// within range.. need more confirmation, update reference point..
-			referenceReading = reading;
+			*referenceReading = reading;
 		}
 	}
-	else if (sampleCount >= CALIBRATE_SAMPLE_REQUIRE)
+	else if (*sampleCount >= CALIBRATE_SAMPLE_REQUIRE)
 	{
 		// Sample long enough...
-		sampleCount = 0; // reset to count..
+		*sampleCount = 0; // reset to count..
 
-		if(checkOutOfRange(reading, &referenceReading, CALIBRATE_RANGE))
+		if(checkOutOfRange(reading, referenceReading, CALIBRATE_RANGE))
 		{
 			// Out of range.. restart to find new calibration point..
-			referenceReading = 0;
+			*referenceReading = 0;
 			return;
 		}
 		else
 		{
 			// all readings within range... can calibrate as new stable.
-			*calibratedReading = referenceReading; // btmIR is calibrated..
+			*calibratedReading = *referenceReading; // btmIR is calibrated..
 			//myUSART_transmitUSART0("\nACK\n");
 			return;
 		}
 	}
 	
-	sampleCount++;
+	(*sampleCount)++;
 }

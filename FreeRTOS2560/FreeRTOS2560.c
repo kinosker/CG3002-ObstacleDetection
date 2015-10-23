@@ -31,7 +31,8 @@ void task4(void *p);
 void init();
 
 void obstacleSend(char deviceBlocked, int reading);
-void sendObstacleDetected(char obstacleDetected, char * deviceBlocked, int frontSonar, int leftSonar, int rightSonar, int btmIR, int topSonar);
+void sendObstacleDetected(char obstacleDetected, char * deviceBlocked, int frontSonar, int leftSonar, int rightSonar, int btmIR, int topSonar, int topIR);
+
 void myItoa(int input, char * buffer);
 
 xQueueHandle queueObstacleData;
@@ -135,6 +136,7 @@ void RPI_sendTask(void *p)
 					myUSART_transmitUSART1_c(obstacleDetected+'0');
 					myUSART_transmitUSART1_c('\n');
 					myUSART_transmitUSART1_c(dataToSend.deviceID);
+					
 					myUSART_transmitUSART1(dataToSend.data);
 					myUSART_transmitUSART1_c('\n');
 				}
@@ -151,12 +153,14 @@ void Sonar_Task(void *p)
 {
 	TickType_t xLastWakeTime;
 	char obstacleDetected = 0;
-	int topSonar, frontSonar, leftSonar, rightSonar, btmIR;
+	int btmReference = 0, topReference = 0;
+	uint8_t btmSampleCount = 0, topSampleCount = 0;
+	int topSonar, frontSonar, leftSonar, rightSonar, btmIR, topIR;
 	int topSonarSample[SONAR_SAMPLE_SIZE] = {0}, frontSonarSample[SONAR_SAMPLE_SIZE] = {0}, leftSonarSample[SONAR_SAMPLE_SIZE] = {0}, rightSonarSample[SONAR_SAMPLE_SIZE] = {0};
-	char deviceBlocked[5] = {0}; // flag to indicate if we should send the reading to RPI
+	char deviceBlocked[SENSOR_NUM] = {0}; // flag to indicate if we should send the reading to RPI
 	
 	
-	
+	int calibratedTopIR = mySharpIR_Read(AN10); // get first value...
 	int calibratedBtmIR = mySharpIR_Read(AN12); // get first value...
 	
 	xLastWakeTime = xTaskGetTickCount(); // get tick count
@@ -174,19 +178,23 @@ void Sonar_Task(void *p)
 			
 			
 		btmIR	= mySharpIR_Read(AN12);
-		mySharpIR_ReCalibrate(&calibratedBtmIR, btmIR); // attempt to re-calibrate btm ir sensor if stable enough..
+		mySharpIR_ReCalibrate(&calibratedBtmIR, &btmReference, &btmSampleCount, btmIR, CALIBRATE_BTM_HIGH_THRESHOLD, CALIBRATE_BTM_LOW_THRESHOLD); // attempt to re-calibrate btm ir sensor if stable enough..
 	
-		obstacleDetected = obstacleDetection(frontSonar, obstacleDetected, deviceBlocked, leftSonar, rightSonar, topSonar, calibratedBtmIR, btmIR);
-		obstacleAvoidance(frontSonar, topSonar, leftSonar, rightSonar, btmIR, deviceBlocked);
+		topIR = mySharpIR_Read(AN10);
+		//mySharpIR_ReCalibrate(&calibratedTopIR, &topReference, &topSampleCount, topIR, CALIBRATE_TOP_HIGH_THRESHOLD, CALIBRATE_TOP_LOW_THRESHOLD); // attempt to re-calibrate btm ir sensor if stable enough..
 		
+		
+		obstacleDetected = obstacleDetection(frontSonar, obstacleDetected, deviceBlocked, leftSonar, rightSonar, topSonar, calibratedBtmIR, btmIR, topIR);
+		obstacleAvoidance(frontSonar, topSonar, leftSonar, rightSonar, btmIR, topIR, deviceBlocked);
+
 		
 		// for debuggin to print all...
-		//cheatPrintAll(deviceBlocked, &obstacleDetected); 
+		cheatPrintAll(deviceBlocked, &obstacleDetected); 
 		// remove top statement... when not debuggin..
 		
 		
 		
-		sendObstacleDetected(obstacleDetected, deviceBlocked, frontSonar, leftSonar, rightSonar, btmIR, topSonar);
+		sendObstacleDetected(obstacleDetected, deviceBlocked, frontSonar, leftSonar, rightSonar, btmIR, topSonar, topIR);
 	
 		
 		vTaskDelayUntil( &xLastWakeTime, MAXSONAR_CHAIN_WAIT);  // delay 150 ms for 3 sonar chain...
@@ -304,7 +312,7 @@ void init()
 		
 		
 		queueObstacleNumber = xQueueCreate(QUEUE_SIZE, sizeof (char)); // create queue
-		queueObstacleData = xQueueCreate( (QUEUE_SIZE*SONAR_NUM), sizeof (obstacleStruct)); // create queue
+		queueObstacleData = xQueueCreate( (QUEUE_SIZE*SENSOR_NUM), sizeof (obstacleStruct)); // create queue
 		
 		MOTOR_LEFT_INIT();
 		MOTOR_RIGHT_INIT();
@@ -334,7 +342,7 @@ void obstacleSend(char deviceBlocked, int reading)
 
 
 // Queue the obstacle to send..
-void sendObstacleDetected(char obstacleDetected, char * deviceBlocked, int frontSonar, int leftSonar, int rightSonar, int btmIR, int topSonar)
+void sendObstacleDetected(char obstacleDetected, char * deviceBlocked, int frontSonar, int leftSonar, int rightSonar, int btmIR, int topSonar, int topIR)
 {	
 	
 	if(obstacleDetected > 0)
@@ -349,6 +357,8 @@ void sendObstacleDetected(char obstacleDetected, char * deviceBlocked, int front
 		obstacleSend(deviceBlocked[BTM_DEVICE], btmIR);
 		
 		obstacleSend(deviceBlocked[TOP_DEVICE], topSonar);
+		
+		obstacleSend(deviceBlocked[HIGH_DEVICE], topIR);
 		
 			//for(i =0; i < 5; i++)
 			//totalObs += (deviceBlocked[i] > 0);

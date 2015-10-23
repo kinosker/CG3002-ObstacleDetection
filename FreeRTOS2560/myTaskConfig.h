@@ -10,7 +10,7 @@
 #define MYTASK_H_
 
 #define QUEUE_SIZE							5
-#define SONAR_NUM							5
+#define SENSOR_NUM							6
 
 
 //#define USART_0_PRIORITY					( tskIDLE_PRIORITY + 2 )
