@@ -24,6 +24,8 @@ char detectStairs(int calibratedBtmIR, int btmIR)
 }
 
 
+
+
 // Priority => BTM, Front, Side
 void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSonar, int btmIR,  int topIR, char const * const deviceBlocked)
 {
