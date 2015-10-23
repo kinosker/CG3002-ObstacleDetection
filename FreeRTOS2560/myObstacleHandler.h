@@ -30,16 +30,29 @@
 #define RIGHT_OBSTACLE_DISTANCE				30
 #define TOP_OBSTACLE_DISTANCE				55
 #define LEFT_TOO_NEAR						30
-#define RIGHT_TOO_NEAR						22
+#define RIGHT_TOO_NEAR						24
 #define STAIRS_OFFSET						8
 
 #define LEFT_POSITIONAL_OFFSET				20
 #define INDISTINGUISHABLE_RANGE				7
 
-#define STAIRS_TOP_LIMIT_H					120 // 80 to 120(150)
+#define STAIRS_TOP_LIMIT_H					110 // 80 to 110
 #define STAIRS_TOP_LIMIT_L					80	
 
 
+/* Optimal Values for demo #1 (w/0 stairs)
+#define FRONT_OBSTACLE_DISTANCE				50
+#define SIDE_OBSTACLE_DISTANCE				30
+#define LEFT_OBSTACLE_DISTANCE				30
+#define RIGHT_OBSTACLE_DISTANCE				30
+#define TOP_OBSTACLE_DISTANCE				55
+#define LEFT_TOO_NEAR						30
+#define RIGHT_TOO_NEAR						24
+#define STAIRS_OFFSET						8
+
+#define LEFT_POSITIONAL_OFFSET				20
+#define INDISTINGUISHABLE_RANGE				7
+*/
 typedef struct
 {
 	unsigned char deviceID;

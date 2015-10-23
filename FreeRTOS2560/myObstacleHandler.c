@@ -35,7 +35,8 @@ void obstacleAvoidance(int frontSonar, int topSonar, int leftSonar, int rightSon
 			MOTOR_RIGHT_START();
 			MOTOR_FRONT_STOP();
 	}
-	else if( (deviceBlocked[FRONT_DEVICE] && (!possibleStairs(frontSonar, topSonar))) || deviceBlocked[TOP_DEVICE])
+	else if( (deviceBlocked[FRONT_DEVICE]  || deviceBlocked[TOP_DEVICE]))
+	//else if( (deviceBlocked[FRONT_DEVICE] && (!possibleStairs(frontSonar, topSonar))) || deviceBlocked[TOP_DEVICE]) // for stairs... possibleStairs.. for slope
 	{
 		// front sensor detected
 		if(!deviceBlocked[LEFT_DEVICE] && !deviceBlocked[RIGHT_DEVICE])
